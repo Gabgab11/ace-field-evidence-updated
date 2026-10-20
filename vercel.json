@@ -1,0 +1,10 @@
+{
+  "buildCommand": "echo 'No build needed'",
+  "installCommand": "echo 'No dependencies to install'",
+  "outputDirectory": ".",
+  "framework": "static",
+  "env": {
+    "NEXT_PUBLIC_SUPABASE_URL": "@supabase_url",
+    "NEXT_PUBLIC_SUPABASE_ANON_KEY": "@supabase_key"
+  }
+}

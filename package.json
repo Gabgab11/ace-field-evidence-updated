@@ -1,0 +1,21 @@
+{
+  "name": "ace-field-evidence",
+  "version": "1.0.0",
+  "description": "Digital MRV Platform for Carbon Project Verification",
+  "main": "index.html",
+  "scripts": {
+    "dev": "npx http-server",
+    "build": "echo 'Static site - no build needed'",
+    "start": "npx http-server"
+  },
+  "keywords": [
+    "carbon",
+    "MRV",
+    "verification",
+    "leaflet",
+    "supabase"
+  ],
+  "author": "ACE Tech",
+  "license": "MIT",
+  "devDependencies": {}
+}
