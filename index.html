@@ -1622,7 +1622,6 @@ render();
 `;
 
 // Modified show function for hybrid
-let authMode = 'signin';
 
 function authMode(mode){
   const isSignup = mode === 'signup';
@@ -1657,14 +1656,6 @@ function show(n){
   }
 }
 
-function toggleAuth(mode){
-  authMode = mode;
-  const isSignup = mode === 'signup';
-  if(document.getElementById('s3')) {
-    const authTitle = document.querySelector('#s3 .h1');
-    if(authTitle) authTitle.textContent = isSignup ? 'Create account' : 'Welcome back';
-  }
-}
 
 show(1);
 </script>
