@@ -380,6 +380,19 @@ input[type=checkbox]{width:18px;height:18px;accent-color:var(--green)}
 [data-theme="dark"] .chip.warn{background:#3A2C0E;color:#F0C56A}
 [data-theme="dark"] .chip.bad{background:#3D221A;color:#E08A72}
 
+/* Dark mode enhancements */
+[data-theme="dark"] .card:hover{background:rgba(19,34,25,0.95);box-shadow:0 8px 32px rgba(0,0,0,.4)}
+[data-theme="dark"] .btn:hover{background:#1A2D22;border-color:#2E4A3C}
+[data-theme="dark"] .nav button:hover{background:#1A2D22;color:#EEF3EC}
+[data-theme="dark"] input:focus,[data-theme="dark"] select:focus,[data-theme="dark"] textarea:focus{border-color:#5CB880;box-shadow:0 0 0 4px #1D3B2A}
+[data-theme="dark"] .leaf:hover{color:#EEF3EC}
+[data-theme="dark"] .setrow:hover{background:rgba(30,50,45,.3)}
+[data-theme="dark"] .act:hover{background:rgba(30,50,45,.2)}
+[data-theme="dark"] .table tr.row:hover td{background:#1A2D22}
+[data-theme="dark"] .tabs button:hover{color:#EEF3EC}
+[data-theme="dark"] .me:hover{background:#1A2D22}
+* {transition:background-color .15s ease,border-color .15s ease,color .15s ease}
+
 /* v5: keep wide tables inside their cards on phones */
 .grid > *, .card{min-width:0}
 .tablewrap{max-width:100%}
