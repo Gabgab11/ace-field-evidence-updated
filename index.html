@@ -854,17 +854,23 @@
         }
 
         async function logout() {
-            await supabaseClient.auth.signOut();
-            currentUser = null;
-            document.getElementById('authScreen').style.display = 'flex';
-            document.getElementById('appContainer').style.display = 'none';
-            resetAuth();
+            // Create a new demo session
+            currentUser = {
+                id: 'demo-user-' + Date.now(),
+                email: 'demo@ace-field-evidence.app',
+                user_metadata: { demo: true }
+            };
+            projects = [];
+            records = [];
+            loadProjects();
+            loadRecords();
+            updateStats();
         }
 
         function loginSuccess() {
             document.getElementById('authScreen').style.display = 'none';
             document.getElementById('appContainer').style.display = 'flex';
-            document.getElementById('userEmail').textContent = currentUser.email;
+            document.getElementById('userEmail').textContent = currentUser.email || 'Demo User';
             loadProjects();
             loadRecords();
             updateStats();
@@ -1164,23 +1170,17 @@
         }
 
         // ===== INIT =====
-        async function checkAuth() {
-            if (!supabase) {
-                setTimeout(checkAuth, 100);
-                return;
-            }
-            try {
-                const { data: { user } } = await supabaseClient.auth.getUser();
-                if (user) {
-                    currentUser = user;
-                    loginSuccess();
-                }
-            } catch (err) {
-                console.error('Auth check failed:', err);
-            }
+        function initApp() {
+            // Allow free access - create a demo user
+            currentUser = {
+                id: 'demo-user-' + Date.now(),
+                email: 'demo@ace-field-evidence.app',
+                user_metadata: { demo: true }
+            };
+            loginSuccess();
         }
 
-        window.addEventListener('load', checkAuth);
+        window.addEventListener('load', initApp);
     </script>
 </body>
 </html>
