@@ -780,7 +780,17 @@
         const SUPABASE_URL = 'https://eqriubzbiwuqfbpyadgg.supabase.co';
         const SUPABASE_KEY = 'sb_publishable_i14N0wt_LPRK_82WLa4u7A_Fzl8HUf-';
 
-        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        let supabase;
+
+        function initSupabase() {
+            if (window.supabase && !supabase) {
+                supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+            } else if (!window.supabase) {
+                setTimeout(initSupabase, 100);
+            }
+        }
+
+        initSupabase();
 
         let currentUser = null;
         let currentProject = null;
@@ -1153,13 +1163,23 @@
         }
 
         // ===== INIT =====
-        window.addEventListener('load', async () => {
-            const { data: { user } } = await supabase.auth.getUser();
-            if (user) {
-                currentUser = user;
-                loginSuccess();
+        async function checkAuth() {
+            if (!supabase) {
+                setTimeout(checkAuth, 100);
+                return;
             }
-        });
+            try {
+                const { data: { user } } = await supabase.auth.getUser();
+                if (user) {
+                    currentUser = user;
+                    loginSuccess();
+                }
+            } catch (err) {
+                console.error('Auth check failed:', err);
+            }
+        }
+
+        window.addEventListener('load', checkAuth);
     </script>
 </body>
 </html>
