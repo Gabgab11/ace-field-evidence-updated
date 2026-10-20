@@ -1,10 +1,91 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>ACE Field Evidence · Digital MRV</title>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ACE · Field Evidence</title>
 <style>
+
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:#0c1510;font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-serif;overflow:hidden}
+#phone{position:absolute;left:50%;top:50%;width:390px;height:844px;transform:translate(-50%,-50%);overflow:hidden;background:#F5F6F2;border-radius:0}
+@media (max-width:500px){#phone{width:100vw;height:100vh;border-radius:0}}
+.scr{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .6s ease,visibility .6s}
+.scr.on{opacity:1;visibility:visible}
+/* splash */
+#splash{background:linear-gradient(#E8F4EC,#F8F5E6);display:flex;flex-direction:column;align-items:center;justify-content:center}
+#sprout{width:200px;height:260px}
+#sprout .stem{stroke:#2F7D4F;stroke-width:5;fill:none;stroke-linecap:round;stroke-dasharray:200;stroke-dashoffset:200;animation:grow 1.3s .2s ease-out forwards}
+#sprout .leaf{transform-origin:100px 150px;transform:scale(0);animation:pop .6s cubic-bezier(.2,1.6,.4,1) forwards}
+#sprout .l1{animation-delay:1.2s}#sprout .l2{animation-delay:1.45s}
+#sprout .ground{transform:scaleX(0);transform-origin:center;animation:ground .9s .1s ease-out forwards}
+@keyframes grow{to{stroke-dashoffset:0}}
+@keyframes pop{to{transform:scale(1)}}
+@keyframes ground{to{transform:scaleX(1)}}
+.wordmark{margin-top:14px;font-size:58px;font-weight:800;color:#0E1A14;letter-spacing:-.02em;opacity:0;transform:translateY(14px);animation:up .7s 2.1s ease forwards}
+.tagline{font-size:17px;font-weight:700;color:#0E1A14;opacity:0;transform:translateY(10px);animation:up .6s 2.6s ease forwards;margin-top:6px}
+.sub{font-size:13px;color:#6B7A70;opacity:0;animation:fade .6s 3s ease forwards;margin-top:4px}
+@keyframes up{to{opacity:1;transform:none}}
+@keyframes fade{to{opacity:1}}
+/* landscape */
+.land{position:absolute;left:0;right:0;top:0;height:560px}
+.land svg{width:100%;height:100%;display:block}
+.cloud{animation:drift 14s linear infinite}
+.cloud.b{animation-duration:20s;animation-delay:-6s}
+@keyframes drift{from{transform:translateX(-120px)}to{transform:translateX(420px)}}
+.blade{transform-origin:300px 120px;animation:spin 6s linear infinite}
+.blade.s{transform-origin:70px 170px;animation-duration:8s;animation-direction:reverse}
+@keyframes spin{to{transform:rotate(360deg)}}
+.sun{transform-origin:300px 110px;animation:pulse 4s ease-in-out infinite}
+@keyframes pulse{50%{transform:scale(1.06)}}
+/* sheet + cards */
+.sheet{position:absolute;left:0;right:0;bottom:0;height:520px;background:#fff;border-radius:34px 34px 0 0;padding:34px 32px;transform:translateY(100%);box-shadow:0 -10px 40px rgba(14,26,20,.12)}
+@keyframes sheet{to{transform:translateY(0)}}
+.h1{font-size:30px;font-weight:800;color:#0E1A14;line-height:1.15;letter-spacing:-.02em}
+.p{color:#6B7A70;font-size:15px;margin-top:10px;line-height:1.5}
+.dots{display:flex;gap:8px;margin:26px 0}
+.dots i{width:10px;height:10px;border-radius:50%;background:#C8D6CB;transition:background .3s,transform .3s}
+.dots i.on{background:#2F7D4F;transform:scale(1.2)}
+.btn{display:block;width:100%;border:0;border-radius:18px;background:#2F7D4F;color:#fff;font-weight:700;font-size:17px;padding:17px;font-family:inherit;cursor:pointer;box-shadow:0 10px 24px rgba(47,125,79,.3);transition:transform .15s}
+.btn:active{transform:scale(.97)}
+.btn.dark{background:#14241C;box-shadow:none}
+.sign{position:absolute;left:0;right:0;bottom:0;height:600px;background:#fff;border-radius:34px 34px 0 0;padding:34px 30px;transform:translateY(100%);box-shadow:0 -10px 40px rgba(14,26,20,.14)}
+#s2.on .sheet{animation:sheet .9s .2s cubic-bezier(.2,.9,.3,1) forwards}
+.scr.on .sign{animation:sheet .8s .15s cubic-bezier(.2,.9,.3,1) forwards}
+.sign .h1{font-size:28px}
+.field{margin-top:18px}
+.field label{font-size:13px;font-weight:700;color:#0E1A14;display:block;margin-bottom:8px}
+.field div{height:50px;border-radius:14px;background:#F6F8F4;border:1px solid #D7E0D6;padding:14px;color:#8A9A90;font-size:14px}
+.field.typed div{color:#0E1A14}
+.caret::after{content:"|";animation:blink 1s steps(1) infinite;margin-left:1px}
+@keyframes blink{50%{opacity:0}}
+.sign .btn{margin-top:26px}
+.link{text-align:center;color:#2F7D4F;font-weight:700;font-size:13px;margin-top:18px}
+/* dashboard */
+.dash-top{position:absolute;left:0;right:0;top:0;height:300px;background:linear-gradient(#A9DCEB,#DDEFE8)}
+.dash-top svg{position:absolute;inset:0;width:100%;height:100%}
+.greet{position:absolute;left:28px;top:70px;color:#0E1A14}
+.greet b{font-size:24px;display:block;letter-spacing:-.02em}
+.greet span{font-size:14px;color:#3F4F45}
+.stats{position:absolute;left:24px;right:24px;top:230px;display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.stat{background:#fff;border-radius:18px;padding:14px;box-shadow:0 8px 22px rgba(14,26,20,.08);opacity:0;transform:translateY(18px)}
+.scr.on .stat{animation:up .5s forwards}.scr.on .stat:nth-child(1){animation-delay:.25s}.scr.on .stat:nth-child(2){animation-delay:.4s}.scr.on .stat:nth-child(3){animation-delay:.55s}
+.stat small{color:#6B7A70;font-size:12px;font-weight:600}
+.stat b{display:block;font-size:26px;margin-top:6px;color:#0E1A14;letter-spacing:-.02em}
+.card{position:absolute;left:24px;right:24px;background:#fff;border-radius:20px;padding:18px 20px;box-shadow:0 8px 22px rgba(14,26,20,.07);opacity:0;transform:translateY(18px)}
+.scr.on .card{animation:up .5s forwards}.card.c1{top:330px}.card.c2{top:414px}.card.c3{top:510px}.scr.on .card.c1{animation-delay:.7s}.scr.on .card.c2{animation-delay:.85s}.scr.on .card.c3{animation-delay:1s}
+.card small{color:#6B7A70;font-size:13px}
+.card b{display:block;font-size:17px;color:#0E1A14;margin-top:2px}
+.bar{height:8px;border-radius:99px;background:#E4ECE6;margin-top:12px;overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:#2F7D4F;border-radius:99px}.scr.on .bar i{animation:fill 1.2s 1s ease forwards}
+@keyframes fill{to{width:80%}}
+.tab{position:absolute;left:24px;right:24px;bottom:22px;height:64px;background:#fff;border-radius:32px;display:flex;justify-content:space-around;align-items:center;box-shadow:0 10px 28px rgba(14,26,20,.14);opacity:0}.scr.on .tab{animation:fade .5s 1.2s forwards}
+.tab span{display:flex;flex-direction:column;align-items:center;font-size:11px;color:#8A9A90;gap:4px}
+.tab span i{width:20px;height:20px;border-radius:7px;background:#D6E1D8}
+.tab span.on{color:#0E1A14;font-weight:700}
+.tab span.on i{background:#2F7D4F}
+#replay{position:fixed;top:14px;right:16px;background:rgba(255,255,255,.12);color:#D9E3DB;border:1px solid rgba(255,255,255,.2);border-radius:10px;padding:8px 12px;font-size:13px;font-family:inherit;cursor:pointer;z-index:5}
+#hint{position:fixed;left:0;right:0;bottom:12px;text-align:center;color:#7F9488;font-size:12px;font-family:inherit;z-index:5}
+
+/* Full app styles */
+
 :root{
   --bg:#F8F9FA; --surface:rgba(255,255,255,0.7); --soft:rgba(240,243,238,0.5); --line:rgba(229,234,227,0.3);
   --ink:#0E1A14; --text:#0E1A14; --paper:#0E1A14; --canopy:#0E1A14; --canopy2:#FFFFFF; --canopy3:rgba(240,243,238,0.8);
@@ -395,15 +476,50 @@ input[type=checkbox]{width:18px;height:18px;accent-color:var(--green)}
 #helpBtn:hover{transform:scale(1.1);box-shadow:0 12px 32px rgba(47,125,79,.4)}
 #helpBtn:active{transform:scale(.95)}
 @media(max-width:620px){#helpBtn{bottom:24px;right:24px;width:48px;height:48px;font-size:20px}}
-</style>
-</head>
-<body>
-<div id="splash" role="status" aria-label="Loading Field Evidence"><canvas id="splashCanvas"></canvas></div>
-<div id="root"></div>
-<div class="toast" id="toast" role="status" aria-live="polite"></div>
-<button id="helpBtn" title="Help & Support" onclick="if(window.help)help();else alert('Help Center - Tips, guides, and support contacts coming soon!')">?</button>
+
+</style></head><body>
+<div id="phone">
+
+  <!-- 1 splash -->
+  <section class="scr on" id="s1" style="background:linear-gradient(#E8F4EC,#F8F5E6)">
+    <div style="position:absolute;left:0;right:0;top:170px;display:flex;flex-direction:column;align-items:center">
+      <svg id="sprout" viewBox="0 0 200 260">
+        <ellipse class="ground" cx="100" cy="236" rx="90" ry="14" fill="#96C48A"/>
+        <path class="stem" d="M100 236 C100 190 98 150 100 100"/>
+        <ellipse class="leaf l1" cx="72" cy="112" rx="34" ry="16" fill="#6FB082" transform="rotate(-25 72 112)" style="transform-origin:100px 105px"/>
+        <ellipse class="leaf l2" cx="128" cy="92" rx="34" ry="16" fill="#2F7D4F" transform="rotate(20 128 92)" style="transform-origin:100px 100px"/>
+      </svg>
+      <div class="wordmark">ACE</div>
+      <div class="tagline">African Carbon Exchange</div>
+      <div class="sub">Field Evidence</div>
+    </div>
+  </section>
+
+  <!-- 2 welcome -->
+  <section class="scr" id="s2">
+    <div class="land">
+      <svg viewBox="0 0 390 560" preserveAspectRatio="xMidYMid slice">
+        <defs><linearGradient id="sk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#B6E2EE"/><stop offset="1" stop-color="#F5F3E2"/></linearGradient></defs>
+        <rect width="390" height="560" fill="url(#sk)"/>
+        <circle class="sun" cx="300" cy="110" r="26" fill="#F9D27A"/>
+        <g class="cloud"><ellipse cx="60" cy="110" rx="34" ry="18" fill="#fff"/><ellipse cx="88" cy="100" rx="26" ry="20" fill="#fff"/></g>
+        <g class="cloud b"><ellipse cx="170" cy="70" rx="28" ry="15" fill="#fff"/><ellipse cx="192" cy="62" rx="22" ry="17" fill="#fff"/></g>
+        <path d="M0 330 C60 290 120 300 190 330 S320 310 390 330 L390 560 L0 560Z" fill="#A9D19A"/>
+        <g transform="translate(70 230)"><rect x="-2" y="0" width="4" height="66" fill="#fafaf8"/><g class="blade s"><rect x="-22" y="-2" width="44" height="4" rx="2" fill="#fff"/><rect x="-2" y="-22" width="4" height="44" rx="2" fill="#fff"/></g></g>
+        <g transform="translate(300 220)"><rect x="-3" y="0" width="6" height="110" fill="#fafaf8"/><g class="blade"><rect x="-36" y="-2" width="72" height="5" rx="2" fill="#fff"/><rect x="-2" y="-36" width="5" height="72" rx="2" fill="#fff"/></g></g>
+        <path d="M0 380 C80 350 180 360 260 382 S360 370 390 380 L390 560 L0 560Z" fill="#7DB979"/>
+        <g fill="#4E8D5C"><circle cx="30" cy="368" r="18"/><circle cx="66" cy="364" r="20"/><circle cx="110" cy="370" r="16"/><circle cx="160" cy="366" r="19"/><circle cx="210" cy="368" r="17"/><circle cx="262" cy="364" r="20"/><circle cx="318" cy="368" r="17"/><circle cx="366" cy="366" r="18"/></g>
+        <path d="M0 440 C120 420 260 436 390 428 L390 560 L0 560Z" fill="#5FA46A"/>
+      </svg>
+    </div>
+    <div class="sheet">
+      <div class="h1">Your carbon records,<br>proven and sealed.</div>
+      <div class="p">Field data, checks and audit trail in one place.</div>
+      <div class="dots"><i class="on"></i><i></i><i></i>
+</div>
 
 <script>
+
 /* ---------- Config ---------- */
 const ROLES = {
   'Field Team': { create:true,  submit:true,  review:false, admin:false },
@@ -645,7 +761,7 @@ function signIn(e){
   S.user.role = role;
   S.authed = true; S.route = 'dashboard';
   toast(`Signed in as ${role}`);
-  render();
+  function onScreen4() { render(); }
   verifyChain().then(res => { S.integrity = res.ok ? { state:'ok', detail:`All ${res.count} records verified in order.` } : { state:'bad', detail:res.why }; render(); });
 }
 function signOut(){ S.authed = false; S.sel = null; render(); toast('Signed out'); }
@@ -1454,6 +1570,32 @@ setInterval(() => {
 applyTheme();
 (async () => { await sealAll(); render(); })();
 render();
+
+
+// Modified show function for hybrid
+let authMode = 'signin';
+const originalShow = typeof show !== 'undefined' ? show : null;
+
+function show(n){
+  document.querySelectorAll('.scr').forEach((s,i)=>s.classList.toggle('on', i===n-1));
+  if(n===4) { 
+    onScreen4();
+  }
+}
+
+function toggleAuth(mode){
+  authMode = mode;
+  const isSignup = mode === 'signup';
+  document.getElementById('authTitle').textContent = isSignup ? 'Create account' : 'Sign in';
+  document.getElementById('authSub').textContent = isSignup ? 'Set up your Field Evidence account' : 'Enter your credentials to access Field Evidence';
+  if(document.getElementById('signup-fields')) document.getElementById('signup-fields').style.display = isSignup ? 'block' : 'none';
+  if(document.getElementById('authBtn')) document.getElementById('authBtn').textContent = isSignup ? 'Create account →' : 'Sign in →';
+  if(document.getElementById('toggleText')) document.getElementById('toggleText').textContent = isSignup ? 'Already have an account? ' : "Don't have an account? ";
+  if(document.getElementById('toggleBtn')) document.getElementById('toggleBtn').textContent = isSignup ? 'Sign in' : 'Create account';
+  if(document.getElementById('signinTab')) document.getElementById('signinTab').classList.toggle('on', !isSignup);
+  if(document.getElementById('signupTab')) document.getElementById('signupTab').classList.toggle('on', isSignup);
+}
+
+show(1);
 </script>
-</body>
-</html>
+</body></html>
