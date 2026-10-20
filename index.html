@@ -522,7 +522,7 @@ input[type=checkbox]{width:18px;height:18px;accent-color:var(--green)}
     </div>
   </section>
 
-  <!-- 3 sign in -->
+  <!-- 3 auth form -->
   <section class="scr" id="s3">
     <div class="land" style="height:470px">
       <svg viewBox="0 0 390 560" preserveAspectRatio="xMidYMid slice">
@@ -535,12 +535,26 @@ input[type=checkbox]{width:18px;height:18px;accent-color:var(--green)}
       <div style="position:absolute;left:0;right:0;top:70px;text-align:center;font-size:30px;font-weight:800;color:#0E1A14">ACE</div>
     </div>
     <div class="sign">
-      <div class="h1">Welcome back</div>
-      <div class="p" style="margin-top:6px">Sign in to your field workspace</div>
-      <div class="field" id="fEmail"><label>Work email</label><div id="emailTxt">name@organisation.org</div></div>
-      <div class="field" id="fPw"><label>Password</label><div>••••••••</div></div>
-      <button class="btn dark" onclick="show(4)">Sign in</button>
-      <div class="link">Forgot password?</div>
+      <div style="display:flex;gap:16px;margin-bottom:20px;border-bottom:1px solid #D7E0D6">
+        <button class="link" style="border:0;background:none;padding:0;text-align:left;padding-bottom:10px;border-bottom:2px solid #2F7D4F" onclick="authMode('signin')">Sign in</button>
+        <button class="link" style="border:0;background:none;padding:0;text-align:left;padding-bottom:10px;border-bottom:2px solid transparent;color:#6B7A70" onclick="authMode('signup')">Create account</button>
+      </div>
+      <div id="signinForm">
+        <div class="h1">Welcome back</div>
+        <div class="p" style="margin-top:6px">Sign in to your field workspace</div>
+        <div class="field"><label>Work email</label><input id="email" type="email" placeholder="name@organisation.org" style="background:#F6F8F4;border:1px solid #D7E0D6;padding:12px 14px;border-radius:14px;width:100%;font-family:inherit;color:#0E1A14;font-size:14px;outline:none;transition:border .15s" onfocus="this.style.borderColor='#2F7D4F'" onblur="this.style.borderColor='#D7E0D6'"/></div>
+        <div class="field"><label>Password</label><input id="password" type="password" placeholder="••••••••" style="background:#F6F8F4;border:1px solid #D7E0D6;padding:12px 14px;border-radius:14px;width:100%;font-family:inherit;color:#0E1A14;font-size:14px;outline:none;transition:border .15s" onfocus="this.style.borderColor='#2F7D4F'" onblur="this.style.borderColor='#D7E0D6'"/></div>
+        <button class="btn dark" style="width:100%;padding:14px;margin-top:16px;border:0;cursor:pointer" onclick="show(4)">Sign in</button>
+        <div class="link" style="text-align:center;margin-top:12px">Forgot password?</div>
+      </div>
+      <div id="signupForm" style="display:none">
+        <div class="h1">Create account</div>
+        <div class="p" style="margin-top:6px">Join the African Carbon Exchange</div>
+        <div class="field"><label>Full name</label><input type="text" placeholder="Your name" style="background:#F6F8F4;border:1px solid #D7E0D6;padding:12px 14px;border-radius:14px;width:100%;font-family:inherit;color:#0E1A14;font-size:14px;outline:none;transition:border .15s" onfocus="this.style.borderColor='#2F7D4F'" onblur="this.style.borderColor='#D7E0D6'"/></div>
+        <div class="field"><label>Work email</label><input type="email" placeholder="name@organisation.org" style="background:#F6F8F4;border:1px solid #D7E0D6;padding:12px 14px;border-radius:14px;width:100%;font-family:inherit;color:#0E1A14;font-size:14px;outline:none;transition:border .15s" onfocus="this.style.borderColor='#2F7D4F'" onblur="this.style.borderColor='#D7E0D6'"/></div>
+        <div class="field"><label>Password</label><input type="password" placeholder="••••••••" style="background:#F6F8F4;border:1px solid #D7E0D6;padding:12px 14px;border-radius:14px;width:100%;font-family:inherit;color:#0E1A14;font-size:14px;outline:none;transition:border .15s" onfocus="this.style.borderColor='#2F7D4F'" onblur="this.style.borderColor='#D7E0D6'"/></div>
+        <button class="btn dark" style="width:100%;padding:14px;margin-top:16px;border:0;cursor:pointer" onclick="show(4)">Create account</button>
+      </div>
     </div>
   </section>
 
@@ -1609,6 +1623,26 @@ render();
 
 // Modified show function for hybrid
 let authMode = 'signin';
+
+function authMode(mode){
+  const isSignup = mode === 'signup';
+  const signinForm = document.getElementById('signinForm');
+  const signupForm = document.getElementById('signupForm');
+  const signinTab = document.querySelector('#s3 .link:nth-of-type(1)');
+  const signupTab = document.querySelector('#s3 .link:nth-of-type(2)');
+
+  if(isSignup){
+    if(signinForm) signinForm.style.display = 'none';
+    if(signupForm) signupForm.style.display = 'block';
+    if(signupTab) { signupTab.style.borderBottom = '2px solid #2F7D4F'; signupTab.style.color = '#0E1A14'; }
+    if(signinTab) { signinTab.style.borderBottom = '2px solid transparent'; signinTab.style.color = '#6B7A70'; }
+  } else {
+    if(signinForm) signinForm.style.display = 'block';
+    if(signupForm) signupForm.style.display = 'none';
+    if(signinTab) { signinTab.style.borderBottom = '2px solid #2F7D4F'; signinTab.style.color = '#0E1A14'; }
+    if(signupTab) { signupTab.style.borderBottom = '2px solid transparent'; signupTab.style.color = '#6B7A70'; }
+  }
+}
 
 function show(n){
   document.querySelectorAll('.scr').forEach((s,i)=>s.classList.toggle('on', i===n-1));
