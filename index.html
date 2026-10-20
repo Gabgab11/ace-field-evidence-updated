@@ -781,12 +781,10 @@
         const SUPABASE_KEY = 'sb_publishable_i14N0wt_LPRK_82WLa4u7A_Fzl8HUf-';
 
         let supabaseClient = null;
-        let supabase = null;
 
         function initSupabase() {
             if (!supabaseClient && typeof window.supabase !== 'undefined') {
                 supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-                supabase = supabaseClient;
             } else if (typeof window.supabase === 'undefined' && !supabaseClient) {
                 setTimeout(initSupabase, 50);
             }
@@ -810,7 +808,7 @@
             }
 
             try {
-                const { error } = await supabase.auth.signInWithOtp({ email });
+                const { error } = await supabaseClient.auth.signInWithOtp({ email });
                 if (error) throw error;
 
                 showAuthMessage('Check your email for the verification code', 'success');
@@ -831,7 +829,7 @@
             }
 
             try {
-                const { data, error } = await supabase.auth.verifyOtp({
+                const { data, error } = await supabaseClient.auth.verifyOtp({
                     email,
                     token,
                     type: 'email'
@@ -856,7 +854,7 @@
         }
 
         async function logout() {
-            await supabase.auth.signOut();
+            await supabaseClient.auth.signOut();
             currentUser = null;
             document.getElementById('authScreen').style.display = 'flex';
             document.getElementById('appContainer').style.display = 'none';
@@ -897,7 +895,7 @@
             }
 
             try {
-                const { data, error } = await supabase
+                const { data, error } = await supabaseClient
                     .from('projects')
                     .insert({
                         user_id: currentUser.id,
@@ -925,7 +923,7 @@
 
         async function loadProjects() {
             try {
-                const { data, error } = await supabase
+                const { data, error } = await supabaseClient
                     .from('projects')
                     .select('*')
                     .eq('user_id', currentUser.id)
@@ -982,7 +980,7 @@
             try {
                 const hash = await generateHash(JSON.stringify({ projectId, type, value, notes, timestamp: new Date().toISOString() }));
 
-                const { data, error } = await supabase
+                const { data, error } = await supabaseClient
                     .from('records')
                     .insert({
                         user_id: currentUser.id,
@@ -1011,7 +1009,7 @@
 
         async function loadRecords() {
             try {
-                const { data, error } = await supabase
+                const { data, error } = await supabaseClient
                     .from('records')
                     .select('*')
                     .eq('user_id', currentUser.id)
@@ -1172,7 +1170,7 @@
                 return;
             }
             try {
-                const { data: { user } } = await supabase.auth.getUser();
+                const { data: { user } } = await supabaseClient.auth.getUser();
                 if (user) {
                     currentUser = user;
                     loginSuccess();
