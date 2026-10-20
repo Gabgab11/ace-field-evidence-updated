@@ -49,13 +49,15 @@ html,body{height:100%;background:#0c1510;font-family:-apple-system,BlinkMacSyste
 .btn{display:block;width:100%;border:0;border-radius:18px;background:#2F7D4F;color:#fff;font-weight:700;font-size:17px;padding:17px;font-family:inherit;cursor:pointer;box-shadow:0 10px 24px rgba(47,125,79,.3);transition:transform .15s}
 .btn:active{transform:scale(.97)}
 .btn.dark{background:#14241C;box-shadow:none}
-.sign{position:absolute;left:0;right:0;bottom:0;height:600px;background:#fff;border-radius:34px 34px 0 0;padding:34px 30px;transform:translateY(100%);box-shadow:0 -10px 40px rgba(14,26,20,.14)}
+.sign{position:absolute;left:0;right:0;bottom:0;height:auto;background:#fff;border-radius:34px 34px 0 0;padding:40px 28px;transform:translateY(100%);box-shadow:0 -10px 40px rgba(14,26,20,.14)}
 #s2.on .sheet{animation:sheet .9s .2s cubic-bezier(.2,.9,.3,1) forwards}
 .scr.on .sign{animation:sheet .8s .15s cubic-bezier(.2,.9,.3,1) forwards}
 .sign .h1{font-size:28px}
-.field{margin-top:18px}
+.field{margin-top:16px}
 .field label{font-size:13px;font-weight:700;color:#0E1A14;display:block;margin-bottom:8px}
-.field div{height:50px;border-radius:14px;background:#F6F8F4;border:1px solid #D7E0D6;padding:14px;color:#8A9A90;font-size:14px}
+.field input{height:50px;border-radius:14px;background:#F6F8F4;border:1px solid #D7E0D6;padding:0 14px;color:#0E1A14;font-size:14px;transition:all .2s;width:100%}
+.field input:focus{outline:none;border-color:#2F7D4F;box-shadow:0 0 0 4px rgba(47,125,79,.1)}
+.field input:hover{border-color:#2F7D4F;background:#fff}
 .field.typed div{color:#0E1A14}
 .caret::after{content:"|";animation:blink 1s steps(1) infinite;margin-left:1px}
 @keyframes blink{50%{opacity:0}}
@@ -145,8 +147,8 @@ html,body{height:100%;background:#0c1510;font-family:-apple-system,BlinkMacSyste
     <div class="sign">
       <div class="h1">Welcome back</div>
       <div class="p" style="margin-top:6px">Sign in to your field workspace</div>
-      <div class="field"><label>Work email</label><div>gabriel@ace.example</div></div>
-      <div class="field"><label>Password</label><div>••••••••</div></div>
+      <div class="field"><label>Work email</label><input type="email" value="gabriel@ace.example" readonly style="cursor:pointer;background:#F6F8F4;border:1px solid #D7E0D6;border-radius:14px;padding:14px;color:#0E1A14;font-size:14px;font-family:inherit;width:100%;box-sizing:border-box"></div>
+      <div class="field"><label>Password</label><input type="password" value="password123" readonly style="cursor:pointer;background:#F6F8F4;border:1px solid #D7E0D6;border-radius:14px;padding:14px;color:#0E1A14;font-size:14px;font-family:inherit;width:100%;box-sizing:border-box"></div>
       <button class="btn dark" onclick="show(4)">Sign in →</button>
       <div class="link">Forgot password?</div>
     </div>
