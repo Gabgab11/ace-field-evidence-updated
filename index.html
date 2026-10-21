@@ -78,23 +78,26 @@ input[type=checkbox]{width:18px;height:18px;accent-color:var(--green)}
 .link{background:none;border:0;color:var(--green);cursor:pointer;padding:0;font-size:13px;font-weight:600}
 
 /* ---------- App shell ---------- */
-.app{display:grid;grid-template-columns:248px 1fr;min-height:100vh}
-.side{background:var(--surface);border-right:1px solid var(--line);padding:26px 16px;display:flex;flex-direction:column;position:sticky;top:0;height:100vh;overflow:auto}
-.brand{display:flex;align-items:center;gap:12px;padding:2px 10px 30px}
-.brand b{font-size:16px;font-weight:700;display:block;line-height:1.15;letter-spacing:-.02em}
-.brand small{color:var(--muted);font-size:12.5px;font-weight:500}
-.nav{display:flex;flex-direction:column;gap:4px}
-.nav button{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;background:none;border:0;padding:11px 14px;border-radius:14px;color:var(--muted);cursor:pointer;text-align:left;font-size:14.5px;font-weight:600}
-.nav button:hover{background:var(--soft);color:var(--ink)}
-.nav button.on{background:var(--ink);color:var(--on-ink)}
-.nav .badge{background:var(--ochre);color:var(--ink);border-radius:var(--r-pill);font-size:11.5px;font-weight:800;padding:1px 8px;min-width:22px;text-align:center}
-.nav .sep{height:1px;background:var(--line);margin:14px 6px}
+.app{display:grid;grid-template-columns:240px 1fr;min-height:100vh}
+.side{background:#0E1A14;border-right:none;padding:20px 12px 20px;display:flex;flex-direction:column;position:sticky;top:0;height:100vh;overflow:auto}
+.brand{display:flex;align-items:center;gap:10px;padding:8px 10px 28px}
+.brand .mark{background:var(--green);color:#fff;font-size:13px;font-weight:800;border-radius:10px;width:34px;height:34px;display:grid;place-items:center;letter-spacing:.5px;flex:0 0 auto}
+.brand b{font-size:14.5px;font-weight:700;display:block;line-height:1.2;letter-spacing:-.01em;color:#e8f0eb}
+.brand small{color:#5c7a66;font-size:11.5px;font-weight:500}
+.nav{display:flex;flex-direction:column;gap:2px}
+.nav button{display:flex;align-items:center;gap:11px;width:100%;background:none;border:0;padding:10px 12px;border-radius:12px;color:#6b8f77;cursor:pointer;text-align:left;font-size:13.5px;font-weight:600;transition:background .15s,color .15s}
+.nav button .nav-icon{width:18px;height:18px;flex:0 0 auto;opacity:.7}
+.nav button:hover{background:rgba(255,255,255,.06);color:#c8dece}
+.nav button.on{background:rgba(255,255,255,.1);color:#e8f5ec}
+.nav button.on .nav-icon{opacity:1}
+.nav .badge{background:var(--ochre);color:var(--ink);border-radius:var(--r-pill);font-size:10.5px;font-weight:800;padding:1px 7px;min-width:20px;text-align:center;margin-left:auto}
+.nav .sep{height:1px;background:rgba(255,255,255,.06);margin:10px 6px}
 .nav .short{display:none}
-.me{margin-top:auto;display:flex;align-items:center;gap:12px;padding:12px;border-radius:18px;background:var(--soft);border:0;cursor:pointer;width:100%;text-align:left}
-.me:hover{background:#E8EDE5}
-.avatar{width:40px;height:40px;border-radius:50%;background:var(--green);color:var(--on-ink);display:grid;place-items:center;font-weight:700;font-size:13.5px;flex:0 0 auto}
-.me b{display:block;font-size:14px}
-.me small{color:var(--muted);font-size:12.5px}
+.me{margin-top:auto;display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:14px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.07);cursor:pointer;width:100%;text-align:left;transition:background .15s}
+.me:hover{background:rgba(255,255,255,.09)}
+.avatar{width:36px;height:36px;border-radius:50%;background:var(--green);color:#fff;display:grid;place-items:center;font-weight:700;font-size:12.5px;flex:0 0 auto}
+.me b{display:block;font-size:13px;color:#daeade;font-weight:600}
+.me small{color:#5c7a66;font-size:11.5px}
 .main{min-width:0;display:flex;flex-direction:column}
 .topbar{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:18px 40px;background:rgba(245,246,242,.85);backdrop-filter:blur(10px);position:sticky;top:0;z-index:4}
 .topbar .crumb{color:var(--muted);font-size:13.5px;font-weight:500}
@@ -856,7 +859,22 @@ function doRegister(e){
 /* ---------- Shell ---------- */
 function shell(body, title, sub, actions = ''){
   const pending = S.records.filter(r => r.status === 'submitted').length;
-  const navBtn = ([id,label,hideM,short]) => `<button class="${(S.route===id||(S.route==='record'&&id==='records'))?'on':''} ${hideM?'m-hide':''}" onclick="go('${id}')"><span class="full">${label}</span><span class="short">${short}</span>${id==='records'&&pending?`<span class="badge">${pending}</span>`:''}</button>`;
+  const NAV_ICONS = {
+    dashboard:`<svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor"><path d="M2 10a8 8 0 1116 0A8 8 0 012 10zm3.5-1.5a.5.5 0 000 1h9a.5.5 0 000-1h-9zM10 6a.5.5 0 01.5.5v7a.5.5 0 01-1 0v-7A.5.5 0 0110 6z"/><rect x="3" y="3" width="6" height="6" rx="1.5"/><rect x="11" y="3" width="6" height="6" rx="1.5"/><rect x="3" y="11" width="6" height="6" rx="1.5"/><rect x="11" y="11" width="6" height="6" rx="1.5"/></svg>`,
+    entry:`<svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor"><circle cx="10" cy="10" r="8"/><path d="M10 6v8M6 10h8" stroke="#0E1A14" stroke-width="2" stroke-linecap="round"/></svg>`,
+    sites:`<svg class="nav-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M10 2a5 5 0 015 5c0 4-5 11-5 11S5 11 5 7a5 5 0 015-5z"/><circle cx="10" cy="7" r="1.8" fill="currentColor" stroke="none"/></svg>`,
+    baselines:`<svg class="nav-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polyline points="3,14 7,9 11,12 17,5"/><line x1="3" y1="17" x2="17" y2="17"/></svg>`,
+    integrity:`<svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor"><path d="M10 2l1.5 4.5H16l-3.5 2.6 1.3 4.4L10 11.1 6.2 13.5l1.3-4.4L4 6.5h4.5z"/></svg>`,
+    projects:`<svg class="nav-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="16" height="12" rx="2"/><path d="M6 5V4a2 2 0 014 0v1"/></svg>`,
+    records:`<svg class="nav-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><rect x="4" y="2" width="12" height="16" rx="2"/><line x1="7" y1="7" x2="13" y2="7"/><line x1="7" y1="10.5" x2="13" y2="10.5"/><line x1="7" y1="14" x2="11" y2="14"/></svg>`,
+    reports:`<svg class="nav-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="14" height="14" rx="2"/><polyline points="7,13 9,10 11,12 14,8"/></svg>`,
+    status:`<svg class="nav-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="10" cy="10" r="7"/><polyline points="10,6 10,10 13,12"/></svg>`,
+    trivia:`<svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor"><path d="M10 2a8 8 0 100 16A8 8 0 0010 2zm0 3a1.2 1.2 0 110 2.4A1.2 1.2 0 0110 5zm1 4.5v5.5H9V9.5h2z"/></svg>`,
+    audit:`<svg class="nav-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3H5a2 2 0 00-2 2v11a2 2 0 002 2h10a2 2 0 002-2V8l-5-5z"/><polyline points="9,3 9,8 14,8"/><line x1="7" y1="13" x2="13" y2="13"/><line x1="7" y1="10" x2="11" y2="10"/></svg>`,
+    profile:`<svg class="nav-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="10" cy="7" r="3.5"/><path d="M3 18c0-3.9 3.1-7 7-7s7 3.1 7 7"/></svg>`,
+    settings:`<svg class="nav-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="2.5"/><path d="M10 2v2m0 12v2M2 10h2m12 0h2m-3.1-4.9-1.4 1.4M5.5 14.5l-1.4 1.4M14.9 14.9l-1.4-1.4M5.5 5.5L4.1 4.1"/></svg>`
+  };
+  const navBtn = ([id,label,hideM,short]) => `<button class="${(S.route===id||(S.route==='record'&&id==='records'))?'on':''} ${hideM?'m-hide':''}" onclick="go('${id}')">${NAV_ICONS[id]||''}<span class="full">${label}</span><span class="short">${short}</span>${id==='records'&&pending?`<span class="badge">${pending}</span>`:''}</button>`;
   return `
   <div class="app">
     <aside class="side">
@@ -864,8 +882,8 @@ function shell(body, title, sub, actions = ''){
       <nav class="nav" aria-label="Main">
         ${NAV.map(navBtn).join('')}
         <div class="sep"></div>
-        <button class="${S.route==='profile'?'on':''}" onclick="go('profile')"><span class="full">Profile</span><span class="short">Profile</span></button>
-        <button class="${S.route==='settings'?'on':''} m-hide" onclick="go('settings')"><span class="full">Settings</span><span class="short">Settings</span></button>
+        <button class="${S.route==='profile'?'on':''}" onclick="go('profile')">${NAV_ICONS.profile}<span class="full">Profile</span><span class="short">Profile</span></button>
+        <button class="${S.route==='settings'?'on':''} m-hide" onclick="go('settings')">${NAV_ICONS.settings}<span class="full">Settings</span><span class="short">Settings</span></button>
       </nav>
       <button class="me" onclick="go('profile')" aria-label="Open profile">
         <span class="avatar">${initials(S.user.name)}</span>
