@@ -1,108 +1,19 @@
 <!DOCTYPE html>
-<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>ACE · Field Evidence v2</title>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>ACE Field Evidence · Digital MRV</title>
 <style>
-
-*{box-sizing:border-box;margin:0;padding:0}
-html,body{height:100%;background:#0c1510;font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-serif;overflow:hidden}
-#phone{position:absolute;left:50%;top:50%;width:390px;height:844px;transform:translate(-50%,-50%);overflow:hidden;background:#F5F6F2;border-radius:0}
-@media (max-width:500px){#phone{width:100vw;height:100vh;border-radius:0}}
-.scr{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .6s ease,visibility .6s}
-.scr.on{opacity:1;visibility:visible}
-/* splash */
-#splash{background:linear-gradient(#E8F4EC,#F8F5E6);display:flex;flex-direction:column;align-items:center;justify-content:center}
-#sprout{width:200px;height:260px}
-#sprout .stem{stroke:#2F7D4F;stroke-width:5;fill:none;stroke-linecap:round;stroke-dasharray:200;stroke-dashoffset:200;animation:grow 1.3s .2s ease-out forwards}
-#sprout .leaf{transform-origin:100px 150px;transform:scale(0);animation:pop .6s cubic-bezier(.2,1.6,.4,1) forwards}
-#sprout .l1{animation-delay:1.2s}#sprout .l2{animation-delay:1.45s}
-#sprout .ground{transform:scaleX(0);transform-origin:center;animation:ground .9s .1s ease-out forwards}
-@keyframes grow{to{stroke-dashoffset:0}}
-@keyframes pop{to{transform:scale(1)}}
-@keyframes ground{to{transform:scaleX(1)}}
-.wordmark{margin-top:14px;font-size:58px;font-weight:800;color:#0E1A14;letter-spacing:-.02em;opacity:0;transform:translateY(14px);animation:up .7s 2.1s ease forwards}
-.tagline{font-size:17px;font-weight:700;color:#0E1A14;opacity:0;transform:translateY(10px);animation:up .6s 2.6s ease forwards;margin-top:6px}
-.sub{font-size:13px;color:#6B7A70;opacity:0;animation:fade .6s 3s ease forwards;margin-top:4px}
-@keyframes up{to{opacity:1;transform:none}}
-@keyframes fade{to{opacity:1}}
-/* landscape */
-.land{position:absolute;left:0;right:0;top:0;height:560px}
-.land svg{width:100%;height:100%;display:block}
-.cloud{animation:drift 14s linear infinite}
-.cloud.b{animation-duration:20s;animation-delay:-6s}
-@keyframes drift{from{transform:translateX(-120px)}to{transform:translateX(420px)}}
-.blade{transform-origin:300px 120px;animation:spin 6s linear infinite}
-.blade.s{transform-origin:70px 170px;animation-duration:8s;animation-direction:reverse}
-@keyframes spin{to{transform:rotate(360deg)}}
-.sun{transform-origin:300px 110px;animation:pulse 4s ease-in-out infinite}
-@keyframes pulse{50%{transform:scale(1.06)}}
-/* sheet + cards */
-.sheet{position:absolute;left:0;right:0;bottom:0;height:520px;background:#fff;border-radius:34px 34px 0 0;padding:34px 32px;transform:translateY(100%);box-shadow:0 -10px 40px rgba(14,26,20,.12)}
-@keyframes sheet{to{transform:translateY(0)}}
-.h1{font-size:30px;font-weight:800;color:#0E1A14;line-height:1.15;letter-spacing:-.02em}
-.p{color:#6B7A70;font-size:15px;margin-top:10px;line-height:1.5}
-.dots{display:flex;gap:8px;margin:26px 0}
-.dots i{width:10px;height:10px;border-radius:50%;background:#C8D6CB;transition:background .3s,transform .3s}
-.dots i.on{background:#2F7D4F;transform:scale(1.2)}
-.btn{display:block;width:100%;border:0;border-radius:18px;background:#2F7D4F;color:#fff;font-weight:700;font-size:17px;padding:17px;font-family:inherit;cursor:pointer;box-shadow:0 10px 24px rgba(47,125,79,.3);transition:transform .15s}
-.btn:active{transform:scale(.97)}
-.btn.dark{background:#14241C;box-shadow:none}
-.sign{position:absolute;left:0;right:0;bottom:0;height:600px;background:#fff;border-radius:34px 34px 0 0;padding:34px 30px;transform:translateY(100%);box-shadow:0 -10px 40px rgba(14,26,20,.14)}
-#s2.on .sheet{animation:sheet .9s .2s cubic-bezier(.2,.9,.3,1) forwards}
-.scr.on .sign{animation:sheet .8s .15s cubic-bezier(.2,.9,.3,1) forwards}
-.sign .h1{font-size:28px}
-.field{margin-top:18px}
-.field label{font-size:13px;font-weight:700;color:#0E1A14;display:block;margin-bottom:8px}
-.field div{height:50px;border-radius:14px;background:#F6F8F4;border:1px solid #D7E0D6;padding:14px;color:#8A9A90;font-size:14px}
-.field.typed div{color:#0E1A14}
-.caret::after{content:"|";animation:blink 1s steps(1) infinite;margin-left:1px}
-@keyframes blink{50%{opacity:0}}
-.sign .btn{margin-top:26px}
-.link{text-align:center;color:#2F7D4F;font-weight:700;font-size:13px;margin-top:18px}
-/* dashboard */
-.dash-top{position:absolute;left:0;right:0;top:0;height:300px;background:linear-gradient(#A9DCEB,#DDEFE8)}
-.dash-top svg{position:absolute;inset:0;width:100%;height:100%}
-.greet{position:absolute;left:28px;top:70px;color:#0E1A14}
-.greet b{font-size:24px;display:block;letter-spacing:-.02em}
-.greet span{font-size:14px;color:#3F4F45}
-.stats{position:absolute;left:24px;right:24px;top:230px;display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
-.stat{background:#fff;border-radius:18px;padding:14px;box-shadow:0 8px 22px rgba(14,26,20,.08);opacity:0;transform:translateY(18px)}
-.scr.on .stat{animation:up .5s forwards}.scr.on .stat:nth-child(1){animation-delay:.25s}.scr.on .stat:nth-child(2){animation-delay:.4s}.scr.on .stat:nth-child(3){animation-delay:.55s}
-.stat small{color:#6B7A70;font-size:12px;font-weight:600}
-.stat b{display:block;font-size:26px;margin-top:6px;color:#0E1A14;letter-spacing:-.02em}
-.card{position:absolute;left:24px;right:24px;background:#fff;border-radius:20px;padding:18px 20px;box-shadow:0 8px 22px rgba(14,26,20,.07);opacity:0;transform:translateY(18px)}
-.scr.on .card{animation:up .5s forwards}.card.c1{top:330px}.card.c2{top:414px}.card.c3{top:510px}.scr.on .card.c1{animation-delay:.7s}.scr.on .card.c2{animation-delay:.85s}.scr.on .card.c3{animation-delay:1s}
-.card small{color:#6B7A70;font-size:13px}
-.card b{display:block;font-size:17px;color:#0E1A14;margin-top:2px}
-.bar{height:8px;border-radius:99px;background:#E4ECE6;margin-top:12px;overflow:hidden}
-.bar i{display:block;height:100%;width:0;background:#2F7D4F;border-radius:99px}.scr.on .bar i{animation:fill 1.2s 1s ease forwards}
-@keyframes fill{to{width:80%}}
-.tab{position:absolute;left:24px;right:24px;bottom:22px;height:64px;background:#fff;border-radius:32px;display:flex;justify-content:space-around;align-items:center;box-shadow:0 10px 28px rgba(14,26,20,.14);opacity:0}.scr.on .tab{animation:fade .5s 1.2s forwards}
-.tab span{display:flex;flex-direction:column;align-items:center;font-size:11px;color:#8A9A90;gap:4px}
-.tab span i{width:20px;height:20px;border-radius:7px;background:#D6E1D8}
-.tab span.on{color:#0E1A14;font-weight:700}
-.tab span.on i{background:#2F7D4F}
-#replay{position:fixed;top:14px;right:16px;background:rgba(255,255,255,.12);color:#D9E3DB;border:1px solid rgba(255,255,255,.2);border-radius:10px;padding:8px 12px;font-size:13px;font-family:inherit;cursor:pointer;z-index:5}
-#hint{position:fixed;left:0;right:0;bottom:12px;text-align:center;color:#7F9488;font-size:12px;font-family:inherit;z-index:5}
-
-/* Full app styles */
-
 :root{
-  --bg:#F8F9FA; --surface:rgba(255,255,255,0.7); --soft:rgba(240,243,238,0.5); --line:rgba(229,234,227,0.3);
-  --ink:#0E1A14; --text:#0E1A14; --paper:#0E1A14; --canopy:#0E1A14; --canopy2:#FFFFFF; --canopy3:rgba(240,243,238,0.8);
-  --muted:#6B7A70; --green:#2F7D4F; --moss:#2F7D4F; --green-soft:rgba(227,241,231,0.6);
+  --bg:#F5F6F2; --surface:#FFFFFF; --soft:#F0F3EE; --line:#E5EAE3;
+  --ink:#0E1A14; --text:#0E1A14; --paper:#0E1A14; --canopy:#0E1A14; --canopy2:#FFFFFF; --canopy3:#F0F3EE;
+  --muted:#6B7A70; --green:#2F7D4F; --moss:#2F7D4F; --green-soft:#E3F1E7;
   --ochre:#E0A93B; --sky:#2F6F92; --clay:#B5472C;
-  --r-card:24px; --r-ctl:14px; --r-pill:999px;
+  --r-card:22px; --r-ctl:12px; --r-pill:999px;
   --serif:"Inter","Helvetica Neue",Arial,system-ui,sans-serif;
   --sans:"Inter","Helvetica Neue",Arial,system-ui,-apple-system,"Segoe UI",sans-serif;
-  --shadow:0 8px 32px rgba(14,26,20,.08),0 2px 8px rgba(14,26,20,.04);
-  --blur:10px;
-}
-@media (prefers-color-scheme:dark){
-  :root{
-    --bg:#0F1419; --surface:rgba(20,30,28,0.6); --soft:rgba(30,50,45,0.4); --line:rgba(107,122,112,0.2);
-    --ink:#F5F6F2; --text:#F5F6F2; --muted:#9BA69D; --green-soft:rgba(47,125,79,0.3);
-    --shadow:0 8px 32px rgba(0,0,0,.3),0 2px 8px rgba(0,0,0,.1);
-  }
+  --shadow:0 1px 2px rgba(14,26,20,.04),0 12px 32px rgba(14,26,20,.06);
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{min-height:100%}
@@ -168,7 +79,7 @@ input[type=checkbox]{width:18px;height:18px;accent-color:var(--green)}
 
 /* ---------- App shell ---------- */
 .app{display:grid;grid-template-columns:248px 1fr;min-height:100vh}
-.side{background:var(--surface);backdrop-filter:blur(var(--blur));border-right:1px solid var(--line);padding:32px 20px;display:flex;flex-direction:column;position:sticky;top:0;height:100vh;overflow:auto}
+.side{background:var(--surface);border-right:1px solid var(--line);padding:26px 16px;display:flex;flex-direction:column;position:sticky;top:0;height:100vh;overflow:auto}
 .brand{display:flex;align-items:center;gap:12px;padding:2px 10px 30px}
 .brand b{font-size:16px;font-weight:700;display:block;line-height:1.15;letter-spacing:-.02em}
 .brand small{color:var(--muted);font-size:12.5px;font-weight:500}
@@ -185,14 +96,14 @@ input[type=checkbox]{width:18px;height:18px;accent-color:var(--green)}
 .me b{display:block;font-size:14px}
 .me small{color:var(--muted);font-size:12.5px}
 .main{min-width:0;display:flex;flex-direction:column}
-.topbar{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:24px 40px;background:var(--surface);backdrop-filter:blur(var(--blur));border-bottom:1px solid var(--line);position:sticky;top:0;z-index:4}
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:18px 40px;background:rgba(245,246,242,.85);backdrop-filter:blur(10px);position:sticky;top:0;z-index:4}
 .topbar .crumb{color:var(--muted);font-size:13.5px;font-weight:500}
 .search{display:flex;align-items:center;gap:10px;background:var(--surface);border:1px solid #D9E0D6;border-radius:var(--r-pill);padding:9px 16px;min-width:280px}
 .search span{color:var(--muted);font-size:13.5px;font-weight:600}
 .search input{border:0;background:none;padding:0;width:100%;box-shadow:none}
 .search input:focus{border:0;box-shadow:none}
 .roletag{font-size:12.5px;font-weight:600;padding:6px 12px;border-radius:var(--r-pill);background:var(--green-soft);color:var(--green)}
-.content{padding:32px 48px 80px;max-width:1280px;width:100%}
+.content{padding:8px 40px 64px;max-width:1280px;width:100%}
 .pagehead{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap;margin:8px 0 28px}
 .pagehead p{color:var(--muted);margin-top:8px;max-width:60ch;font-size:15.5px}
 
@@ -219,9 +130,8 @@ input[type=checkbox]{width:18px;height:18px;accent-color:var(--green)}
 }
 
 /* ---------- Cards ---------- */
-.card{background:var(--surface);backdrop-filter:blur(var(--blur));border:1px solid var(--line);border-radius:var(--r-card);padding:28px;box-shadow:var(--shadow);transition:all .2s ease}
-.card:hover{background:rgba(255,255,255,0.75);backdrop-filter:blur(calc(var(--blur) * 1.2))}
-.card.flat{background:transparent;box-shadow:none;backdrop-filter:none}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-card);padding:24px;box-shadow:var(--shadow)}
+.card.flat{background:transparent;box-shadow:none}
 .grid{display:grid;gap:20px}
 .k4{grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
 .dash{grid-template-columns:1.5fr 1fr}
@@ -471,104 +381,42 @@ input[type=checkbox]{width:18px;height:18px;accent-color:var(--green)}
   .setrow{flex-wrap:wrap}
 }
 
-/* ---------- Help/Support Button ---------- */
-#helpBtn{position:fixed;bottom:32px;right:32px;width:56px;height:56px;border-radius:50%;background:var(--green);color:#fff;border:2px solid rgba(255,255,255,0.2);cursor:pointer;font-size:24px;display:grid;place-items:center;box-shadow:0 8px 24px rgba(47,125,79,.3);z-index:100;transition:all .3s ease}
-#helpBtn:hover{transform:scale(1.1);box-shadow:0 12px 32px rgba(47,125,79,.4)}
-#helpBtn:active{transform:scale(.95)}
-@media(max-width:620px){#helpBtn{bottom:24px;right:24px;width:48px;height:48px;font-size:20px}}
+/* Illustrated welcome screen */
+.welcome{min-height:100vh;display:flex;flex-direction:column;background:var(--surface)}
+.welcome-land{position:relative;height:46vh;min-height:300px;max-height:460px;overflow:hidden}
+.welcome-land svg{position:absolute;inset:0;width:100%;height:100%}
+.wcloud{animation:wdrift 16s linear infinite}
+@keyframes wdrift{from{transform:translateX(-120px)}to{transform:translateX(420px)}}
+.wblade{transform-origin:300px 200px;animation:wspin 6s linear infinite}
+@keyframes wspin{to{transform:rotate(360deg)}}
+.welcome-sheet{position:relative;margin-top:-34px;background:#fff;border-radius:32px 32px 0 0;padding:32px 28px 36px;flex:1;box-shadow:0 -10px 30px rgba(14,26,20,.08)}
+.welcome-sheet .h1{font-size:30px;font-weight:800;color:#0E1A14;line-height:1.15;letter-spacing:-.02em}
+.welcome-sheet .p{color:#6B7A70;font-size:15px;margin-top:10px}
+.welcome-sheet .dots{display:flex;gap:8px;margin:22px 0}
+.welcome-sheet .dots i{width:9px;height:9px;border-radius:50%;background:#C8D6CB}
+.welcome-sheet .dots i.on{background:#2F7D4F}
+.welcome-sheet .link{display:block;width:100%;text-align:center;margin-top:16px;background:none;border:0;color:#2F7D4F;font-weight:700;font-size:14px;cursor:pointer;font-family:inherit}
+@media (prefers-reduced-motion:reduce){.wcloud,.wblade{animation:none}}
 
-</style></head><body>
-<div id="phone">
-
-  <!-- 1 splash -->
-  <section class="scr on" id="s1" style="background:linear-gradient(#E8F4EC,#F8F5E6)">
-    <div style="position:absolute;left:0;right:0;top:170px;display:flex;flex-direction:column;align-items:center">
-      <svg id="sprout" viewBox="0 0 200 260">
-        <ellipse class="ground" cx="100" cy="236" rx="90" ry="14" fill="#96C48A"/>
-        <path class="stem" d="M100 236 C100 190 98 150 100 100"/>
-        <ellipse class="leaf l1" cx="72" cy="112" rx="34" ry="16" fill="#6FB082" transform="rotate(-25 72 112)" style="transform-origin:100px 105px"/>
-        <ellipse class="leaf l2" cx="128" cy="92" rx="34" ry="16" fill="#2F7D4F" transform="rotate(20 128 92)" style="transform-origin:100px 100px"/>
-      </svg>
-      <div class="wordmark">ACE</div>
-      <div class="tagline">African Carbon Exchange</div>
-      <div class="sub">Field Evidence</div>
-    </div>
-    <button class="btn" style="position:absolute;bottom:32px;left:32px;right:32px;width:auto;margin:0" onclick="show(2)">Continue →</button>
-  </section>
-
-  <!-- 2 welcome -->
-  <section class="scr" id="s2">
-    <div class="land">
-      <svg viewBox="0 0 390 560" preserveAspectRatio="xMidYMid slice">
-        <defs><linearGradient id="sk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#B6E2EE"/><stop offset="1" stop-color="#F5F3E2"/></linearGradient></defs>
-        <rect width="390" height="560" fill="url(#sk)"/>
-        <circle class="sun" cx="300" cy="110" r="26" fill="#F9D27A"/>
-        <g class="cloud"><ellipse cx="60" cy="110" rx="34" ry="18" fill="#fff"/><ellipse cx="88" cy="100" rx="26" ry="20" fill="#fff"/></g>
-        <g class="cloud b"><ellipse cx="170" cy="70" rx="28" ry="15" fill="#fff"/><ellipse cx="192" cy="62" rx="22" ry="17" fill="#fff"/></g>
-        <path d="M0 330 C60 290 120 300 190 330 S320 310 390 330 L390 560 L0 560Z" fill="#A9D19A"/>
-        <g transform="translate(70 230)"><rect x="-2" y="0" width="4" height="66" fill="#fafaf8"/><g class="blade s"><rect x="-22" y="-2" width="44" height="4" rx="2" fill="#fff"/><rect x="-2" y="-22" width="4" height="44" rx="2" fill="#fff"/></g></g>
-        <g transform="translate(300 220)"><rect x="-3" y="0" width="6" height="110" fill="#fafaf8"/><g class="blade"><rect x="-36" y="-2" width="72" height="5" rx="2" fill="#fff"/><rect x="-2" y="-36" width="5" height="72" rx="2" fill="#fff"/></g></g>
-        <path d="M0 380 C80 350 180 360 260 382 S360 370 390 380 L390 560 L0 560Z" fill="#7DB979"/>
-        <g fill="#4E8D5C"><circle cx="30" cy="368" r="18"/><circle cx="66" cy="364" r="20"/><circle cx="110" cy="370" r="16"/><circle cx="160" cy="366" r="19"/><circle cx="210" cy="368" r="17"/><circle cx="262" cy="364" r="20"/><circle cx="318" cy="368" r="17"/><circle cx="366" cy="366" r="18"/></g>
-        <path d="M0 440 C120 420 260 436 390 428 L390 560 L0 560Z" fill="#5FA46A"/>
-      </svg>
-    </div>
-    <div class="sheet">
-      <div class="h1">Your carbon records,<br>proven and sealed.</div>
-      <div class="p">Field data, checks and audit trail in one place.</div>
-      <div class="dots"><i class="on"></i><i></i><i></i></div>
-      <button class="btn" onclick="show(3)">Get started  →</button>
-      <div class="link" onclick="show(3)">Already have an account? Sign in</div>
-    </div>
-  </section>
-
-  <!-- 3 auth form -->
-  <section class="scr" id="s3">
-    <div class="land" style="height:470px">
-      <svg viewBox="0 0 390 560" preserveAspectRatio="xMidYMid slice">
-        <rect width="390" height="560" fill="#A9DCEB"/>
-        <path d="M0 240 C90 200 150 230 230 250 S340 230 390 240 L390 560 L0 560Z" fill="#A9D19A"/>
-        <g class="cloud"><ellipse cx="60" cy="90" rx="30" ry="16" fill="#fff"/></g>
-        <path d="M0 330 C120 300 260 320 390 310 L390 560 L0 560Z" fill="#7DB979"/>
-        <path d="M0 400 C120 380 260 396 390 388 L390 560 L0 560Z" fill="#5FA46A"/>
-      </svg>
-      <div style="position:absolute;left:0;right:0;top:70px;text-align:center;font-size:30px;font-weight:800;color:#0E1A14">ACE</div>
-    </div>
-    <div class="sign">
-      <div style="display:flex;gap:16px;margin-bottom:20px;border-bottom:1px solid #D7E0D6">
-        <button class="link" style="border:0;background:none;padding:0;text-align:left;padding-bottom:10px;border-bottom:2px solid #2F7D4F" onclick="authMode('signin')">Sign in</button>
-        <button class="link" style="border:0;background:none;padding:0;text-align:left;padding-bottom:10px;border-bottom:2px solid transparent;color:#6B7A70" onclick="authMode('signup')">Create account</button>
-      </div>
-      <div id="signinForm">
-        <div class="h1">Welcome back</div>
-        <div class="p" style="margin-top:6px">Sign in to your field workspace</div>
-        <div class="field"><label>Work email</label><input id="email" type="email" placeholder="name@organisation.org" style="background:#F6F8F4;border:1px solid #D7E0D6;padding:12px 14px;border-radius:14px;width:100%;font-family:inherit;color:#0E1A14;font-size:14px;outline:none;transition:border .15s" onfocus="this.style.borderColor='#2F7D4F'" onblur="this.style.borderColor='#D7E0D6'"/></div>
-        <div class="field"><label>Password</label><input id="password" type="password" placeholder="••••••••" style="background:#F6F8F4;border:1px solid #D7E0D6;padding:12px 14px;border-radius:14px;width:100%;font-family:inherit;color:#0E1A14;font-size:14px;outline:none;transition:border .15s" onfocus="this.style.borderColor='#2F7D4F'" onblur="this.style.borderColor='#D7E0D6'"/></div>
-        <button class="btn dark" style="width:100%;padding:14px;margin-top:16px;border:0;cursor:pointer" onclick="show(4)">Sign in</button>
-        <div class="link" style="text-align:center;margin-top:12px">Forgot password?</div>
-      </div>
-      <div id="signupForm" style="display:none">
-        <div class="h1">Create account</div>
-        <div class="p" style="margin-top:6px">Join the African Carbon Exchange</div>
-        <div class="field"><label>Full name</label><input type="text" placeholder="Your name" style="background:#F6F8F4;border:1px solid #D7E0D6;padding:12px 14px;border-radius:14px;width:100%;font-family:inherit;color:#0E1A14;font-size:14px;outline:none;transition:border .15s" onfocus="this.style.borderColor='#2F7D4F'" onblur="this.style.borderColor='#D7E0D6'"/></div>
-        <div class="field"><label>Work email</label><input type="email" placeholder="name@organisation.org" style="background:#F6F8F4;border:1px solid #D7E0D6;padding:12px 14px;border-radius:14px;width:100%;font-family:inherit;color:#0E1A14;font-size:14px;outline:none;transition:border .15s" onfocus="this.style.borderColor='#2F7D4F'" onblur="this.style.borderColor='#D7E0D6'"/></div>
-        <div class="field"><label>Password</label><input type="password" placeholder="••••••••" style="background:#F6F8F4;border:1px solid #D7E0D6;padding:12px 14px;border-radius:14px;width:100%;font-family:inherit;color:#0E1A14;font-size:14px;outline:none;transition:border .15s" onfocus="this.style.borderColor='#2F7D4F'" onblur="this.style.borderColor='#D7E0D6'"/></div>
-        <button class="btn dark" style="width:100%;padding:14px;margin-top:16px;border:0;cursor:pointer" onclick="show(4)">Create account</button>
-      </div>
-    </div>
-  </section>
-
-  <!-- 4 dashboard -->
-  <section class="scr" id="s4" style="position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .6s ease,visibility .6s;background:var(--bg);overflow:auto">
-    <div id="root" style="width:100%;height:100%;position:relative;background:var(--bg)"></div>
-  </section>
-
-</div>
-<button id="replay" onclick="show(1)" style="position:fixed;top:14px;right:16px;background:rgba(255,255,255,.12);color:#D9E3DB;border:1px solid rgba(255,255,255,.2);border-radius:10px;padding:8px 12px;font-size:13px;font-family:inherit;cursor:pointer;z-index:5">Replay</button>
+/* Illustrated style across the whole app */
+.land-band{position:relative;overflow:hidden;border-radius:26px;margin:0 0 22px}
+.land-band svg{position:absolute;inset:0;width:100%;height:100%;display:block}
+.land-band .wcloud{animation:wdrift 18s linear infinite}
+.land-band .wblade{transform-origin:860px 118px;animation:wspin 7s linear infinite}
+.signin-page{position:relative;overflow:hidden}
+.signin-band{position:absolute;top:0;left:0;right:0;height:230px;z-index:0}
+.signin-band .land-band{margin:0;border-radius:0;height:100%}
+.signin-card{position:relative;z-index:1;margin-top:150px}
+@media (prefers-reduced-motion:reduce){.land-band .wcloud,.land-band .wblade{animation:none}}
+[data-theme="dark"] .land-band{filter:brightness(.82) saturate(.9)}
+</style>
+</head>
+<body>
+<div id="splash" role="status" aria-label="Loading Field Evidence"><canvas id="splashCanvas"></canvas></div>
+<div id="root"></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script>
-// Store full app script in a module
-const fullAppCode = `
 /* ---------- Config ---------- */
 const ROLES = {
   'Field Team': { create:true,  submit:true,  review:false, admin:false },
@@ -675,7 +523,7 @@ const $ = id => document.getElementById(id);
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const nowStr = () => new Date().toISOString().slice(0,16).replace('T',' ');
 const today = () => new Date().toISOString().slice(0,10);
-const pill = s => \`<span class="pill ${s}">${STATUS[s]}</span>\`;
+const pill = s => `<span class="pill ${s}">${STATUS[s]}</span>`;
 const find = id => S.records.find(r => r.id === id);
 const projOf = id => PROJECTS.find(p => p.id === id) || { name:id, c:[0,0] };
 const can = k => ROLES[S.user.role][k];
@@ -716,19 +564,19 @@ function checks(r){
   const out = [], rng = RANGES[r.type];
   if (r.value === '') out.push({ ok:null, label:'Value recorded', note:'Waiting for a value' });
   else if (!rng) out.push({ ok:null, label:'Value range', note:'No range rule for this measurement type' });
-  else { const v = +r.value; out.push(v>=rng[0]&&v<=rng[1] ? { ok:true, label:'Value in expected range', note:\`${rng[0]} to ${rng[1]} ${r.unit}\` } : { ok:false, label:'Value outside expected range', note:\`Expected ${rng[0]} to ${rng[1]}, recorded ${v}\` }); }
+  else { const v = +r.value; out.push(v>=rng[0]&&v<=rng[1] ? { ok:true, label:'Value in expected range', note:`${rng[0]} to ${rng[1]} ${r.unit}` } : { ok:false, label:'Value outside expected range', note:`Expected ${rng[0]} to ${rng[1]}, recorded ${v}` }); }
   const p = projOf(r.projectId), d = km(p.c[0], p.c[1], r.lat, r.lon);
-  out.push(d<=30 ? { ok:true, label:'Inside project boundary', note:\`${d.toFixed(1)} km from project centre\` } : { ok:false, label:'Outside project boundary', note:\`${d.toFixed(1)} km from centre, limit 30 km\` });
+  out.push(d<=30 ? { ok:true, label:'Inside project boundary', note:`${d.toFixed(1)} km from project centre` } : { ok:false, label:'Outside project boundary', note:`${d.toFixed(1)} km from centre, limit 30 km` });
   const dateOk = r.date >= r.periodStart && r.date <= r.periodEnd && r.date <= today();
-  out.push(dateOk ? { ok:true, label:'Collected within reporting period', note:r.date } : { ok:false, label:'Collection date outside period', note:\`${r.date || 'No date'} against ${r.periodStart} to ${r.periodEnd}\` });
-  out.push(r.hash ? { ok:true, label:'Sealed on creation', note:\`SHA-256 ${r.hash.slice(0,16)}…\` } : { ok:null, label:'Not sealed', note:'' });
+  out.push(dateOk ? { ok:true, label:'Collected within reporting period', note:r.date } : { ok:false, label:'Collection date outside period', note:`${r.date || 'No date'} against ${r.periodStart} to ${r.periodEnd}` });
+  out.push(r.hash ? { ok:true, label:'Sealed on creation', note:`SHA-256 ${r.hash.slice(0,16)}…` } : { ok:null, label:'Not sealed', note:'' });
   return out;
 }
 const flagCount = r => checks(r).filter(c => c.ok === false).length;
 function spark(vals, color){
   const w=120,h=36,min=Math.min(...vals),max=Math.max(...vals),span=(max-min)||1;
-  const pts = vals.map((v,i)=>\`${(i/(vals.length-1))*w},${h-((v-min)/span)*(h-6)-3}\`).join(' ');
-  return \`<svg viewBox="0 0 ${w} ${h}" preserveAspectRatio="none" aria-hidden="true"><polyline fill="none" stroke="${color}" stroke-width="2" points="${pts}"/></svg>\`;
+  const pts = vals.map((v,i)=>`${(i/(vals.length-1))*w},${h-((v-min)/span)*(h-6)-3}`).join(' ');
+  return `<svg viewBox="0 0 ${w} ${h}" preserveAspectRatio="none" aria-hidden="true"><polyline fill="none" stroke="${color}" stroke-width="2" points="${pts}"/></svg>`;
 }
 
 /* Topographic background, generated as an SVG data URI */
@@ -736,18 +584,18 @@ function topoURI(){
   let paths = '';
   for (let i = 0; i < 16; i++){
     const off = i * 38, amp = 22 + i * 1.5;
-    let d = \`M -50 ${off}\`;
+    let d = `M -50 ${off}`;
     for (let x = -50; x <= 1500; x += 60){
       const y = off + Math.sin((x + i * 40) / 180) * amp + Math.cos((x - i * 25) / 110) * (amp * 0.4);
-      d += \` L ${x} ${y.toFixed(1)}\`;
+      d += ` L ${x} ${y.toFixed(1)}`;
     }
-    paths += \`<path d="${d}" />\`;
+    paths += `<path d="${d}" />`;
   }
-  const svg = \`<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="900" viewBox="0 0 1400 900"><g fill="none" stroke="#7fb08f" stroke-opacity=".16" stroke-width="1.2">${paths}</g></svg>\`;
-  return \`url("data:image/svg+xml;utf8,${encodeURIComponent(svg)}")\`;
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="900" viewBox="0 0 1400 900"><g fill="none" stroke="#7fb08f" stroke-opacity=".16" stroke-width="1.2">${paths}</g></svg>`;
+  return `url("data:image/svg+xml;utf8,${encodeURIComponent(svg)}")`;
 }
 function artURI(){
-  const svg = \`<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1000" viewBox="0 0 1200 1000" preserveAspectRatio="xMidYMid slice">
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1000" viewBox="0 0 1200 1000" preserveAspectRatio="xMidYMid slice">
     <defs><linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#CFE6F2"/><stop offset=".6" stop-color="#EEF5EC"/><stop offset="1" stop-color="#F7F3E6"/></linearGradient></defs>
     <rect width="1200" height="1000" fill="url(#sky)"/>
     <circle cx="880" cy="250" r="90" fill="#F6DFA2" opacity=".9"/>
@@ -755,8 +603,8 @@ function artURI(){
     <path d="M0 640 C220 560 420 600 620 650 S980 580 1200 630 L1200 1000 L0 1000Z" fill="#A9D19A"/>
     <path d="M0 740 C260 680 480 720 700 760 S1040 700 1200 735 L1200 1000 L0 1000Z" fill="#7DB779"/>
     <path d="M0 850 C300 800 600 840 900 860 S1100 830 1200 845 L1200 1000 L0 1000Z" fill="#4F9A5E"/>
-  </svg>\`;
-  return \`url("data:image/svg+xml;utf8,${encodeURIComponent(svg)}")\`;
+  </svg>`;
+  return `url("data:image/svg+xml;utf8,${encodeURIComponent(svg)}")`;
 }
 document.documentElement.style.setProperty('--art', artURI());
 
@@ -777,8 +625,9 @@ const NAV = [
 
 /* ---------- Login ---------- */
 function loginView(){
-  return \`
+  return `
   <div class="signin-page">
+    <div class="signin-band">${landBand(230)}</div>
     <div class="signin-card">
       <div class="mark big" aria-hidden="true">ACE</div>
       <h1>Sign in</h1>
@@ -794,11 +643,11 @@ function loginView(){
       </div>
       <div class="demo">
         <label for="rl">Demo role</label>
-        <select id="rl">${Object.keys(ROLES).map(r => \`<option ${r==='Admin'?'selected':''}>${r}</option>\`).join('')}</select>
+        <select id="rl">${Object.keys(ROLES).map(r => `<option ${r==='Admin'?'selected':''}>${r}</option>`).join('')}</select>
       </div>
     </div>
     <div class="signin-foot">Prototype · Luminary Digital Group</div>
-  </div>\`;
+  </div>`;
 }
 function signIn(e){
   e.preventDefault();
@@ -809,17 +658,17 @@ function signIn(e){
   S.user.name = local.replace(/\b\w/g, c => c.toUpperCase());
   S.user.role = role;
   S.authed = true; S.route = 'dashboard';
-  toast(\`Signed in as ${role}\`);
+  toast(`Signed in as ${role}`);
   render();
-  verifyChain().then(res => { S.integrity = res.ok ? { state:'ok', detail:\`All ${res.count} records verified in order.\` } : { state:'bad', detail:res.why }; render(); });
+  verifyChain().then(res => { S.integrity = res.ok ? { state:'ok', detail:`All ${res.count} records verified in order.` } : { state:'bad', detail:res.why }; render(); });
 }
-function signOut(){ S.authed = false; S.sel = null; render(); toast('Signed out'); }
+function signOut(){ S.authed = false; S.sel = null; S.route = 'welcome'; render(); toast('Signed out'); }
 
 /* ---------- Shell ---------- */
 function shell(body, title, sub, actions = ''){
   const pending = S.records.filter(r => r.status === 'submitted').length;
-  const navBtn = ([id,label,hideM,short]) => \`<button class="${(S.route===id||(S.route==='record'&&id==='records'))?'on':''} ${hideM?'m-hide':''}" onclick="go('${id}')"><span class="full">${label}</span><span class="short">${short}</span>${id==='records'&&pending?\`<span class="badge">${pending}</span>\`:''}</button>\`;
-  return \`
+  const navBtn = ([id,label,hideM,short]) => `<button class="${(S.route===id||(S.route==='record'&&id==='records'))?'on':''} ${hideM?'m-hide':''}" onclick="go('${id}')"><span class="full">${label}</span><span class="short">${short}</span>${id==='records'&&pending?`<span class="badge">${pending}</span>`:''}</button>`;
+  return `
   <div class="app">
     <aside class="side">
       <div class="brand"><div class="mark" aria-hidden="true">ACE</div><div><b>Field Evidence</b><small>Digital MRV · Demo</small></div></div>
@@ -845,32 +694,33 @@ function shell(body, title, sub, actions = ''){
         </div>
       </header>
       <main class="content">
+        ${S.route === 'dashboard' ? '' : landBand(150)}
         <div class="pagehead">
-          <div><h1>${title}</h1>${sub ? \`<p>${sub}</p>\` : ''}</div>
+          <div><h1>${title}</h1>${sub ? `<p>${sub}</p>` : ''}</div>
           <div class="actions">${actions}</div>
         </div>
         ${body}
       </main>
     </div>
-  </div>\`;
+  </div>`;
 }
 let _dt; function debounceSearch(){ clearTimeout(_dt); _dt = setTimeout(() => { if (S.route === 'records') render(); const el = $('q'); if (el) { el.focus(); el.setSelectionRange(el.value.length, el.value.length); } }, 180); }
 
 /* ---------- Views ---------- */
 function mapSvg(){
   const W = 640, H = 400, x = lon => (lon + 12) / 62 * W, y = lat => (20 - lat) / 34 * H;
-  let dots = ''; for (let gx = 8; gx < W; gx += 14) for (let gy = 8; gy < H; gy += 14) dots += \`<circle cx="${gx}" cy="${gy}" r="1.2"/>\`;
+  let dots = ''; for (let gx = 8; gx < W; gx += 14) for (let gy = 8; gy < H; gy += 14) dots += `<circle cx="${gx}" cy="${gy}" r="1.2"/>`;
   const col = { verified:'#2F7D4F', submitted:'#2F6F92', changes:'#E0A93B', rejected:'#B5472C', draft:'#9AA69D' };
   const pts = S.records.filter(r => r.lat && r.lon).map(r => {
     const cx = x(r.lon), cy = y(r.lat), f = flagCount(r) > 0;
-    return \`<g class="pt" onclick="viewRecord('${r.id}')" tabindex="0" role="button" aria-label="${r.id}, ${STATUS[r.status]}">
-      ${f ? \`<circle cx="${cx}" cy="${cy}" r="15" fill="none" stroke="#d0654a" stroke-dasharray="3 3"/>\` : ''}
-      <circle cx="${cx}" cy="${cy}" r="6" fill="${col[r.status]}"/><text x="${cx+11}" y="${cy+4}">${r.id}</text></g>\`;
+    return `<g class="pt" onclick="viewRecord('${r.id}')" tabindex="0" role="button" aria-label="${r.id}, ${STATUS[r.status]}">
+      ${f ? `<circle cx="${cx}" cy="${cy}" r="15" fill="none" stroke="#d0654a" stroke-dasharray="3 3"/>` : ''}
+      <circle cx="${cx}" cy="${cy}" r="6" fill="${col[r.status]}"/><text x="${cx+11}" y="${cy+4}">${r.id}</text></g>`;
   }).join('');
-  const prj = PROJECTS.map(p => \`<circle cx="${x(p.c[1])}" cy="${y(p.c[0])}" r="30" fill="none" stroke="#0E1A14" stroke-opacity=".35"/>
-    <text class="pl" x="${x(p.c[1])}" y="${y(p.c[0])-38}" text-anchor="middle">${esc(p.name)}</text>\`).join('');
-  return \`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Map of measurement points"><g fill="#0E1A14" opacity=".1">${dots}</g>${prj}${pts}</svg>
-    <div class="legend"><span><i style="background:#8fbfd9"></i>Awaiting review</span><span><i style="background:#7fb08f"></i>Verified</span><span><i style="background:#e0a93b"></i>Changes requested</span><span><i style="background:#9db0a2"></i>Draft</span><span><i style="border:1px dashed #d0654a;background:none"></i>Automated flag</span></div>\`;
+  const prj = PROJECTS.map(p => `<circle cx="${x(p.c[1])}" cy="${y(p.c[0])}" r="30" fill="none" stroke="#0E1A14" stroke-opacity=".35"/>
+    <text class="pl" x="${x(p.c[1])}" y="${y(p.c[0])-38}" text-anchor="middle">${esc(p.name)}</text>`).join('');
+  return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Map of measurement points"><g fill="#0E1A14" opacity=".1">${dots}</g>${prj}${pts}</svg>
+    <div class="legend"><span><i style="background:#8fbfd9"></i>Awaiting review</span><span><i style="background:#7fb08f"></i>Verified</span><span><i style="background:#e0a93b"></i>Changes requested</span><span><i style="background:#9db0a2"></i>Draft</span><span><i style="border:1px dashed #d0654a;background:none"></i>Automated flag</span></div>`;
 }
 
 function dashboard(){
@@ -882,7 +732,7 @@ function dashboard(){
   const srcMax = Math.max(1, ...srcCounts.map(x => x[1]));
   const I = S.integrity;
   const queue = can('review') ? r.filter(x => x.status === 'submitted') : [];
-  const body = \`
+  const body = `
   <section class="hero-band">
     <div class="intro">
       <div>
@@ -905,9 +755,9 @@ function dashboard(){
     <div class="card">
       <div class="cardhead"><h3>Verification pipeline</h3><small>${r.length} records</small></div>
       ${stages.map(st => { const c = n(st), p = r.length ? c / r.length * 100 : 0;
-        return \`<div class="pipe"><span>${STATUS[st]}</span><div class="track"><i style="width:${p}%"></i></div><b>${c}</b></div>\`; }).join('')}
+        return `<div class="pipe"><span>${STATUS[st]}</span><div class="track"><i style="width:${p}%"></i></div><b>${c}</b></div>`; }).join('')}
       <div class="cardhead" style="margin-top:22px"><h3>Where the data comes from</h3></div>
-      ${srcCounts.map(([s,c]) => \`<div class="pipe"><span>${s}</span><div class="track"><i class="srcbar" style="width:${c/srcMax*100}%"></i></div><b>${c}</b></div>\`).join('')}
+      ${srcCounts.map(([s,c]) => `<div class="pipe"><span>${s}</span><div class="track"><i class="srcbar" style="width:${c/srcMax*100}%"></i></div><b>${c}</b></div>`).join('')}
     </div>
     <div class="grid" style="gap:18px;align-content:start">
       <div class="card">
@@ -916,8 +766,8 @@ function dashboard(){
           <div><b>${I.state==='ok'?'Chain intact':I.state==='bad'?'Tampering detected':'Not checked yet'}</b><div class="muted" style="font-size:13px">${esc(I.detail)}</div></div></div>
         <div class="actions" style="margin-top:16px">
           <button class="btn primary sm" onclick="runVerify()">Verify chain</button>
-          ${S.user.role==='Admin' ? \`<button class="btn danger sm" onclick="simulateTamper()">Simulate tampering</button>\` : ''}
-          ${S.tampered ? \`<button class="btn sm" onclick="restoreTamper()">Restore data</button>\` : ''}
+          ${S.user.role==='Admin' ? `<button class="btn danger sm" onclick="simulateTamper()">Simulate tampering</button>` : ''}
+          ${S.tampered ? `<button class="btn sm" onclick="restoreTamper()">Restore data</button>` : ''}
         </div>
       </div>
       <div class="card">
@@ -932,27 +782,27 @@ function dashboard(){
     </div>
   </section>
 
-  <section class="card" style="margin-top:20px"><div class="cardhead"><h3>Modules</h3><small>Open any part of the brief</small></div><div class="actions" style="flex-wrap:wrap">${NAV.filter(n=>n[0]!=='dashboard').map(n => \`<button class="btn sm" onclick="go('${n[0]}')">${n[1]}</button>\`).join('')}</div></section>
+  <section class="card" style="margin-top:20px"><div class="cardhead"><h3>Modules</h3><small>Open any part of the brief</small></div><div class="actions" style="flex-wrap:wrap">${NAV.filter(n=>n[0]!=='dashboard').map(n => `<button class="btn sm" onclick="go('${n[0]}')">${n[1]}</button>`).join('')}</div></section>
   <section class="grid dash2" style="margin-top:20px">
     <div class="card">
-      <div class="cardhead"><h3>${can('review') ? 'Review queue' : 'Your recent activity'}</h3><small>${can('review') ? \`${queue.length} waiting\` : ''}</small></div>
+      <div class="cardhead"><h3>${can('review') ? 'Review queue' : 'Your recent activity'}</h3><small>${can('review') ? `${queue.length} waiting` : ''}</small></div>
       ${can('review')
-        ? (queue.length ? queue.map(x => \`<div class="act" style="cursor:pointer" onclick="viewRecord('${x.id}')" tabindex="0"><span class="ic">${x.id.slice(-2)}</span><div><b>${x.id} · ${esc(x.type)}</b><small>${esc(projOf(x.projectId).name)} · ${esc(x.source)}${flagCount(x)?\` · ${flagCount(x)} flag${flagCount(x)>1?'s':''}\`:''}</small></div></div>\`).join('') : '<div class="empty">Nothing waiting. The queue is clear.</div>')
-        : allAudit().filter(a => a.by === S.user.role).slice(0,5).map(a => \`<div class="act"><span class="ic">✓</span><div><b>${a.rec} · ${esc(a.action)}</b><small>${a.at}</small></div></div>\`).join('') || '<div class="empty">No activity yet. Create a measurement to get started.</div>'}
+        ? (queue.length ? queue.map(x => `<div class="act" style="cursor:pointer" onclick="viewRecord('${x.id}')" tabindex="0"><span class="ic">${x.id.slice(-2)}</span><div><b>${x.id} · ${esc(x.type)}</b><small>${esc(projOf(x.projectId).name)} · ${esc(x.source)}${flagCount(x)?` · ${flagCount(x)} flag${flagCount(x)>1?'s':''}`:''}</small></div></div>`).join('') : '<div class="empty">Nothing waiting. The queue is clear.</div>')
+        : allAudit().filter(a => a.by === S.user.role).slice(0,5).map(a => `<div class="act"><span class="ic">✓</span><div><b>${a.rec} · ${esc(a.action)}</b><small>${a.at}</small></div></div>`).join('') || '<div class="empty">No activity yet. Create a measurement to get started.</div>'}
     </div>
     <div class="card">
       <div class="cardhead"><h3>Recent activity</h3><small>All roles</small></div>
-      ${allAudit().slice(0,6).map(a => \`<div class="act"><span class="ic">${a.rec.slice(-2)}</span><div><b>${a.rec} · ${esc(a.action)}</b><small>${esc(a.by)} · ${a.at}</small></div></div>\`).join('')}
+      ${allAudit().slice(0,6).map(a => `<div class="act"><span class="ic">${a.rec.slice(-2)}</span><div><b>${a.rec} · ${esc(a.action)}</b><small>${esc(a.by)} · ${a.at}</small></div></div>`).join('')}
     </div>
-  </section>\`;
+  </section>`;
   return shell(body, 'Overview', 'Where your field evidence stands today.');
 }
 
 function projects(){
-  const body = \`<div class="grid projects">${PROJECTS.map(p => {
+  const body = `<div class="grid projects">${PROJECTS.map(p => {
     const recs = S.records.filter(r => r.projectId === p.id), ver = recs.filter(r => r.status === 'verified').length, pend = recs.filter(r => r.status === 'submitted').length;
     const pct = recs.length ? Math.round(ver / recs.length * 100) : 0;
-    return \`<article class="card proj">
+    return `<article class="card proj">
       <h3>${esc(p.name)}</h3>
       <div class="meta">${esc(p.country)} · ${esc(p.type)}<br>Methodology: ${esc(p.method)}<br>Standard: ${esc(p.standard)}</div>
       <div class="stats"><div><b>${recs.length}</b>Records</div><div><b>${ver}</b>Verified</div><div><b>${pend}</b>Pending</div></div>
@@ -961,24 +811,24 @@ function projects(){
         <button class="btn primary sm" onclick="S.prefProject='${p.id}';go('entry')" ${can('create')?'':'disabled'}>New measurement</button>
         <button class="btn sm" onclick="S.filter='all';go('records')">View records</button>
       </div>
-    </article>\`; }).join('')}</div>\`;
+    </article>`; }).join('')}</div>`;
   return shell(body, 'Projects', 'Each project has its own boundary, methodology and data sources.');
 }
 
 function entry(){
-  if (!can('create')) return shell(\`<div class="card notice">Your role (${esc(S.user.role)}) can review records but not create them. Ask an admin for Field Team access.</div>\`, 'Capture');
+  if (!can('create')) return shell(`<div class="card notice">Your role (${esc(S.user.role)}) can review records but not create them. Ask an admin for Field Team access.</div>`, 'Capture');
   const pre = S.prefProject || PROJECTS[0].id;
   const tplName = (PROJECTS.find(p => p.id === pre) || {}).tpl || 'Generic';
   const tpl = TEMPLATES[tplName] || TEMPLATES.Generic;
-  const body = \`
+  const body = `
   <form class="card" novalidate onsubmit="saveRecord(event)" style="max-width:920px">
     <div class="formsec">
       <h3>Project and template</h3>
       <div class="grid2">
-        <div class="field"><label for="f_p">Project</label><select id="f_p" name="projectId" onchange="S.prefProject=this.value;render()" style="width:100%">${PROJECTS.map(p => \`<option value="${p.id}" ${p.id===pre?'selected':''}>${esc(p.name)}</option>\`).join('')}</select></div>
+        <div class="field"><label for="f_p">Project</label><select id="f_p" name="projectId" onchange="S.prefProject=this.value;render()" style="width:100%">${PROJECTS.map(p => `<option value="${p.id}" ${p.id===pre?'selected':''}>${esc(p.name)}</option>`).join('')}</select></div>
         <div class="field"><label for="f_tp">Data template</label><input id="f_tp" value="${esc(tplName)}" disabled></div>
-        <div class="field"><label for="f_t">Measurement type</label><select id="f_t" name="type" style="width:100%">${TYPES.map(t => \`<option ${t===tpl.type?'selected':''}>${t}</option>\`).join('')}</select></div>
-        <div class="field"><label for="f_s">Data source</label><select id="f_s" name="source" style="width:100%">${SOURCES.map(s => \`<option>${s}</option>\`).join('')}</select></div>
+        <div class="field"><label for="f_t">Measurement type</label><select id="f_t" name="type" style="width:100%">${TYPES.map(t => `<option ${t===tpl.type?'selected':''}>${t}</option>`).join('')}</select></div>
+        <div class="field"><label for="f_s">Data source</label><select id="f_s" name="source" style="width:100%">${SOURCES.map(s => `<option>${s}</option>`).join('')}</select></div>
         <div class="field"><label for="f_r">Source reference</label><input id="f_r" name="ref" placeholder="Flight ID, scene ID, sensor serial or team code"></div>
       </div>
     </div>
@@ -1002,9 +852,9 @@ function entry(){
         <div class="field"><label for="f_c">Collector</label><input id="f_c" name="collector" placeholder="Name or team"></div>
       </div>
     </div>
-    ${tpl.fields.length ? \`<div class="formsec"><h3>${esc(tplName)} fields</h3><div class="grid2">
-      ${tpl.fields.map(([k,l,t,ph]) => \`<div class="field"><label for="x_${k}">${esc(l)}</label><input id="x_${k}" data-extra="${k}" data-kind="${t}" inputmode="${t==='number'?'decimal':'text'}" placeholder="${esc(ph)}"></div>\`).join('')}
-    </div></div>\` : ''}
+    ${tpl.fields.length ? `<div class="formsec"><h3>${esc(tplName)} fields</h3><div class="grid2">
+      ${tpl.fields.map(([k,l,t,ph]) => `<div class="field"><label for="x_${k}">${esc(l)}</label><input id="x_${k}" data-extra="${k}" data-kind="${t}" inputmode="${t==='number'?'decimal':'text'}" placeholder="${esc(ph)}"></div>`).join('')}
+    </div></div>` : ''}
     <div class="formsec">
       <div class="field"><label for="f_n">Field notes</label><textarea id="f_n" name="notes" rows="3" placeholder="Conditions, deviations from plan, anything a verifier should know"></textarea></div>
       <div class="field"><label for="f_e">Evidence (photos, PDFs, flight outputs)</label><input id="f_e" type="file" multiple accept="image/*,application/pdf"></div>
@@ -1015,7 +865,7 @@ function entry(){
       <button type="submit" value="submit" class="btn primary">Submit for review</button>
     </div>
     <div class="formmsg" id="formMsg" style="margin-top:12px"></div>
-  </form>\`;
+  </form>`;
   return shell(body, 'Capture', 'Log a reading from any source. The form follows the project template.');
 }
 
@@ -1023,24 +873,24 @@ function records(){
   const q = S.q.trim().toLowerCase();
   const list = S.records.filter(r => (S.filter==='all' || r.status===S.filter) &&
     (!q || [r.id, r.plot, r.type, projOf(r.projectId).name, r.collector, r.source].join(' ').toLowerCase().includes(q)));
-  const body = \`
+  const body = `
   <div class="toolbar">
     <select aria-label="Filter by status" onchange="S.filter=this.value;render()">
-      ${['all',...Object.keys(STATUS)].map(k => \`<option value="${k}" ${S.filter===k?'selected':''}>${k==='all'?'All statuses':STATUS[k]}</option>\`).join('')}
+      ${['all',...Object.keys(STATUS)].map(k => `<option value="${k}" ${S.filter===k?'selected':''}>${k==='all'?'All statuses':STATUS[k]}</option>`).join('')}
     </select>
     <span class="muted" style="font-size:13px">${list.length} of ${S.records.length} records</span>
   </div>
   <div class="card tablewrap" style="padding:8px 12px">
     <table class="table">
       <thead><tr><th>ID</th><th>Project</th><th>Measurement</th><th>Source</th><th>Status</th><th>Checks</th></tr></thead>
-      <tbody>${list.map(r => { const f = flagCount(r); return \`
+      <tbody>${list.map(r => { const f = flagCount(r); return `
         <tr class="row" tabindex="0" onclick="viewRecord('${r.id}')" onkeydown="if(event.key==='Enter')viewRecord('${r.id}')">
           <td><b>${r.id}</b></td><td>${esc(projOf(r.projectId).name)}</td><td>${esc(r.type)}</td><td class="muted">${esc(r.source)}</td>
-          <td>${pill(r.status)}</td><td>${f ? \`<span class="flag">${f} flag${f>1?'s':''}</span>\` : '<span class="clear">Clear</span>'}</td>
-        </tr>\`; }).join('') || '<tr><td colspan="6" class="empty">No records match. Try a different filter or search.</td></tr>'}
+          <td>${pill(r.status)}</td><td>${f ? `<span class="flag">${f} flag${f>1?'s':''}</span>` : '<span class="clear">Clear</span>'}</td>
+        </tr>`; }).join('') || '<tr><td colspan="6" class="empty">No records match. Try a different filter or search.</td></tr>'}
       </tbody>
     </table>
-  </div>\`;
+  </div>`;
   return shell(body, 'Records', 'Every measurement, with its automated checks and review status.');
 }
 
@@ -1050,8 +900,8 @@ function recordView(){
   const showCoords = can('review');
   const canEdit = can('submit') && (r.status==='draft' || r.status==='changes');
   const canReview = can('review') && r.status==='submitted';
-  const evidence = r.evidence.length ? r.evidence.map(e => \`<div>${e.url && e.type.startsWith('image/') ? \`<img src="${e.url}" alt="">\` : \`<div class="d">${e.type==='application/pdf'?'PDF':'FILE'}</div>\`}<small>${esc(e.name)}</small></div>\`).join('') : '<p class="muted" style="margin-bottom:14px">No evidence attached yet</p>';
-  const body = \`
+  const evidence = r.evidence.length ? r.evidence.map(e => `<div>${e.url && e.type.startsWith('image/') ? `<img src="${e.url}" alt="">` : `<div class="d">${e.type==='application/pdf'?'PDF':'FILE'}</div>`}<small>${esc(e.name)}</small></div>`).join('') : '<p class="muted" style="margin-bottom:14px">No evidence attached yet</p>';
+  const body = `
   <div class="actions" style="margin-bottom:18px"><button class="btn sm" onclick="go('records')">Back to records</button></div>
   <section class="grid dash">
     <div class="card">
@@ -1059,33 +909,33 @@ function recordView(){
       <dl class="kv">
         <dt>Record</dt><dd>${r.id}</dd>
         <dt>Project</dt><dd>${esc(projOf(r.projectId).name)}</dd>
-        <dt>Data source</dt><dd>${esc(r.source)}${r.ref?\` · ${esc(r.ref)}\`:''}</dd>
+        <dt>Data source</dt><dd>${esc(r.source)}${r.ref?` · ${esc(r.ref)}`:''}</dd>
         <dt>Reporting period</dt><dd>${r.periodStart} to ${r.periodEnd}</dd>
         <dt>Plot or sample</dt><dd>${esc(r.plot)}</dd>
         <dt>Measured value</dt><dd>${esc(r.value)||'<span class="muted">Not entered</span>'} ${esc(r.unit)}</dd>
         <dt>Date collected</dt><dd>${r.date}</dd>
         <dt>Method</dt><dd>${esc(r.method)}</dd>
         <dt>Collector</dt><dd>${esc(r.collector)}</dd>
-        <dt>Coordinates</dt><dd>${showCoords?\`${r.lat}, ${r.lon}\`:'<span class="muted">Visible to verifiers and admins</span>'}</dd>
+        <dt>Coordinates</dt><dd>${showCoords?`${r.lat}, ${r.lon}`:'<span class="muted">Visible to verifiers and admins</span>'}</dd>
         <dt>Notes</dt><dd>${esc(r.notes)||'<span class="muted">None</span>'}</dd>
       </dl>
       <h3 style="margin-bottom:12px">Evidence</h3>
       <div class="ev">${evidence}</div>
-      ${canEdit ? \`<div class="actions" style="margin-bottom:18px"><input type="file" id="addFiles" multiple accept="image/*,application/pdf" aria-label="Attach evidence" style="max-width:280px"><button class="btn sm" onclick="addEvidence('${r.id}')">Attach</button></div>\` : ''}
-      ${canEdit ? \`<div class="actions"><button class="btn primary" onclick="submitExisting('${r.id}')">${r.status==='changes'?'Resubmit with changes':'Submit for review'}</button></div>\` : ''}
-      ${canReview ? \`<div class="review">
+      ${canEdit ? `<div class="actions" style="margin-bottom:18px"><input type="file" id="addFiles" multiple accept="image/*,application/pdf" aria-label="Attach evidence" style="max-width:280px"><button class="btn sm" onclick="addEvidence('${r.id}')">Attach</button></div>` : ''}
+      ${canEdit ? `<div class="actions"><button class="btn primary" onclick="submitExisting('${r.id}')">${r.status==='changes'?'Resubmit with changes':'Submit for review'}</button></div>` : ''}
+      ${canReview ? `<div class="review">
         <div class="field" style="margin:0"><label for="revNote">Review note (required for changes or rejection)</label>
         <textarea id="revNote" rows="3" placeholder="What needs to change, or why this record is verified"></textarea></div>
         <div class="actions">
           <button class="btn primary" onclick="review('${r.id}','approve')">Approve and verify</button>
           <button class="btn" onclick="review('${r.id}','changes')">Request changes</button>
           <button class="btn danger" onclick="review('${r.id}','reject')">Reject</button>
-        </div></div>\` : ''}
+        </div></div>` : ''}
     </div>
     <div class="grid" style="gap:18px;align-content:start">
       <div class="card">
         <div class="cardhead"><h3>Automated checks</h3></div>
-        <div class="checks">${checks(r).map(c => \`<div class="chk"><span class="m ${c.ok===true?'ok':c.ok===false?'no':'na'}">${c.ok===true?'✓':c.ok===false?'!':'–'}</span><div>${c.label}${c.note?\`<small>${esc(c.note)}</small>\`:''}</div></div>\`).join('')}</div>
+        <div class="checks">${checks(r).map(c => `<div class="chk"><span class="m ${c.ok===true?'ok':c.ok===false?'no':'na'}">${c.ok===true?'✓':c.ok===false?'!':'–'}</span><div>${c.label}${c.note?`<small>${esc(c.note)}</small>`:''}</div></div>`).join('')}</div>
       </div>
       <div class="card">
         <div class="cardhead"><h3>Seal</h3></div>
@@ -1094,25 +944,25 @@ function recordView(){
       </div>
       <div class="card">
         <div class="cardhead"><h3>History</h3></div>
-        <div class="hist">${r.history.slice().reverse().map(h => \`<div class="h"><b>${esc(h[2])}</b> <span class="muted">by ${esc(h[1])}</span><small>${h[0]}</small>${h[3]?\`<p>${esc(h[3])}</p>\`:''}</div>\`).join('')}</div>
+        <div class="hist">${r.history.slice().reverse().map(h => `<div class="h"><b>${esc(h[2])}</b> <span class="muted">by ${esc(h[1])}</span><small>${h[0]}</small>${h[3]?`<p>${esc(h[3])}</p>`:''}</div>`).join('')}</div>
       </div>
     </div>
-  </section>\`;
+  </section>`;
   return shell(body, r.id, '');
 }
 
 function auditView(){
-  const body = \`<div class="card tablewrap" style="padding:8px 12px"><table class="table">
+  const body = `<div class="card tablewrap" style="padding:8px 12px"><table class="table">
     <thead><tr><th>Time</th><th>Record</th><th>Action</th><th>By</th><th>Note</th></tr></thead>
-    <tbody>${allAudit().map(a => \`<tr><td class="muted">${a.at}</td><td><b>${a.rec}</b></td><td>${esc(a.action)}</td><td>${esc(a.by)}</td><td class="muted">${esc(a.note)||'—'}</td></tr>\`).join('')}</tbody>
-  </table></div>\`;
+    <tbody>${allAudit().map(a => `<tr><td class="muted">${a.at}</td><td><b>${a.rec}</b></td><td>${esc(a.action)}</td><td>${esc(a.by)}</td><td class="muted">${esc(a.note)||'—'}</td></tr>`).join('')}</tbody>
+  </table></div>`;
   return shell(body, 'Audit log', 'Every action, timestamped and attributed to a role.');
 }
 
 function profile(){
   const mine = S.records.filter(r => r.history.some(h => h[1] === S.user.role));
   const u = S.user;
-  const body = \`
+  const body = `
   <div class="profile-top">
     <span class="avatar">${initials(u.name)}</span>
     <div style="flex:1;min-width:200px">
@@ -1137,7 +987,7 @@ function profile(){
         <div class="field"><label for="p_t">Title</label><input id="p_t" value="${esc(u.title)}"></div>
         <div class="field"><label for="p_o">Organisation</label><input id="p_o" value="${esc(u.org)}"></div>
         <div class="field"><label for="p_ph">Phone</label><input id="p_ph" value="${esc(u.phone)}" placeholder="+254 …"></div>
-        <div class="field"><label for="p_tz">Time zone</label><select id="p_tz" style="width:100%">${['Africa/Nairobi','Africa/Accra','Africa/Lagos','Africa/Cairo','Europe/London','America/New_York'].map(z => \`<option ${z===u.tz?'selected':''}>${z}</option>\`).join('')}</select></div>
+        <div class="field"><label for="p_tz">Time zone</label><select id="p_tz" style="width:100%">${['Africa/Nairobi','Africa/Accra','Africa/Lagos','Africa/Cairo','Europe/London','America/New_York'].map(z => `<option ${z===u.tz?'selected':''}>${z}</option>`).join('')}</select></div>
         <div class="field"><label for="p_e">Email</label><input id="p_e" value="${esc(u.email)}" disabled></div>
       </div>
       <div class="actions"><button class="btn primary" onclick="saveProfile()">Save changes</button></div>
@@ -1150,8 +1000,8 @@ function profile(){
       <div class="actions"><button class="btn" onclick="changePassword()">Update password</button></div>
       <div class="formmsg" id="pwMsg" style="margin-top:10px"></div>
     </div>
-  </section>\`;
-  return shell(body, 'Profile', 'Your details, your role, and your recent work.', \`<button class="btn sm" onclick="go('audit')">Audit log</button><button class="btn sm" onclick="go('settings')">Settings</button>\`);
+  </section>`;
+  return shell(body, 'Profile', 'Your details, your role, and your recent work.', `<button class="btn sm" onclick="go('audit')">Audit log</button><button class="btn sm" onclick="go('settings')">Settings</button>`);
 }
 
 function saveProfile(){
@@ -1172,16 +1022,16 @@ function changePassword(){
 function settings(){
   const st = S.stab, s = S.settings, admin = can('admin');
   const tabs = [['account','Account'],['appearance','Appearance'],['notifications','Notifications'],['security','Security'],['data','Data and integrity'],['team','Team and roles']];
-  const sw = (key, label, desc) => \`<div class="setrow"><div><b>${label}</b><p>${desc}</p></div>
-    <button class="switch ${s[key]?'on':''}" role="switch" aria-checked="${!!s[key]}" aria-label="${label}" onclick="toggleSetting('${key}')"></button></div>\`;
+  const sw = (key, label, desc) => `<div class="setrow"><div><b>${label}</b><p>${desc}</p></div>
+    <button class="switch ${s[key]?'on':''}" role="switch" aria-checked="${!!s[key]}" aria-label="${label}" onclick="toggleSetting('${key}')"></button></div>`;
   let panel = '';
-  if (st === 'account') panel = \`<div class="card">
+  if (st === 'account') panel = `<div class="card">
       <div class="cardhead"><h3>Account</h3><small>Signed in as ${esc(S.user.email)}</small></div>
       <div class="setrow"><div><b>Role</b><p>${esc(S.user.role)}. Roles set what you can see and do. Ask an admin to change it.</p></div><span class="roletag">${esc(S.user.role)}</span></div>
       <div class="setrow"><div><b>Organisation</b><p>${esc(S.user.org)}</p></div><button class="btn sm" onclick="go('profile')">Edit in profile</button></div>
       <div class="setrow"><div><b>Sign out</b><p>End this session on this device.</p></div><button class="btn sm danger" onclick="signOut()">Sign out</button></div>
-    </div>\`;
-  if (st === 'appearance') panel = \`<div class="card themebox">
+    </div>`;
+  if (st === 'appearance') panel = `<div class="card themebox">
       <div class="cardhead"><h3>Appearance</h3><small>Follows your phone unless you choose otherwise</small></div>
       ${themeTree(false)}
       <p class="muted" style="font-size:14px">System follows your phone's setting. Day and Night override it. Schedule switches by the times below.</p>
@@ -1190,34 +1040,34 @@ function settings(){
         <span style="font-weight:600;font-size:14px">Night starts</span><input type="time" value="${S.theme.nightStart}" onchange="setSchedule('nightStart',this.value)">
       </div>
       <p class="muted" style="font-size:13px">Current look: <b style="color:var(--ink)">${resolveTheme() === 'dark' ? 'Night' : 'Day'}</b></p>
-    </div>\`;
-  if (st === 'notifications') panel = \`<div class="card">
+    </div>`;
+  if (st === 'notifications') panel = `<div class="card">
       <div class="cardhead"><h3>Notifications</h3><small>Email and in-app</small></div>
       ${sw('notifyReview','Records waiting for review','Verifiers get an email when a record is submitted.')}
       ${sw('notifyFlags','Automated flags','Tell me when a record I submitted has a flag or needs changes.')}
       ${sw('notifyDigest','Daily digest','One email each morning with the day\'s pending records.')}
-    </div>\`;
-  if (st === 'security') panel = \`<div class="card">
+    </div>`;
+  if (st === 'security') panel = `<div class="card">
       <div class="cardhead"><h3>Security</h3><small>Applies to this workspace</small></div>
       ${sw('mfa','Require two-step sign-in','Ask for a code from an authenticator app each time you sign in. Recommended for verifiers and admins.')}
       <div class="setrow"><div><b>Session timeout</b><p>Sign out after a period of inactivity.</p></div>
-        <select aria-label="Session timeout" onchange="S.settings.timeout=this.value;toast('Timeout set to '+this.value+' minutes')">${['15','30','60','240'].map(v => \`<option value="${v}" ${s.timeout===v?'selected':''}>${v} minutes</option>\`).join('')}</select></div>
+        <select aria-label="Session timeout" onchange="S.settings.timeout=this.value;toast('Timeout set to '+this.value+' minutes')">${['15','30','60','240'].map(v => `<option value="${v}" ${s.timeout===v?'selected':''}>${v} minutes</option>`).join('')}</select></div>
       <div class="notice" style="margin-top:14px">This prototype does not sign in against a real account. These settings show the intended controls; the live system will enforce them on the server.</div>
-    </div>\`;
-  if (st === 'data') panel = \`<div class="card">
+    </div>`;
+  if (st === 'data') panel = `<div class="card">
       <div class="cardhead"><h3>Data and integrity</h3><small>Sealing and retention</small></div>
       ${sw('autoVerify','Check the chain every morning','Runs the full seal check and tells admins if any record has changed.')}
       <div class="setrow"><div><b>Record retention</b><p>How long records stay after a project closes. The standard may require a longer period (see open questions).</p></div>
-        <select aria-label="Retention" onchange="S.settings.retention=this.value;toast('Retention set to '+this.value+' years')">${['5','7','10','15'].map(v => \`<option value="${v}" ${s.retention===v?'selected':''}>${v} years</option>\`).join('')}</select></div>
+        <select aria-label="Retention" onchange="S.settings.retention=this.value;toast('Retention set to '+this.value+' years')">${['5','7','10','15'].map(v => `<option value="${v}" ${s.retention===v?'selected':''}>${v} years</option>`).join('')}</select></div>
       <div class="setrow"><div><b>Chain check</b><p>${esc(S.integrity.detail)}</p></div><button class="btn sm primary" onclick="runVerify()">Verify now</button></div>
-    </div>\`;
-  if (st === 'team') panel = \`<div class="card tablewrap" style="padding:8px 12px">
+    </div>`;
+  if (st === 'team') panel = `<div class="card tablewrap" style="padding:8px 12px">
       <table class="table"><thead><tr><th>Name</th><th>Organisation</th><th>Role</th></tr></thead>
-      <tbody>${TEAM.map((m,i) => \`<tr><td><b>${esc(m.name)}</b><div class="muted" style="font-size:12.5px">${esc(m.email)}</div></td><td class="muted">${esc(m.org)}</td>
-        <td>${admin ? \`<select aria-label="Role for ${esc(m.name)}" onchange="TEAM[${i}].role=this.value;toast('Role updated for ${esc(m.name)}')">${Object.keys(ROLES).map(r => \`<option ${r===m.role?'selected':''}>${r}</option>\`).join('')}</select>\` : \`<span class="roletag">${esc(m.role)}</span>\`}</td></tr>\`).join('')}</tbody></table>
+      <tbody>${TEAM.map((m,i) => `<tr><td><b>${esc(m.name)}</b><div class="muted" style="font-size:12.5px">${esc(m.email)}</div></td><td class="muted">${esc(m.org)}</td>
+        <td>${admin ? `<select aria-label="Role for ${esc(m.name)}" onchange="TEAM[${i}].role=this.value;toast('Role updated for ${esc(m.name)}')">${Object.keys(ROLES).map(r => `<option ${r===m.role?'selected':''}>${r}</option>`).join('')}</select>` : `<span class="roletag">${esc(m.role)}</span>`}</td></tr>`).join('')}</tbody></table>
       ${admin ? '' : '<p class="muted" style="padding:14px 12px;font-size:13px">Only admins can change roles.</p>'}
-    </div>\`;
-  const body = \`<div class="tabs" role="tablist">${tabs.map(([id,l]) => \`<button role="tab" aria-selected="${st===id}" class="${st===id?'on':''}" onclick="S.stab='${id}';render()">${l}</button>\`).join('')}</div>${panel}\`;
+    </div>`;
+  const body = `<div class="tabs" role="tablist">${tabs.map(([id,l]) => `<button role="tab" aria-selected="${st===id}" class="${st===id?'on':''}" onclick="S.stab='${id}';render()">${l}</button>`).join('')}</div>${panel}`;
   return shell(body, 'Settings', 'Choose how the workspace behaves for you and your team.');
 }
 function toggleSetting(k){ S.settings[k] = !S.settings[k]; render(); toast(S.settings[k] ? 'On' : 'Off'); }
@@ -1225,19 +1075,19 @@ function toggleSetting(k){ S.settings[k] = !S.settings[k]; render(); toast(S.set
 /* ---------- Clickable status chips ---------- */
 const CHIP = { 'Demo ready':'ok','Done':'ok','Current':'ok','Validated':'ok','Acknowledged':'ok','Received':'warn','Flagged':'bad','Overdue':'bad','Due soon':'warn','Pending':'mute','Not started':'mute','In progress':'warn','Needs decision':'warn','None':'mute' };
 function chip(label, onclick, title){
-  return \`<button class="chip ${CHIP[label]||'mute'}" onclick="${onclick}" title="${esc(title||'Click to change')}">${esc(label)}</button>\`;
+  return `<button class="chip ${CHIP[label]||'mute'}" onclick="${onclick}" title="${esc(title||'Click to change')}">${esc(label)}</button>`;
 }
 const cycle = (list, cur) => list[(list.indexOf(cur)+1) % list.length];
 function setBuild(i){ S.buildStatus[i] = cycle(BUILD_STATES, S.buildStatus[i]); render(); toast('Status: ' + S.buildStatus[i]); }
 function setAlert(i){ S.alerts[i] = cycle(ALERT_STATES, S.alerts[i]); render(); toast('Alert: ' + S.alerts[i]); }
 function setBaseline(i){ S.baselineStatus[i] = cycle(BASELINE_STATES, S.baselineStatus[i]); render(); toast('Baseline: ' + S.baselineStatus[i]); }
-function setCal(i){ S.calibration[i].status = cycle(CAL_STATES, S.calibration[i].status); render(); toast(\`${S.calibration[i].id}: ${S.calibration[i].status}\`); }
+function setCal(i){ S.calibration[i].status = cycle(CAL_STATES, S.calibration[i].status); render(); toast(`${S.calibration[i].id}: ${S.calibration[i].status}`); }
 function calibrateToday(i){
   const c = S.calibration[i];
   c.last = TODAY_ISO();
   c.next = new Date(Date.now() + 90*864e5).toISOString().slice(0,10);
   c.status = 'Current';
-  render(); toast(\`${c.id} calibrated today\`);
+  render(); toast(`${c.id} calibrated today`);
 }
 async function advanceBatch(){
   const b = S.batch;
@@ -1246,73 +1096,73 @@ async function advanceBatch(){
   const prev = b.log.length ? b.log[b.log.length-1].hash : 'GENESIS';
   const hash = await sha256(prev + stage + nowStr());
   b.log.push({ at: nowStr(), stage, hash, by: S.user.role });
-  render(); toast(\`Recorded: ${stage}\`);
+  render(); toast(`Recorded: ${stage}`);
 }
 
 /* ---------- Module views ---------- */
 function sitesView(){
-  const body = \`
+  const body = `
   <h3 style="margin-bottom:14px">Project sites</h3>
   <div class="card tablewrap" style="margin-bottom:26px"><table class="table">
     <thead><tr><th>Site</th><th>Project</th><th>Area</th><th>Baseline year</th><th>Centroid</th></tr></thead>
-    <tbody>${SITES.map(x => \`<tr><td><b>${x.id}</b><div class="muted" style="font-size:13px">${esc(x.name)}</div></td><td>${esc(projOf(x.project).name)}</td><td>${x.area}</td><td>${x.baseline}</td><td class="muted">${x.centroid}</td></tr>\`).join('')}</tbody>
+    <tbody>${SITES.map(x => `<tr><td><b>${x.id}</b><div class="muted" style="font-size:13px">${esc(x.name)}</div></td><td>${esc(projOf(x.project).name)}</td><td>${x.area}</td><td>${x.baseline}</td><td class="muted">${x.centroid}</td></tr>`).join('')}</tbody>
   </table></div>
   <h3 style="margin-bottom:6px">Imagery and alerts</h3>
   <p class="muted" style="font-size:14px;margin-bottom:14px">Click an alert to change its status. Values are sample data.</p>
   <div class="card tablewrap"><table class="table">
     <thead><tr><th>Scene</th><th>Sensor</th><th>Date</th><th>Reading</th><th>Alert</th></tr></thead>
-    <tbody>${IMAGERY.map((x,i) => \`<tr><td><b>${x.scene}</b></td><td>${esc(x.sensor)}</td><td>${x.date}</td><td>${esc(x.metric)}</td><td>${chip(S.alerts[i], \`setAlert(${i})\`, 'Click to change alert status')}</td></tr>\`).join('')}</tbody>
-  </table></div>\`;
+    <tbody>${IMAGERY.map((x,i) => `<tr><td><b>${x.scene}</b></td><td>${esc(x.sensor)}</td><td>${x.date}</td><td>${esc(x.metric)}</td><td>${chip(S.alerts[i], `setAlert(${i})`, 'Click to change alert status')}</td></tr>`).join('')}</tbody>
+  </table></div>`;
   return shell(body, 'Sites and imagery', 'Polygons, optical and radar scenes, and disturbance alerts for each site.');
 }
 
 function baselinesView(){
-  const body = \`<div class="card tablewrap"><table class="table">
+  const body = `<div class="card tablewrap"><table class="table">
     <thead><tr><th>Dataset</th><th>Type</th><th>Source</th><th>Version</th><th>Status</th></tr></thead>
-    <tbody>${BASELINES.map((b,i) => \`<tr><td><b>${esc(b.name)}</b></td><td>${esc(b.kind)}</td><td class="muted">${esc(b.source)}</td><td>${b.version}</td><td>${chip(S.baselineStatus[i], \`setBaseline(${i})\`, 'Click to change status')}</td></tr>\`).join('')}</tbody>
+    <tbody>${BASELINES.map((b,i) => `<tr><td><b>${esc(b.name)}</b></td><td>${esc(b.kind)}</td><td class="muted">${esc(b.source)}</td><td>${b.version}</td><td>${chip(S.baselineStatus[i], `setBaseline(${i})`, 'Click to change status')}</td></tr>`).join('')}</tbody>
   </table></div>
-  <div class="notice" style="margin-top:22px">Reference values are placeholders until the methodology is confirmed. The app stores and tracks these datasets but does not calculate carbon from them.</div>\`;
+  <div class="notice" style="margin-top:22px">Reference values are placeholders until the methodology is confirmed. The app stores and tracks these datasets but does not calculate carbon from them.</div>`;
   return shell(body, 'Baselines and reference data', 'Counterfactual baselines, emission factors, soil and weather layers.');
 }
 
 function integrityView(){
   const b = S.batch;
-  const logRows = b.log.map(l => \`<div class="act"><span class="ic">✓</span><div><b>${esc(l.stage)}</b><small>${l.at} · ${esc(l.by)} · ${l.hash.slice(0,14)}…</small></div></div>\`).join('') || '<div class="empty">No steps recorded yet.</div>';
+  const logRows = b.log.map(l => `<div class="act"><span class="ic">✓</span><div><b>${esc(l.stage)}</b><small>${l.at} · ${esc(l.by)} · ${l.hash.slice(0,14)}…</small></div></div>`).join('') || '<div class="empty">No steps recorded yet.</div>';
   const nextStage = b.log.length < BATCH_STAGES.length ? BATCH_STAGES[b.log.length] : null;
-  const body = \`
+  const body = `
   <section class="grid dash">
     <div class="card">
       <div class="cardhead"><h3>Data-point IDs</h3><small>Every record has a unique ID</small></div>
       <div class="tablewrap"><table class="table">
         <thead><tr><th>Data-point ID</th><th>Record</th><th>Source</th><th>Status</th></tr></thead>
-        <tbody>${S.records.map(r => \`<tr class="row" onclick="viewRecord('${r.id}')"><td><b>${r.uid}</b></td><td>${r.id}</td><td class="muted">${esc(r.source)}</td><td>${pill(r.status)}</td></tr>\`).join('')}</tbody>
+        <tbody>${S.records.map(r => `<tr class="row" onclick="viewRecord('${r.id}')"><td><b>${r.uid}</b></td><td>${r.id}</td><td class="muted">${esc(r.source)}</td><td>${pill(r.status)}</td></tr>`).join('')}</tbody>
       </table></div>
     </div>
     <div class="card">
       <div class="cardhead"><h3>Calibration log</h3><small>Click a status to change it</small></div>
-      ${S.calibration.map((c,i) => \`<div class="setrow" style="padding:14px 0">
+      ${S.calibration.map((c,i) => `<div class="setrow" style="padding:14px 0">
         <div><b>${c.id} · ${esc(c.device)}</b><p>${esc(c.loc)} · last ${c.last}, next ${c.next}</p></div>
-        <div class="actions">${chip(c.status, \`setCal(${i})\`, 'Click to change status')}<button class="btn sm" onclick="calibrateToday(${i})">Calibrated today</button></div>
-      </div>\`).join('')}
+        <div class="actions">${chip(c.status, `setCal(${i})`, 'Click to change status')}<button class="btn sm" onclick="calibrateToday(${i})">Calibrated today</button></div>
+      </div>`).join('')}
     </div>
   </section>
   <section class="grid dash" style="margin-top:22px">
     <div class="card">
       <div class="cardhead"><h3>Chain of custody · batch ${b.id}</h3><small>Biochar batch</small></div>
       <div class="hist" style="margin-bottom:18px">${logRows}</div>
-      ${nextStage ? \`<button class="btn primary" onclick="advanceBatch()">Record: ${esc(nextStage)}</button>\` : \`<div class="notice">Batch ${b.id} has all four stages recorded.</div>\`}
+      ${nextStage ? `<button class="btn primary" onclick="advanceBatch()">Record: ${esc(nextStage)}</button>` : `<div class="notice">Batch ${b.id} has all four stages recorded.</div>`}
     </div>
     <div class="card">
       <div class="cardhead"><h3>Verify</h3><small>Check the seal on every record</small></div>
       <div class="state"><span class="dot ${S.integrity.state==='ok'?'ok':S.integrity.state==='bad'?'bad':''}"></span><div><b>${S.integrity.state==='ok'?'Chain intact':S.integrity.state==='bad'?'Tampering detected':'Not checked yet'}</b><div class="muted" style="font-size:13px">${esc(S.integrity.detail)}</div></div></div>
       <div class="actions" style="margin-top:16px"><button class="btn primary sm" onclick="runVerify()">Verify chain</button></div>
     </div>
-  </section>\`;
+  </section>`;
   return shell(body, 'Integrity', 'Unique IDs, calibration, chain of custody, and the seal check.');
 }
 
 function reportsView(){
-  const body = \`
+  const body = `
   <div class="grid dash2">
     <div class="card">
       <div class="cardhead"><h3>Export records</h3><small>CSV, one row per data point</small></div>
@@ -1330,7 +1180,7 @@ function reportsView(){
         <div><b>${S.records.filter(r=>r.hash).length}</b>Sealed</div>
       </div>
     </div>
-  </div>\`;
+  </div>`;
   return shell(body, 'Reports', 'Export data for verifiers, in the template you choose.');
 }
 
@@ -1338,7 +1188,7 @@ function exportCsv(){
   const cols = ['uid','id','projectId','type','source','ref','periodStart','periodEnd','plot','value','unit','lat','lon','date','method','collector','status','hash'];
   const extraKeys = [...new Set(S.records.flatMap(r => Object.keys(r.extra||{})))];
   const head = [...cols, ...extraKeys];
-  const q = v => \`"${String(v ?? '').replace(/"/g,'""')}"\`;
+  const q = v => `"${String(v ?? '').replace(/"/g,'""')}"`;
   const rows = S.records.map(r => [...cols.map(c => r[c]), ...extraKeys.map(k => (r.extra||{})[k])].map(q).join(','));
   const csv = [head.join(','), ...rows].join('\n');
   const blob = new Blob([csv], {type:'text/csv'});
@@ -1349,7 +1199,7 @@ function exportCsv(){
 
 function statusView(){
   const count = v => S.buildStatus.filter(x => x === v).length;
-  const body = \`
+  const body = `
   <div class="grid k4" style="margin-bottom:22px">
     <div class="card kpi"><div class="lbl">Brief items</div><div class="num">${BUILD_ITEMS.length}</div></div>
     <div class="card kpi"><div class="lbl">Demo ready</div><div class="num" style="color:var(--green)">${count('Demo ready')}</div></div>
@@ -1358,9 +1208,9 @@ function statusView(){
   </div>
   <div class="card tablewrap"><table class="table">
     <thead><tr><th>Brief item</th><th>Status (click to change)</th></tr></thead>
-    <tbody>${BUILD_ITEMS.map((x,i) => \`<tr><td>${esc(x[0])}</td><td>${chip(S.buildStatus[i], \`setBuild(${i})\`, 'Click to change status')}</td></tr>\`).join('')}</tbody>
+    <tbody>${BUILD_ITEMS.map((x,i) => `<tr><td>${esc(x[0])}</td><td>${chip(S.buildStatus[i], `setBuild(${i})`, 'Click to change status')}</td></tr>`).join('')}</tbody>
   </table></div>
-  <p class="muted" style="font-size:13px;margin-top:16px">Statuses are for this demo session. They reset on refresh.</p>\`;
+  <p class="muted" style="font-size:13px;margin-top:16px">Statuses are for this demo session. They reset on refresh.</p>`;
   return shell(body, 'Build status', 'Every item from the brief, with where it stands.');
 }
 
@@ -1400,7 +1250,7 @@ async function saveRecord(e){
   rec.hash = await sha256(rec.prevHash + payload(rec));
   S.sel = id; S.route = 'record'; S.prefProject = null;
   S.integrity = { state:'idle', detail:'New record sealed. Verify to confirm the chain.' };
-  toast(mode==='submit' ? \`${id} submitted and checked\` : \`${id} saved as draft\`);
+  toast(mode==='submit' ? `${id} submitted and checked` : `${id} saved as draft`);
   render();
 }
 function submitExisting(id){
@@ -1409,7 +1259,7 @@ function submitExisting(id){
   if (r.status !== 'draft' && r.status !== 'changes') return;
   r.history.push([nowStr(), S.user.role, r.status==='changes'?'Resubmitted':'Submitted', '']);
   r.status = 'submitted';
-  toast(\`${id} sent to verifier\`); render();
+  toast(`${id} sent to verifier`); render();
 }
 function review(id, act){
   const r = find(id);
@@ -1420,7 +1270,7 @@ function review(id, act){
   const map = { approve:['verified','Verified'], changes:['changes','Requested changes'], reject:['rejected','Rejected'] };
   const [st, label] = map[act];
   r.status = st; r.history.push([nowStr(), S.user.role, label, note]);
-  toast(\`${id}: ${label.toLowerCase()}\`); render();
+  toast(`${id}: ${label.toLowerCase()}`); render();
 }
 function addEvidence(id){
   const r = find(id), files = [...($('addFiles')?.files || [])];
@@ -1428,20 +1278,20 @@ function addEvidence(id){
   if (!can('submit') || (r.status!=='draft' && r.status!=='changes')) return toast('Evidence can be added to drafts or records with changes requested');
   files.forEach(x => r.evidence.push({ name:x.name, type:x.type, url:URL.createObjectURL(x) }));
   r.history.push([nowStr(), S.user.role, 'Evidence added', files.map(x => x.name).join(', ')]);
-  toast(\`${files.length} file(s) attached\`); render();
+  toast(`${files.length} file(s) attached`); render();
 }
 async function runVerify(){
   const res = await verifyChain();
-  S.integrity = res.ok ? { state:'ok', detail:\`All ${res.count} records verified in order. No data has changed since sealing.\` } : { state:'bad', detail:\`${res.id}: ${res.why}. Treat later records as untrusted until investigated.\` };
-  toast(res.ok ? 'Chain intact' : \`Tampering detected at ${res.id}\`); render();
+  S.integrity = res.ok ? { state:'ok', detail:`All ${res.count} records verified in order. No data has changed since sealing.` } : { state:'bad', detail:`${res.id}: ${res.why}. Treat later records as untrusted until investigated.` };
+  toast(res.ok ? 'Chain intact' : `Tampering detected at ${res.id}`); render();
 }
 function simulateTamper(){
   if (S.tampered) return toast('Already tampered. Restore first.');
   const r = S.records.find(x => x.status==='verified') || S.records[0];
   S.tampered = { id:r.id, value:r.value };
   r.value = (+r.value * 1.4).toFixed(1);
-  S.integrity = { state:'idle', detail:\`Value in ${r.id} changed directly in the database. Run verification.\` };
-  toast(\`Edited ${r.id} without resealing\`); render();
+  S.integrity = { state:'idle', detail:`Value in ${r.id} changed directly in the database. Run verification.` };
+  toast(`Edited ${r.id} without resealing`); render();
 }
 function restoreTamper(){
   if (!S.tampered) return;
@@ -1461,9 +1311,9 @@ const TREE_ICONS = {
 };
 const TREE_LABELS = { system:'System', day:'Day', night:'Night', auto:'Schedule' };
 function themeTree(compact){
-  return \`<div class="tree ${compact?'compact':''}" role="radiogroup" aria-label="Theme">
-    ${Object.keys(TREE_LABELS).map(m => \`<button class="leaf ${S.theme.mode===m?'on':''}" role="radio" aria-checked="${S.theme.mode===m}" onclick="setThemeMode('${m}')">${TREE_ICONS[m]}${compact?'':TREE_LABELS[m]}</button>\`).join('')}
-  </div>\`;
+  return `<div class="tree ${compact?'compact':''}" role="radiogroup" aria-label="Theme">
+    ${Object.keys(TREE_LABELS).map(m => `<button class="leaf ${S.theme.mode===m?'on':''}" role="radio" aria-checked="${S.theme.mode===m}" onclick="setThemeMode('${m}')">${TREE_ICONS[m]}${compact?'':TREE_LABELS[m]}</button>`).join('')}
+  </div>`;
 }
 function minutesOf(t){ const [h,m] = t.split(':').map(Number); return h*60 + m; }
 function resolveTheme(){
@@ -1479,7 +1329,7 @@ function resolveTheme(){
 function applyTheme(){ document.documentElement.dataset.theme = resolveTheme(); }
 function setThemeMode(mode){
   S.theme.mode = mode; applyTheme(); render();
-  toast(mode === 'auto' ? \`Schedule: day ${S.theme.dayStart} to ${S.theme.nightStart}\` : \`Theme: ${TREE_LABELS[mode]}\`);
+  toast(mode === 'auto' ? `Schedule: day ${S.theme.dayStart} to ${S.theme.nightStart}` : `Theme: ${TREE_LABELS[mode]}`);
 }
 function setSchedule(key, val){ S.theme[key] = val; applyTheme(); render(); }
 matchMedia('(prefers-color-scheme: dark)').addEventListener('change', applyTheme);
@@ -1583,7 +1433,7 @@ if (!CanvasRenderingContext2D.prototype.roundRect) { CanvasRenderingContext2D.pr
   function finish(){
     const el = $('splash');
     el.classList.add('fadeout');
-    setTimeout(() => { el.classList.add('hidden'); $('root').classList.add('show'); }, 320);
+    setTimeout(() => { el.classList.add('hidden'); S.route = 'welcome'; render(); $('root').classList.add('show'); }, 320);
   }
   const t0 = performance.now();
   function loop(now){
@@ -1595,10 +1445,40 @@ if (!CanvasRenderingContext2D.prototype.roundRect) { CanvasRenderingContext2D.pr
   requestAnimationFrame(loop);
 })();
 
+/* ---------- Welcome (illustrated front door) ---------- */
+function welcomeView(){
+  return `
+  <div class="welcome">
+    <div class="welcome-land" aria-hidden="true">
+      <svg viewBox="0 0 390 420" preserveAspectRatio="xMidYMid slice">
+        <defs><linearGradient id="wsk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#B6E2EE"/><stop offset="1" stop-color="#F5F3E2"/></linearGradient></defs>
+        <rect width="390" height="420" fill="url(#wsk)"/>
+        <circle cx="300" cy="110" r="26" fill="#F9D27A"/>
+        <g class="wcloud"><ellipse cx="60" cy="100" rx="32" ry="17" fill="#fff"/><ellipse cx="88" cy="92" rx="24" ry="19" fill="#fff"/></g>
+        <path d="M0 270 C60 240 120 250 190 270 S320 255 390 270 L390 420 L0 420Z" fill="#A9D19A"/>
+        <g transform="translate(300 200)"><rect x="-3" y="0" width="6" height="120" fill="#fafaf8"/><g class="wblade"><rect x="-34" y="-2" width="68" height="5" rx="2" fill="#fff"/><rect x="-2" y="-34" width="5" height="68" rx="2" fill="#fff"/></g></g>
+        <path d="M0 340 C120 320 260 336 390 328 L390 420 L0 420Z" fill="#5FA46A"/>
+      </svg>
+    </div>
+    <div class="welcome-sheet">
+      <div class="h1">Your carbon records,<br>proven and sealed.</div>
+      <div class="p">Field data, checks and audit trail in one place.</div>
+      <div class="dots"><i class="on"></i><i></i><i></i></div>
+      <button class="btn" onclick="S.route='login';render()">Get started  →</button>
+      <button class="link" type="button" onclick="S.route='login';render()">Already have an account? Sign in</button>
+    </div>
+  </div>`;
+}
+
+/* ---------- Illustrated landscape band (used on every page) ---------- */
+function landBand(h){
+  return `<div class="land-band" style="height:${h}px" aria-hidden="true"><svg viewBox="0 0 1200 240" preserveAspectRatio="xMidYMid slice"><defs><linearGradient id="bsk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#B6E2EE"/><stop offset="1" stop-color="#F5F3E2"/></linearGradient></defs><rect width="1200" height="240" fill="url(#bsk)"/><circle cx="1010" cy="70" r="28" fill="#F9D27A"/><g class="wcloud"><ellipse cx="180" cy="62" rx="34" ry="16" fill="#fff"/><ellipse cx="208" cy="54" rx="24" ry="18" fill="#fff"/></g><g class="wcloud" style="animation-delay:-8s"><ellipse cx="620" cy="40" rx="26" ry="13" fill="#fff"/></g><path d="M0 130 C200 100 380 120 560 128 S900 106 1200 128 L1200 240 L0 240Z" fill="#A9D19A"/><g transform="translate(860 118)"><rect x="-2.5" y="0" width="5" height="60" fill="#fafaf8"/><g class="wblade"><rect x="-22" y="-2" width="44" height="4" rx="2" fill="#fff"/><rect x="-2" y="-22" width="4" height="44" rx="2" fill="#fff"/></g></g><path d="M0 180 C240 160 480 182 700 178 S1000 166 1200 180 L1200 240 L0 240Z" fill="#7DB979"/><path d="M0 214 C300 200 600 220 900 212 S1100 206 1200 214 L1200 240 L0 240Z" fill="#5FA46A"/></svg></div>`;
+}
+
 /* ---------- Render ---------- */
 function render(){
   const root = $('root');
-  if (!S.authed){ root.innerHTML = loginView(); return; }
+  if (!S.authed){ root.innerHTML = (S.route === 'welcome') ? welcomeView() : loginView(); return; }
   const views = { dashboard, projects, entry, records, record:recordView, audit:auditView, profile, settings, sites:sitesView, baselines:baselinesView, integrity:integrityView, reports:reportsView, status:statusView };
   const focusQ = document.activeElement && document.activeElement.id === 'q';
   root.innerHTML = (views[S.route] || dashboard)();
@@ -1619,44 +1499,6 @@ setInterval(() => {
 applyTheme();
 (async () => { await sealAll(); render(); })();
 render();
-`;
-
-// Modified show function for hybrid
-
-function authMode(mode){
-  const isSignup = mode === 'signup';
-  const signinForm = document.getElementById('signinForm');
-  const signupForm = document.getElementById('signupForm');
-  const signinTab = document.querySelector('#s3 .link:nth-of-type(1)');
-  const signupTab = document.querySelector('#s3 .link:nth-of-type(2)');
-
-  if(isSignup){
-    if(signinForm) signinForm.style.display = 'none';
-    if(signupForm) signupForm.style.display = 'block';
-    if(signupTab) { signupTab.style.borderBottom = '2px solid #2F7D4F'; signupTab.style.color = '#0E1A14'; }
-    if(signinTab) { signinTab.style.borderBottom = '2px solid transparent'; signinTab.style.color = '#6B7A70'; }
-  } else {
-    if(signinForm) signinForm.style.display = 'block';
-    if(signupForm) signupForm.style.display = 'none';
-    if(signinTab) { signinTab.style.borderBottom = '2px solid #2F7D4F'; signinTab.style.color = '#0E1A14'; }
-    if(signupTab) { signupTab.style.borderBottom = '2px solid transparent'; signupTab.style.color = '#6B7A70'; }
-  }
-}
-
-function show(n){
-  document.querySelectorAll('.scr').forEach((s,i)=>s.classList.toggle('on', i===n-1));
-  if(n===4) { 
-    // Load and run full app
-    try {
-      eval(fullAppCode);
-      render();
-    } catch (e) {
-      console.error('Error loading full app:', e);
-    }
-  }
-}
-
-
-show(1);
 </script>
-</body></html>
+</body>
+</html>
