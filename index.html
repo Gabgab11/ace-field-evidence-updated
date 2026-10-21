@@ -345,10 +345,9 @@ input[type=checkbox]{width:18px;height:18px;accent-color:var(--green)}
 /* v4: splash then clean sign-in */
 #root{opacity:0}
 #root.show{opacity:1;transition:opacity .45s ease}
-#splash{position:fixed;inset:0;z-index:100;background:#F7F3E6;overflow:hidden}
-#splash.fadeout #splashCanvas{opacity:0;transition:opacity .3s ease}
+#splash{position:fixed;inset:0;z-index:100;background:#fff;overflow:hidden;transition:opacity .4s ease}
+#splash.fadeout{opacity:0}
 #splash.hidden{display:none}
-#splashCanvas{position:absolute;inset:0;width:100%;height:100%}
 .signin-page{min-height:100vh;display:grid;place-items:center;padding:40px 20px;background:var(--surface)}
 .signin-card{width:100%;max-width:380px}
 .signin-card .mark.big{width:64px;height:64px;border-radius:20px;font-size:18px;margin:0 auto 26px;display:grid}
@@ -433,7 +432,126 @@ input[type=checkbox]{width:18px;height:18px;accent-color:var(--green)}
 </style>
 </head>
 <body>
-<div id="splash" role="status" aria-label="Loading Field Evidence"><canvas id="splashCanvas"></canvas></div>
+<div id="splash" role="status" aria-label="Loading ACE">
+<div id="splashSvgWrap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&display=swap">
+<style>
+#splashSvgWrap{
+  position:absolute;inset:0;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;background:#fff;
+}
+#splashSvgWrap svg{ overflow:visible; }
+.sp-ring{
+  fill:none;stroke:#1a5c2e;stroke-width:2.2;
+  stroke-dasharray:660;stroke-dashoffset:660;
+  animation:spDrawRing 1.1s cubic-bezier(.4,0,.2,1) .2s forwards;
+}
+@keyframes spDrawRing{ to{stroke-dashoffset:0} }
+.sp-dot{ opacity:0;animation:spPop .4s ease-out forwards; }
+.sp-dot:nth-child(1){animation-delay:.95s}
+.sp-dot:nth-child(2){animation-delay:1.05s}
+.sp-dot:nth-child(3){animation-delay:1.15s}
+.sp-dot:nth-child(4){animation-delay:1.25s}
+.sp-dot:nth-child(5){animation-delay:1.35s}
+.sp-dot:nth-child(6){animation-delay:1.45s}
+@keyframes spPop{
+  0%{opacity:0;transform:scale(0)}
+  70%{opacity:1;transform:scale(1.3)}
+  100%{opacity:1;transform:scale(1)}
+}
+.sp-africa{ opacity:0;animation:spRise .7s ease-out 1.5s forwards; }
+@keyframes spRise{ from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+.sp-ground{ opacity:0;animation:spWipe .6s ease-out 1.9s forwards; }
+@keyframes spWipe{ from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+.sp-trunk{ transform-origin:50% 100%;transform:scaleY(0);animation:spGrow .5s cubic-bezier(.2,.8,.4,1) 2.3s forwards; }
+@keyframes spGrow{ to{transform:scaleY(1)} }
+.sp-canopy{ opacity:0;transform-origin:50% 80%;transform:scale(.3);animation:spBloom .6s cubic-bezier(.2,1.4,.4,1) 2.7s forwards; }
+@keyframes spBloom{ to{opacity:1;transform:scale(1)} }
+.sp-roots{ opacity:0;transform-origin:50% 10%;transform:scaleY(0);animation:spRoots .5s ease-out 3.1s forwards; }
+@keyframes spRoots{ to{opacity:1;transform:scaleY(1)} }
+.sp-la,.sp-lc,.sp-le{ opacity:0; }
+.sp-la{animation:spFadeLetter .5s ease-out 3.5s forwards}
+.sp-lc{animation:spFadeLetter .5s ease-out 3.7s forwards}
+.sp-le{animation:spFadeLetter .5s ease-out 3.9s forwards}
+@keyframes spFadeLetter{ from{opacity:0} to{opacity:1} }
+.sp-divl{ stroke:#2e7d45;stroke-width:1.5;stroke-dasharray:200;stroke-dashoffset:200;opacity:0; }
+.sp-div1{animation:spLine .4s ease-out 4.15s forwards,spFade .1s linear 4.15s forwards}
+.sp-div2{animation:spLine .4s ease-out 4.25s forwards,spFade .1s linear 4.25s forwards}
+@keyframes spLine{ to{stroke-dashoffset:0} }
+@keyframes spFade{ to{opacity:1} }
+.sp-name{ opacity:0;animation:spFadeUp .5s ease-out 4.4s forwards; }
+.sp-tag{  opacity:0;animation:spFadeUp .5s ease-out 4.7s forwards; }
+@keyframes spFadeUp{ from{opacity:0;transform:translateY(7px)} to{opacity:1;transform:translateY(0)} }
+</style>
+<svg viewBox="0 0 300 460" width="260" height="400" xmlns="http://www.w3.org/2000/svg">
+  <!-- ring -->
+  <circle class="sp-ring" cx="150" cy="140" r="105"/>
+  <!-- dots -->
+  <g>
+    <circle class="sp-dot" cx="76"  cy="66"  r="5.5" fill="#1a5c2e"/>
+    <circle class="sp-dot" cx="203" cy="53"  r="5.5" fill="#1a5c2e"/>
+    <circle class="sp-dot" cx="251" cy="104" r="6"   fill="#4a9cc7"/>
+    <circle class="sp-dot" cx="253" cy="183" r="6"   fill="#4a9cc7"/>
+    <circle class="sp-dot" cx="60"  cy="186" r="5.5" fill="#1a5c2e"/>
+    <circle class="sp-dot" cx="45"  cy="140" r="5.5" fill="#1a5c2e"/>
+  </g>
+  <!-- Africa silhouette -->
+  <g class="sp-africa">
+    <path d="M150,62 C160,62 172,66 178,73 C185,82 183,93 187,102 C192,112 191,122 186,130
+             C182,137 184,146 179,153 C174,160 167,164 160,162 C155,160 152,155 150,152
+             C148,155 145,160 140,162 C133,164 126,160 121,153
+             C116,146 118,137 114,130 C109,122 108,112 113,102 C117,93 115,82 122,73
+             C128,66 140,62 150,62Z"
+      fill="#1a5c2e" opacity=".15" stroke="#1a5c2e" stroke-width="1.8"/>
+    <path d="M186,108 C192,104 200,109 199,117 C198,123 191,125 186,122Z"
+      fill="#1a5c2e" opacity=".15" stroke="#1a5c2e" stroke-width="1.2"/>
+  </g>
+  <!-- landscape bowl -->
+  <g class="sp-ground">
+    <path d="M55,158 Q80,215 150,222 Q220,215 245,158 Q200,180 150,182 Q100,180 55,158Z" fill="#4aad5a" opacity=".35"/>
+    <path d="M68,160 Q150,147 232,160" fill="none" stroke="#2e7d45" stroke-width="1.8" opacity=".65"/>
+    <path d="M76,169 Q150,157 224,169" fill="none" stroke="#2e7d45" stroke-width="1.4" opacity=".5"/>
+    <path d="M86,177 Q150,167 214,177" fill="none" stroke="#2e7d45" stroke-width="1.1" opacity=".35"/>
+  </g>
+  <!-- trunk -->
+  <g class="sp-trunk">
+    <rect x="145" y="150" width="10" height="34" rx="4" fill="#1a5c2e"/>
+  </g>
+  <!-- canopy -->
+  <g class="sp-canopy">
+    <ellipse cx="150" cy="124" rx="40" ry="27" fill="#2e7d45" opacity=".88"/>
+    <ellipse cx="118" cy="134" rx="24" ry="17" fill="#2e7d45" opacity=".78"/>
+    <ellipse cx="182" cy="134" rx="24" ry="17" fill="#2e7d45" opacity=".78"/>
+    <ellipse cx="150" cy="108" rx="28" ry="19" fill="#1a5c2e" opacity=".72"/>
+    <ellipse cx="150" cy="99"  rx="17" ry="11" fill="#1a5c2e" opacity=".55"/>
+  </g>
+  <!-- roots -->
+  <g class="sp-roots">
+    <path d="M150,183 C140,188 126,197 110,214" fill="none" stroke="#1a5c2e" stroke-width="3"   stroke-linecap="round"/>
+    <path d="M150,183 C146,192 142,203 140,218" fill="none" stroke="#1a5c2e" stroke-width="2.2" stroke-linecap="round"/>
+    <path d="M150,183 C154,192 158,203 160,218" fill="none" stroke="#1a5c2e" stroke-width="2.2" stroke-linecap="round"/>
+    <path d="M150,183 C160,188 174,197 190,214" fill="none" stroke="#1a5c2e" stroke-width="3"   stroke-linecap="round"/>
+  </g>
+  <!-- ACE letters centred -->
+  <text x="150" y="305" text-anchor="middle"
+        font-family="Montserrat,sans-serif" font-weight="800" font-size="80"
+        fill="#1a5c2e" letter-spacing="8">
+    <tspan class="sp-la">A</tspan><tspan class="sp-lc">C</tspan><tspan class="sp-le">E</tspan>
+  </text>
+  <!-- dividers -->
+  <line class="sp-divl sp-div1" x1="55" y1="317" x2="245" y2="317"/>
+  <line class="sp-divl sp-div2" x1="55" y1="360" x2="245" y2="360"/>
+  <!-- full name -->
+  <text x="150" y="344" text-anchor="middle" class="sp-name"
+        font-family="Montserrat,sans-serif" font-weight="700" font-size="15"
+        fill="#1a5c2e" letter-spacing="1">African Carbon Exchange</text>
+  <!-- tagline -->
+  <text x="150" y="386" text-anchor="middle" class="sp-tag"
+        font-family="'Open Sans',sans-serif" font-size="10.5" font-style="italic"
+        fill="#3a7a4a">From Soil and Forest to Credible Carbon Value</text>
+</svg>
+</div>
+</div>
 <div id="root"></div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
@@ -1414,107 +1532,15 @@ setInterval(() => { if (S.theme.mode === 'auto') applyTheme(); }, 30000);
 if (!CanvasRenderingContext2D.prototype.roundRect) { CanvasRenderingContext2D.prototype.roundRect = function(x,y,w,h){ this.rect(x,y,w,h); }; }
 /* ---------- Splash: ACE grows from a forest, then the full name, 7 seconds ---------- */
 (function splash(){
-  const DW = 390, DH = 844, DUR = 7.0;
-  const canvas = $('splashCanvas'), ctx = canvas.getContext('2d');
-  const LET = { A:["01110","10001","10001","11111","10001","10001","10001"],
-                C:["01111","10000","10000","10000","10000","10000","01111"],
-                E:["11111","10000","10000","11110","10000","10000","11111"] };
-  const CELL = 17;
-  const targets = []; let x0 = 0;
-  for (const ch of 'ACE'){ LET[ch].forEach((row, r) => [...row].forEach((v, c) => { if (v === '1') targets.push([x0 + c, r]); })); x0 += 6; }
-  const cols = x0 - 1, ox = (DW - cols*CELL)/2, oy = 250;
-  const letterPts = targets.map(([x, y]) => [ox + x*CELL + CELL/2, oy + y*CELL + CELL/2]);
-  let seed = 9; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
-  const starts = letterPts.map(() => [14 + rnd()*(DW-28), 640 + rnd()*150]);
-  const spots = Array.from({length:30}, () => [14 + rnd()*(DW-28), 630 + rnd()*150, 0.9 + rnd()*0.7]).sort((a,b) => a[1]-b[1]);
-  const easeIO = t => { t = Math.max(0, Math.min(1, t)); return t*t*t*(t*(6*t-15)+10); };
-  const easeBack = t => { t = Math.max(0, Math.min(1, t)); const c1 = 1.4, c3 = c1+1; return 1 + c3*Math.pow(t-1,3) + c1*Math.pow(t-1,2); };
-  const COL = { trunk:'#654E38', a:'#2F7D4F', b:'#60A075', ink:'#0E1A14', muted:'#6B7A70', sun:'#F6D68C', gold:'#E0A93B' };
-
-  function resize(){
-    const dpr = window.devicePixelRatio || 1;
-    canvas.width = innerWidth * dpr; canvas.height = innerHeight * dpr;
-  }
-  function tree(x, y, s, alpha){
-    if (s <= 0.02) return;
-    ctx.globalAlpha = alpha;
-    ctx.fillStyle = COL.trunk; ctx.fillRect(x-1.1*s, y-1*s, 2.2*s, 7*s);
-    ctx.fillStyle = COL.a; ctx.beginPath(); ctx.arc(x, y-9*s, 6*s, 0, Math.PI*2); ctx.fill();
-    ctx.fillStyle = COL.b; ctx.beginPath(); ctx.arc(x-0.8*s, y-13*s, 4.5*s, 0, Math.PI*2); ctx.fill();
-    ctx.globalAlpha = 1;
-  }
-  function draw(t){
-    const vw = innerWidth, vh = innerHeight, dpr = window.devicePixelRatio || 1;
-    const k = Math.min(vw/DW, vh/DH);
-    ctx.setTransform(dpr,0,0,dpr,0,0);
-    ctx.fillStyle = '#F7F3E6'; ctx.fillRect(0,0,vw,vh);
-    ctx.setTransform(k*dpr,0,0,k*dpr,(vw-DW*k)/2*dpr,(vh-DH*k)/2*dpr);
-    // sky
-    const sky = ctx.createLinearGradient(0,0,0,DH);
-    sky.addColorStop(0,'#E8F2E9'); sky.addColorStop(1,'#F8F4E8');
-    ctx.fillStyle = sky; ctx.fillRect(0,0,DW,DH);
-    // sun glow and sun
-    const g = ctx.createRadialGradient(300,110,20,300,110,120);
-    g.addColorStop(0,'rgba(246,214,140,0.45)'); g.addColorStop(1,'rgba(246,214,140,0)');
-    ctx.fillStyle = g; ctx.fillRect(0,0,DW,DH);
-    ctx.fillStyle = COL.sun; ctx.beginPath(); ctx.arc(300,110,22,0,Math.PI*2); ctx.fill();
-    // hills
-    const hills = ['#CDE5C0','#A8CF98','#7DB574','#4E985D'];
-    hills.forEach((col, i) => {
-      ctx.fillStyle = col; ctx.beginPath(); ctx.moveTo(0, DH);
-      const base = 600 + i*62, ph = t*30;
-      for (let x = 0; x <= DW; x += 8){
-        const y = base + Math.sin((x + ph*(1+i*0.2))/95 + i*1.3)*12 + Math.cos(x/52 + i)*5;
-        ctx.lineTo(x, y);
-      }
-      ctx.lineTo(DW, DH); ctx.closePath(); ctx.fill();
-    });
-    // 0 to 1.6s: forest sprouts
-    if (t < 1.6){
-      spots.forEach((p, i) => {
-        const gg = easeBack((t - i*0.03)/0.7);
-        if (gg > 0) tree(p[0], p[1], p[2]*gg, Math.min(1, gg));
-      });
-    }
-    // 1.4 to 3.8s: trees travel into A C E
-    if (t >= 1.4){
-      letterPts.forEach(([tx, ty], i) => {
-        const [fx, fy] = starts[i];
-        const kk = easeIO((t - 1.6 - i*0.012)/1.9);
-        const x = fx + (tx-fx)*kk, y = fy + (ty-fy)*kk - Math.sin(kk*Math.PI)*40;
-        tree(x, y+8, 1.0, 1);
-      });
-    }
-    // 4.8s onward: full name fades in under ACE
-    if (t >= 4.8){
-      const a = easeIO((t-4.8)/0.8);
-      ctx.globalAlpha = a; ctx.textAlign = 'center';
-      ctx.fillStyle = COL.ink; ctx.font = '700 17px Inter, Arial, sans-serif';
-      ctx.fillText('African Carbon Exchange', DW/2, 500);
-      ctx.fillStyle = COL.muted; ctx.font = '400 13px Inter, Arial, sans-serif';
-      ctx.fillText('Field Evidence', DW/2, 528);
-      ctx.globalAlpha = 1;
-    }
-    // progress line
-    if (t >= 0.6){
-      const p = Math.min(1, (t-0.6)/6.4);
-      ctx.fillStyle = '#D6DED4'; ctx.beginPath(); ctx.roundRect(96,780,198,4,2); ctx.fill();
-      ctx.fillStyle = COL.gold; ctx.beginPath(); ctx.roundRect(96,780,198*p,4,2); ctx.fill();
-    }
-  }
   function finish(){
     const el = $('splash');
     el.classList.add('fadeout');
     setTimeout(() => { el.classList.add('hidden'); S.route = 'welcome'; render(); $('root').classList.add('show'); }, 320);
   }
-  const t0 = performance.now();
-  function loop(now){
-    const t = (now - t0)/1000;
-    draw(Math.min(t, DUR));
-    if (t < DUR) requestAnimationFrame(loop); else finish();
-  }
-  resize(); addEventListener('resize', resize);
-  requestAnimationFrame(loop);
+  // Animation completes at ~5.2s; add a short pause then hand off
+  setTimeout(finish, 5600);
+  // Tap to skip
+  $('splash').addEventListener('click', finish, {once:true});
 })();
 
 /* ---------- Welcome (illustrated front door) ---------- */
