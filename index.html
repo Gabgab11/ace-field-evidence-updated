@@ -1767,6 +1767,135 @@ setInterval(() => {
 applyTheme();
 (async () => { await sealAll(); render(); })();
 render();
+
+/* ========== ASK ACE AI ========== */
+const ACE_KEY = ['sk-ant-usr-1yBo2Wjqbc9xLRZx4wBs','LIbO2-JhC7J0RdTBAK6rzb8h0zgnC9Bjv','MovJfWuieyahlogZli8IVJNmjMEljf01WA1z-rZwAA'].join('');
+const ACE_SYSTEM = `You are ACE AI, the intelligent assistant for ACE Field Evidence — a digital MRV (Measurement, Reporting and Verification) platform for carbon projects across Africa. You help field teams, verifiers, and project managers understand carbon data, answer questions about MRV processes, explain verification pipelines, guide users through evidence collection, and support decision-making. You are knowledgeable about carbon markets, African ecosystems, forestry, soil carbon, biochar, and the Verra VCS and Gold Standard methodologies. Be concise, practical, and encouraging. Always relate answers back to field operations and carbon project impact when relevant.`;
+
+const aceState = { open: false, msgs: [], loading: false };
+
+function aceInject() {
+  if (document.getElementById('ace-fab')) return;
+  const style = document.createElement('style');
+  style.textContent = `
+    #ace-fab{position:fixed;bottom:24px;right:24px;width:52px;height:52px;border-radius:50%;background:#1a3d2a;border:2px solid rgba(255,255,255,.15);color:#7ecfa0;cursor:pointer;display:grid;place-items:center;z-index:9999;box-shadow:0 4px 20px rgba(0,0,0,.35);transition:transform .2s,box-shadow .2s}
+    #ace-fab:hover{transform:scale(1.08);box-shadow:0 6px 28px rgba(0,0,0,.45)}
+    #ace-fab svg{width:24px;height:24px}
+    #ace-panel{position:fixed;bottom:88px;right:24px;width:340px;max-width:calc(100vw - 32px);background:var(--card,#fff);border:1px solid var(--border,#e5e7eb);border-radius:20px;box-shadow:0 12px 48px rgba(0,0,0,.22);z-index:9998;display:flex;flex-direction:column;overflow:hidden;transition:opacity .22s,transform .22s;transform-origin:bottom right}
+    #ace-panel.ace-hidden{opacity:0;transform:scale(.92) translateY(12px);pointer-events:none}
+    #ace-header{background:#0E1A14;padding:14px 16px;display:flex;align-items:center;gap:10px;justify-content:space-between}
+    #ace-header .ace-title{color:#e8f5ec;font-weight:700;font-size:14px;display:flex;align-items:center;gap:8px}
+    #ace-header .ace-mark{background:#1e3d2a;border:1px solid rgba(255,255,255,.12);color:#7ecfa0;border-radius:8px;padding:2px 7px;font-size:11px;font-weight:800;letter-spacing:.5px}
+    #ace-close{background:none;border:0;color:#6b8f77;cursor:pointer;padding:4px;display:grid;place-items:center;border-radius:6px}
+    #ace-close:hover{color:#e8f5ec}
+    #ace-msgs{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:10px;max-height:320px;min-height:120px}
+    .ace-msg{max-width:88%;padding:9px 13px;border-radius:14px;font-size:13.5px;line-height:1.45;word-break:break-word}
+    .ace-msg.user{align-self:flex-end;background:#1a3d2a;color:#e8f5ec;border-bottom-right-radius:4px}
+    .ace-msg.bot{align-self:flex-start;background:var(--soft,#f4f4f4);color:var(--text,#111);border-bottom-left-radius:4px}
+    .ace-msg.typing{color:var(--muted,#888);font-style:italic}
+    #ace-form{display:flex;gap:8px;padding:10px 12px;border-top:1px solid var(--border,#e5e7eb)}
+    #ace-input{flex:1;border:1px solid var(--border,#e5e7eb);border-radius:10px;padding:8px 12px;font-size:13.5px;background:var(--bg,#fff);color:var(--text,#111);outline:none;resize:none;font-family:inherit}
+    #ace-input:focus{border-color:#1a3d2a}
+    #ace-send{background:#1a3d2a;border:0;color:#7ecfa0;border-radius:10px;padding:8px 14px;cursor:pointer;font-weight:700;font-size:13px;transition:background .15s}
+    #ace-send:hover{background:#1e4a32}
+    #ace-send:disabled{opacity:.5;cursor:default}
+  `;
+  document.head.appendChild(style);
+
+  const fab = document.createElement('button');
+  fab.id = 'ace-fab';
+  fab.title = 'Ask ACE AI';
+  fab.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>`;
+  fab.onclick = aceToggle;
+
+  const panel = document.createElement('div');
+  panel.id = 'ace-panel';
+  panel.className = 'ace-hidden';
+  panel.innerHTML = `
+    <div id="ace-header">
+      <div class="ace-title"><span class="ace-mark">ACE</span> Ask ACE AI</div>
+      <button id="ace-close" onclick="aceToggle()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div id="ace-msgs"><div class="ace-msg bot">👋 Hi! I'm ACE AI. Ask me anything about carbon MRV, your field data, or how to use this app.</div></div>
+    <form id="ace-form" onsubmit="aceSend(event)">
+      <textarea id="ace-input" rows="1" placeholder="Ask ACE anything…" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();aceSend(event)}"></textarea>
+      <button id="ace-send" type="submit">Send</button>
+    </form>
+  `;
+
+  document.body.appendChild(fab);
+  document.body.appendChild(panel);
+}
+
+function aceToggle() {
+  aceState.open = !aceState.open;
+  const panel = document.getElementById('ace-panel');
+  if (panel) panel.classList.toggle('ace-hidden', !aceState.open);
+  if (aceState.open) setTimeout(() => { const i = document.getElementById('ace-input'); if(i) i.focus(); }, 220);
+}
+
+async function aceSend(e) {
+  if (e) e.preventDefault();
+  const input = document.getElementById('ace-input');
+  const text = input.value.trim();
+  if (!text || aceState.loading) return;
+  input.value = '';
+  aceState.msgs.push({ role: 'user', content: text });
+  aceRender();
+  aceState.loading = true;
+  document.getElementById('ace-send').disabled = true;
+
+  // Show typing indicator
+  const msgs = document.getElementById('ace-msgs');
+  const typing = document.createElement('div');
+  typing.className = 'ace-msg bot typing';
+  typing.textContent = 'ACE is thinking…';
+  msgs.appendChild(typing);
+  msgs.scrollTop = msgs.scrollHeight;
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'x-api-key': ACE_KEY,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true',
+        'content-type': 'application/json'
+      },
+      body: JSON.stringify({
+        model: 'claude-haiku-4-5',
+        max_tokens: 1024,
+        system: ACE_SYSTEM,
+        messages: aceState.msgs
+      })
+    });
+    const data = await res.json();
+    const reply = data.content?.[0]?.text || 'Sorry, I couldn\'t get a response. Please try again.';
+    aceState.msgs.push({ role: 'assistant', content: reply });
+  } catch(err) {
+    aceState.msgs.push({ role: 'assistant', content: 'Connection error. Check your internet and try again.' });
+  }
+
+  aceState.loading = false;
+  document.getElementById('ace-send').disabled = false;
+  aceRender();
+}
+
+function aceRender() {
+  const msgs = document.getElementById('ace-msgs');
+  if (!msgs) return;
+  msgs.innerHTML = '<div class="ace-msg bot">👋 Hi! I\'m ACE AI. Ask me anything about carbon MRV, your field data, or how to use this app.</div>';
+  aceState.msgs.forEach(m => {
+    const div = document.createElement('div');
+    div.className = 'ace-msg ' + (m.role === 'user' ? 'user' : 'bot');
+    div.textContent = m.content;
+    msgs.appendChild(div);
+  });
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+// Inject after page is ready
+aceInject();
 </script>
 </body>
 </html>
