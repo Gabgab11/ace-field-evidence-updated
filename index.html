@@ -165,6 +165,20 @@ input[type=checkbox]{width:18px;height:18px;accent-color:var(--green)}
 @media(max-width:1080px){.dash,.dash2{grid-template-columns:1fr}}
 .cardhead{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:18px}
 .cardhead small{color:var(--muted);font-size:13px;font-weight:500}
+/* Collapsible card sections — spacing between stacked col-cards in dash */
+.grid.dash2 .col-card + .col-card{margin-top:0}
+
+.col-card{overflow:hidden}
+.col-card .col-head{display:flex;align-items:center;justify-content:space-between;cursor:pointer;padding:14px 20px;margin:-20px -20px 0;border-radius:var(--r-card) var(--r-card) 0 0;user-select:none;-webkit-user-select:none}
+.col-card .col-head:hover{background:var(--soft)}
+.col-card .col-head h3{font-size:14.5px;font-weight:700;margin:0}
+.col-card .col-head .col-meta{display:flex;align-items:center;gap:10px}
+.col-card .col-head small{color:var(--muted);font-size:13px;font-weight:500}
+.col-chevron{display:grid;place-items:center;color:var(--muted);transition:transform .22s cubic-bezier(.4,0,.2,1);flex:0 0 auto}
+.col-card.closed .col-chevron{transform:rotate(-90deg)}
+.col-body{display:grid;grid-template-rows:1fr;transition:grid-template-rows .22s cubic-bezier(.4,0,.2,1);margin-top:18px}
+.col-card.closed .col-body{grid-template-rows:0fr;margin-top:0}
+.col-body-inner{overflow:hidden;min-height:0}
 .kpi .lbl{color:var(--muted);font-size:13.5px;font-weight:600}
 .kpi .num{font-size:44px;font-weight:700;letter-spacing:-.04em;line-height:1;margin:10px 0 6px}
 .kpi svg{display:block;margin-top:14px;width:100%;height:40px}
@@ -665,7 +679,7 @@ const TEAM = [
 
 /* ---------- State (demo only, held in memory) ---------- */
 const S = {
-  authed:false, route:'dashboard', tpl:'Soil carbon', buildStatus:BUILD_ITEMS.map(x => x[1]), calibration:CALIBRATION.map(c => ({...c})), alerts:IMAGERY.map(i => i.alert), baselineStatus:BASELINES.map(b => b.status), batch:{ id:'BC-0042', stage:1, log:[] }, theme:{ mode:'system', dayStart:'06:00', nightStart:'18:00' }, sel:null, filter:'all', q:'', prefProject:null, nextId:106, tab:'account', stab:'account', sideOpen:true,
+  authed:false, route:'dashboard', tpl:'Soil carbon', buildStatus:BUILD_ITEMS.map(x => x[1]), calibration:CALIBRATION.map(c => ({...c})), alerts:IMAGERY.map(i => i.alert), baselineStatus:BASELINES.map(b => b.status), batch:{ id:'BC-0042', stage:1, log:[] }, theme:{ mode:'system', dayStart:'06:00', nightStart:'18:00' }, sel:null, filter:'all', q:'', prefProject:null, nextId:106, tab:'account', stab:'account', sideOpen:true, collapsed:{},
   user:{ name:'Demo User', email:'', role:'Admin', org:'African Carbon Exchange', title:'Programme lead', phone:'', tz:'Africa/Nairobi' },
   integrity:{ state:'idle', detail:'Not verified yet' }, tampered:null,
   settings:{ notifyReview:true, notifyFlags:true, notifyDigest:false, mfa:false, autoVerify:true, timeout:'30', retention:'7' },
@@ -989,17 +1003,15 @@ function dashboard(){
     <div class="card kpi"><div class="lbl">Records with flags</div><div class="num" style="color:${flagged?'#d0654a':'#7fb08f'}">${flagged}</div>${spark([0,1,1,2,1,flagged],'#d0654a')}</div>
   </section>
 
-  <section class="grid dash">
-    <div class="card">
-      <div class="cardhead"><h3>Verification pipeline</h3><small>${r.length} records</small></div>
+  <section class="grid dash" style="margin-top:0">
+    ${colCard('pipeline','Verification pipeline',`${r.length} records`,`
       ${stages.map(st => { const c = n(st), p = r.length ? c / r.length * 100 : 0;
         return `<div class="pipe"><span>${STATUS[st]}</span><div class="track"><i style="width:${p}%"></i></div><b>${c}</b></div>`; }).join('')}
-      <div class="cardhead" style="margin-top:22px"><h3>Where the data comes from</h3></div>
+      <div class="cardhead" style="margin-top:22px;margin-bottom:14px"><h3>Where the data comes from</h3></div>
       ${srcCounts.map(([s,c]) => `<div class="pipe"><span>${s}</span><div class="track"><i class="srcbar" style="width:${c/srcMax*100}%"></i></div><b>${c}</b></div>`).join('')}
-    </div>
+    `)}
     <div class="grid" style="gap:18px;align-content:start">
-      <div class="card">
-        <div class="cardhead"><h3>Chain integrity</h3></div>
+      ${colCard('integrity','Chain integrity','',`
         <div class="state"><span class="dot ${I.state==='ok'?'ok':I.state==='bad'?'bad':''}"></span>
           <div><b>${I.state==='ok'?'Chain intact':I.state==='bad'?'Tampering detected':'Not checked yet'}</b><div class="muted" style="font-size:13px">${esc(I.detail)}</div></div></div>
         <div class="actions" style="margin-top:16px">
@@ -1007,32 +1019,28 @@ function dashboard(){
           ${S.user.role==='Admin' ? `<button class="btn danger sm" onclick="simulateTamper()">Simulate tampering</button>` : ''}
           ${S.tampered ? `<button class="btn sm" onclick="restoreTamper()">Restore data</button>` : ''}
         </div>
-      </div>
-      <div class="card">
-        <div class="cardhead"><h3>Live sensor feed</h3><span class="live">Simulated</span></div>
+      `)}
+      ${colCard('sensor','Live sensor feed','Simulated',`
         <div class="feed">
           <span class="n">Cookstove logger NDC-0412</span><span class="v" id="f0">186.4<span class="u">°C</span></span>
           <span class="n">Soil moisture KF-S03</span><span class="v" id="f1">31.2<span class="u">%</span></span>
           <span class="n">Weather station AA-WS1</span><span class="v" id="f2">27.8<span class="u">°C</span></span>
           <span class="n">Drone flight AA-0815</span><span class="v" id="f3">82<span class="u">% done</span></span>
         </div>
-      </div>
+      `)}
     </div>
   </section>
 
-  ${factCard(true)}
-  <section class="card" style="margin-top:20px"><div class="cardhead"><h3>Modules</h3><small>Open any part of the brief</small></div><div class="actions" style="flex-wrap:wrap">${NAV.filter(n=>n[0]!=='dashboard').map(n => `<button class="btn sm" onclick="go('${n[0]}')">${n[1]}</button>`).join('')}</div></section>
+  <div style="margin-top:20px">${colCard('fact','Did you know','Carbon trivia',factCard(true))}</div>
+
+  <div style="margin-top:20px">${colCard('modules','Modules','Quick navigation',`<div class="actions" style="flex-wrap:wrap;margin-top:4px">${NAV.filter(n=>n[0]!=='dashboard').map(n => `<button class="btn sm" onclick="go('${n[0]}')">${n[1]}</button>`).join('')}</div>`)}</div>
+
   <section class="grid dash2" style="margin-top:20px">
-    <div class="card">
-      <div class="cardhead"><h3>${can('review') ? 'Review queue' : 'Your recent activity'}</h3><small>${can('review') ? `${queue.length} waiting` : ''}</small></div>
-      ${can('review')
-        ? (queue.length ? queue.map(x => `<div class="act" style="cursor:pointer" onclick="viewRecord('${x.id}')" tabindex="0"><span class="ic">${x.id.slice(-2)}</span><div><b>${x.id} · ${esc(x.type)}</b><small>${esc(projOf(x.projectId).name)} · ${esc(x.source)}${flagCount(x)?` · ${flagCount(x)} flag${flagCount(x)>1?'s':''}`:''}</small></div></div>`).join('') : '<div class="empty">Nothing waiting. The queue is clear.</div>')
-        : allAudit().filter(a => a.by === S.user.role).slice(0,5).map(a => `<div class="act"><span class="ic">✓</span><div><b>${a.rec} · ${esc(a.action)}</b><small>${a.at}</small></div></div>`).join('') || '<div class="empty">No activity yet. Create a measurement to get started.</div>'}
-    </div>
-    <div class="card">
-      <div class="cardhead"><h3>Recent activity</h3><small>All roles</small></div>
-      ${allAudit().slice(0,6).map(a => `<div class="act"><span class="ic">${a.rec.slice(-2)}</span><div><b>${a.rec} · ${esc(a.action)}</b><small>${esc(a.by)} · ${a.at}</small></div></div>`).join('')}
-    </div>
+    ${colCard('queue', can('review') ? 'Review queue' : 'Your recent activity', can('review') ? `${queue.length} waiting` : '', can('review')
+      ? (queue.length ? queue.map(x => `<div class="act" style="cursor:pointer" onclick="viewRecord('${x.id}')" tabindex="0"><span class="ic">${x.id.slice(-2)}</span><div><b>${x.id} · ${esc(x.type)}</b><small>${esc(projOf(x.projectId).name)} · ${esc(x.source)}${flagCount(x)?` · ${flagCount(x)} flag${flagCount(x)>1?'s':''}`:''}</small></div></div>`).join('') : '<div class="empty">Nothing waiting. The queue is clear.</div>')
+      : (allAudit().filter(a => a.by === S.user.role).slice(0,5).map(a => `<div class="act"><span class="ic">✓</span><div><b>${a.rec} · ${esc(a.action)}</b><small>${a.at}</small></div></div>`).join('') || '<div class="empty">No activity yet. Create a measurement to get started.</div>')
+    )}
+    ${colCard('activity','Recent activity','All roles',allAudit().slice(0,6).map(a => `<div class="act"><span class="ic">${a.rec.slice(-2)}</span><div><b>${a.rec} · ${esc(a.action)}</b><small>${esc(a.by)} · ${a.at}</small></div></div>`).join(''))}
   </section>`;
   return shell(body, 'Overview', 'Where your field evidence stands today.');
 }
@@ -1540,6 +1548,18 @@ function restoreTamper(){
 }
 function go(v){ S.route = v; if (v!=='entry') S.prefProject = null; render(); window.scrollTo({top:0}); }
 function toggleSide(){ S.sideOpen = !S.sideOpen; render(); }
+function toggleCol(id){ S.collapsed[id] = !S.collapsed[id]; const card = document.getElementById('col-'+id); if(card){ card.classList.toggle('closed', S.collapsed[id]); } }
+function colCard(id, title, sub, content){
+  const closed = !!S.collapsed[id];
+  const chevron = `<svg class="col-chevron" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4,6 8,10 12,6"/></svg>`;
+  return `<div class="card col-card${closed?' closed':''}" id="col-${id}">
+    <div class="col-head" onclick="toggleCol('${id}')" role="button" aria-expanded="${!closed}" aria-controls="col-body-${id}">
+      <h3>${title}</h3>
+      <div class="col-meta">${sub?`<small>${sub}</small>`:''}${chevron}</div>
+    </div>
+    <div class="col-body" id="col-body-${id}"><div class="col-body-inner">${content}</div></div>
+  </div>`;
+}
 function viewRecord(id){ S.sel = id; S.route = 'record'; render(); window.scrollTo({top:0}); }
 
 /* ---------- Theme: system, day, night, or scheduled ---------- */
