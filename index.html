@@ -420,6 +420,16 @@ input[type=checkbox]{width:18px;height:18px;accent-color:var(--green)}
 .fact-a{margin-top:12px;padding:14px 16px;border-radius:14px;background:var(--green-soft);color:var(--ink);font-size:15px;line-height:1.5}
 [data-theme="dark"] .fact{background:var(--surface)}
 [data-theme="dark"] .fact-a{background:#1D3B2A}
+
+/* Auth switcher cards */
+.auth-cards{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:20px}
+.auth-card{display:flex;flex-direction:column;align-items:center;gap:8px;background:var(--surface);border:2px solid var(--line);border-radius:20px;padding:22px 14px;cursor:pointer;font-weight:700;font-size:15px;color:var(--ink);transition:border-color .15s,box-shadow .15s,transform .12s;text-align:center;font-family:var(--sans)}
+.auth-card:hover{border-color:var(--green);box-shadow:0 4px 18px rgba(47,125,79,.13);transform:translateY(-2px)}
+.auth-card .ac-icon{width:44px;height:44px;border-radius:14px;display:grid;place-items:center;font-size:22px;font-weight:800;margin-bottom:2px}
+.auth-card .ac-icon.ac-in{background:var(--ink);color:var(--on-ink)}
+.auth-card .ac-icon.ac-reg{background:var(--green-soft);color:var(--green)}
+.auth-card small{display:block;color:var(--muted);font-size:12px;font-weight:500;margin-top:1px}
+[data-theme="dark"] .auth-card{border-color:var(--line)}
 </style>
 </head>
 <body>
@@ -676,6 +686,55 @@ function signIn(e){
   verifyChain().then(res => { S.integrity = res.ok ? { state:'ok', detail:`All ${res.count} records verified in order.` } : { state:'bad', detail:res.why }; render(); });
 }
 function signOut(){ S.authed = false; S.sel = null; S.route = 'welcome'; render(); toast('Signed out'); }
+
+/* ---------- Register ---------- */
+function registerView(){
+  return `
+  <div class="signin-page">
+    <div class="signin-band">${landBand(230)}</div>
+    <div class="signin-card">
+      <div class="mark big" aria-hidden="true">ACE</div>
+      <h1 style="font-size:26px">Create account</h1>
+      <p class="sub">Join Field Evidence &middot; African Carbon Exchange</p>
+      <form onsubmit="doRegister(event)" novalidate>
+        <div class="grid2">
+          <div class="field"><label for="reg-fn">First name</label><input id="reg-fn" type="text" placeholder="First" autocomplete="given-name" required></div>
+          <div class="field"><label for="reg-ln">Last name</label><input id="reg-ln" type="text" placeholder="Last" autocomplete="family-name" required></div>
+        </div>
+        <div class="field"><label for="reg-em">Work email</label><input id="reg-em" type="email" placeholder="name@organisation.org" autocomplete="username" required></div>
+        <div class="field"><label for="reg-pw">Password</label><input id="reg-pw" type="password" placeholder="Choose a password" autocomplete="new-password" required></div>
+        <div class="field"><label for="reg-pw2">Confirm password</label><input id="reg-pw2" type="password" placeholder="Repeat password" autocomplete="new-password" required></div>
+        <div class="field"><label for="reg-role">Role</label>
+          <select id="reg-role">${Object.keys(ROLES).map(r => '<option>'+r+'</option>').join('')}</select>
+        </div>
+        <div class="field"><label for="reg-org">Organisation</label><input id="reg-org" type="text" placeholder="e.g. African Carbon Exchange" autocomplete="organization"></div>
+        <p id="regMsg" class="formmsg" style="min-height:20px"></p>
+        <button class="btn primary block" type="submit" style="margin-top:6px">Create account</button>
+      </form>
+      <div class="links" style="margin-top:18px">
+        <button class="link" type="button" onclick="S.route='login';render()">Already have an account? Sign in</button>
+        <button class="link" type="button" onclick="S.route='welcome';render()">&larr; Back</button>
+      </div>
+    </div>
+    <div class="signin-foot">Prototype &middot; Luminary Digital Group</div>
+  </div>`;
+}
+function doRegister(e){
+  e.preventDefault();
+  const fn=($('reg-fn').value||'').trim(), ln=($('reg-ln').value||'').trim();
+  const em=($('reg-em').value||'').trim(), pw=$('reg-pw').value, pw2=$('reg-pw2').value;
+  const msg=t=>{const m=$('regMsg');if(m)m.textContent=t;};
+  if(!fn||!ln){msg('Please enter your first and last name.');return;}
+  if(!em){msg('Please enter a work email.');return;}
+  if(pw.length<6){msg('Password must be at least 6 characters.');return;}
+  if(pw!==pw2){msg('Passwords do not match.');return;}
+  S.user.name=fn+' '+ln; S.user.email=em;
+  S.user.role=$('reg-role').value;
+  S.user.org=($('reg-org').value||'').trim()||'African Carbon Exchange';
+  S.authed=true; S.route='dashboard';
+  toast('Account created — welcome, '+fn+'!');
+  render();
+}
 
 /* ---------- Shell ---------- */
 function shell(body, title, sub, actions = ''){
@@ -1478,8 +1537,22 @@ function welcomeView(){
       <div class="h1">Your carbon records,<br>proven and sealed.</div>
       <div class="p">Field data, checks and audit trail in one place.</div>
       <div class="dots"><i class="on"></i><i></i><i></i></div>
-      <button class="btn" onclick="S.route='login';render()">Get started  →</button>
-      <button class="link" type="button" onclick="S.route='login';render()">Already have an account? Sign in</button>
+      <div class="auth-cards">
+        <div class="auth-card" role="button" tabindex="0"
+             onclick="S.route='login';render()"
+             onkeydown="if(event.key==='Enter'||event.key===' ')this.click()">
+          <div class="ac-icon ac-in">&#8594;</div>
+          <span>Sign in</span>
+          <small>I have an account</small>
+        </div>
+        <div class="auth-card" role="button" tabindex="0"
+             onclick="S.route='register';render()"
+             onkeydown="if(event.key==='Enter'||event.key===' ')this.click()">
+          <div class="ac-icon ac-reg">+</div>
+          <span>Create account</span>
+          <small>New to Field Evidence</small>
+        </div>
+      </div>
     </div>
   </div>`;
 }
@@ -1568,7 +1641,7 @@ function triviaView(){
 /* ---------- Render ---------- */
 function render(){
   const root = $('root');
-  if (!S.authed){ root.innerHTML = (S.route === 'welcome') ? welcomeView() : loginView(); return; }
+  if (!S.authed){ if(S.route==='welcome'){root.innerHTML=welcomeView();return;} if(S.route==='register'){root.innerHTML=registerView();return;} root.innerHTML=loginView(); return; }
   const views = { dashboard, projects, entry, records, record:recordView, audit:auditView, profile, settings, sites:sitesView, baselines:baselinesView, integrity:integrityView, reports:reportsView, status:statusView, trivia:triviaView, trivia:triviaView };
   const focusQ = document.activeElement && document.activeElement.id === 'q';
   root.innerHTML = (views[S.route] || dashboard)();
