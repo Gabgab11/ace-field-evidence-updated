@@ -186,9 +186,9 @@ input[type=checkbox]{width:18px;height:18px;accent-color:var(--green)}
 /* Hero band */
 .hero-band{display:grid;grid-template-columns:1fr 1.1fr;gap:20px;margin-bottom:24px;align-items:stretch}
 @media(max-width:1080px){.hero-band{grid-template-columns:1fr}}
-.hero-band .intro{position:relative;overflow:hidden;padding:30px;border-radius:var(--r-card);background:linear-gradient(180deg,rgba(255,255,255,0) 0%,rgba(255,255,255,.92) 62%,#fff 100%),var(--art) center 40%/cover no-repeat;border:1px solid var(--line);display:flex;flex-direction:column;justify-content:flex-end;gap:22px;min-height:300px;box-shadow:var(--shadow)}
+.hero-band .intro{position:relative;overflow:hidden;padding:30px;border-radius:var(--r-card);background:linear-gradient(180deg,var(--hero-fade-0) 0%,var(--hero-fade-92) 62%,var(--hero-fade-ff) 100%),var(--art) center 40%/cover no-repeat;border:1px solid var(--line);display:flex;flex-direction:column;justify-content:flex-end;gap:22px;min-height:300px;box-shadow:var(--shadow)}
 .hero-band .intro h2{font-size:32px;margin-bottom:10px}
-.hero-band .intro p{color:#3F4F45;max-width:44ch;font-size:15.5px}
+.hero-band .intro p{color:var(--hero-p);max-width:44ch;font-size:15.5px}
 .mapcard{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-card);padding:16px;overflow:hidden;box-shadow:var(--shadow)}
 .mapcard svg{width:100%;height:auto;display:block;border-radius:14px;background:#F7F9F5}
 .mapcard text{font-family:var(--sans);fill:var(--muted);font-size:11px;font-weight:600}
@@ -316,12 +316,22 @@ input[type=checkbox]{width:18px;height:18px;accent-color:var(--green)}
 @media(max-width:900px){.toast{bottom:104px;left:18px;right:18px;max-width:none}}
 
 
-:root{ --on-ink:#fff; --topbg:rgba(245,246,242,.85); }
+:root{
+  --on-ink:#fff; --topbg:rgba(245,246,242,.85);
+  --hero-fade-0:rgba(255,255,255,0);
+  --hero-fade-92:rgba(255,255,255,.92);
+  --hero-fade-ff:#fff;
+  --hero-p:#3F4F45;
+}
 [data-theme="dark"]{
   --bg:#0B1510; --surface:#132219; --soft:#1A2D22; --line:#284036; --ink:#EEF3EC; --text:#EEF3EC; --paper:#EEF3EC; --canopy:#EEF3EC; --canopy2:#132219; --canopy3:#1A2D22;
   --muted:#9AB0A2; --green:#5CB880; --moss:#5CB880; --green-soft:#1D3B2A; --sky:#8CC4E0; --clay:#E08A72;
   --on-ink:#0B1510; --topbg:rgba(11,21,16,.85);
   --shadow:0 1px 2px rgba(0,0,0,.3),0 12px 32px rgba(0,0,0,.35);
+  --hero-fade-0:rgba(11,21,16,0);
+  --hero-fade-92:rgba(11,21,16,.92);
+  --hero-fade-ff:#0B1510;
+  --hero-p:#9AB0A2;
   color-scheme:dark;
 }
 [data-theme="dark"] .pill.submitted{background:#15303F;color:#8CC4E0}
@@ -988,7 +998,7 @@ function dashboard(){
   <section class="hero-band">
     <div class="intro">
       <div>
-        <h2>Good ${new Date().getHours() < 12 ? 'morning' : 'afternoon'}, ${esc(firstName(S.user.name))}.</h2>
+        <h2>Good ${(h=>h<12?'morning':h<17?'afternoon':h<21?'evening':'night')(new Date().getHours())}, ${esc(firstName(S.user.name))}.</h2>
         <p style="margin-top:10px">${n('submitted')} ${n('submitted') === 1 ? 'record is' : 'records are'} waiting for review, and ${flagged} ${flagged === 1 ? 'has' : 'have'} automated flags. Every record is sealed as it is saved.</p>
       </div>
       <div class="actions"><button class="btn primary" onclick="go('entry')">New measurement</button><button class="btn" onclick="go('records')">Open records</button></div>
