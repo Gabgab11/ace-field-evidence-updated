@@ -78,8 +78,31 @@ input[type=checkbox]{width:18px;height:18px;accent-color:var(--green)}
 .link{background:none;border:0;color:var(--green);cursor:pointer;padding:0;font-size:13px;font-weight:600}
 
 /* ---------- App shell ---------- */
-.app{display:grid;grid-template-columns:240px 1fr;min-height:100vh}
-.side{background:#0E1A14;border-right:none;padding:20px 12px 20px;display:flex;flex-direction:column;position:sticky;top:0;height:100vh;overflow:auto}
+.app{display:grid;grid-template-columns:240px 1fr;min-height:100vh;transition:grid-template-columns .25s cubic-bezier(.4,0,.2,1)}
+.app.side-collapsed{grid-template-columns:56px 1fr}
+.side{background:#0E1A14;border-right:none;padding:20px 12px 20px;display:flex;flex-direction:column;position:sticky;top:0;height:100vh;overflow:hidden;transition:width .25s cubic-bezier(.4,0,.2,1)}
+/* Collapse toggle button */
+.side-toggle{position:absolute;top:22px;right:-12px;width:24px;height:24px;border-radius:50%;background:#1e3326;border:1.5px solid rgba(255,255,255,.12);color:#6b8f77;cursor:pointer;display:grid;place-items:center;z-index:5;transition:background .15s,color .15s}
+.side-toggle:hover{background:#2a4535;color:#c8dece}
+.side-toggle svg{transition:transform .25s cubic-bezier(.4,0,.2,1)}
+.app.side-collapsed .side-toggle svg{transform:rotate(180deg)}
+/* Labels & text hidden when collapsed */
+.app.side-collapsed .brand b,
+.app.side-collapsed .brand small,
+.app.side-collapsed .nav .full,
+.app.side-collapsed .nav .sep,
+.app.side-collapsed .me b,
+.app.side-collapsed .me small,
+.app.side-collapsed .nav .badge{display:none}
+.app.side-collapsed .brand{padding-bottom:18px;justify-content:center}
+.app.side-collapsed .brand .mark{margin:0 auto}
+.app.side-collapsed .nav button{justify-content:center;padding:10px 0}
+.app.side-collapsed .nav button .nav-icon{opacity:.7;margin:0}
+.app.side-collapsed .nav button.on .nav-icon{opacity:1}
+.app.side-collapsed .me{justify-content:center;padding:10px 0}
+/* Topbar open-sidebar button (rendered only when collapsed, via template) */
+.sidebar-open-btn{background:none;border:0;color:var(--muted);cursor:pointer;padding:4px 6px;border-radius:8px;display:flex;align-items:center}
+.sidebar-open-btn:hover{color:var(--ink);background:var(--soft)}
 .brand{display:flex;align-items:center;gap:10px;padding:8px 10px 28px}
 .brand .mark{background:var(--green);color:#fff;font-size:13px;font-weight:800;border-radius:10px;width:34px;height:34px;display:grid;place-items:center;letter-spacing:.5px;flex:0 0 auto}
 .brand b{font-size:14.5px;font-weight:700;display:block;line-height:1.2;letter-spacing:-.01em;color:#e8f0eb}
@@ -642,7 +665,7 @@ const TEAM = [
 
 /* ---------- State (demo only, held in memory) ---------- */
 const S = {
-  authed:false, route:'dashboard', tpl:'Soil carbon', buildStatus:BUILD_ITEMS.map(x => x[1]), calibration:CALIBRATION.map(c => ({...c})), alerts:IMAGERY.map(i => i.alert), baselineStatus:BASELINES.map(b => b.status), batch:{ id:'BC-0042', stage:1, log:[] }, theme:{ mode:'system', dayStart:'06:00', nightStart:'18:00' }, sel:null, filter:'all', q:'', prefProject:null, nextId:106, tab:'account', stab:'account',
+  authed:false, route:'dashboard', tpl:'Soil carbon', buildStatus:BUILD_ITEMS.map(x => x[1]), calibration:CALIBRATION.map(c => ({...c})), alerts:IMAGERY.map(i => i.alert), baselineStatus:BASELINES.map(b => b.status), batch:{ id:'BC-0042', stage:1, log:[] }, theme:{ mode:'system', dayStart:'06:00', nightStart:'18:00' }, sel:null, filter:'all', q:'', prefProject:null, nextId:106, tab:'account', stab:'account', sideOpen:true,
   user:{ name:'Demo User', email:'', role:'Admin', org:'African Carbon Exchange', title:'Programme lead', phone:'', tz:'Africa/Nairobi' },
   integrity:{ state:'idle', detail:'Not verified yet' }, tampered:null,
   settings:{ notifyReview:true, notifyFlags:true, notifyDigest:false, mfa:false, autoVerify:true, timeout:'30', retention:'7' },
@@ -876,8 +899,13 @@ function shell(body, title, sub, actions = ''){
   };
   const navBtn = ([id,label,hideM,short]) => `<button class="${(S.route===id||(S.route==='record'&&id==='records'))?'on':''} ${hideM?'m-hide':''}" onclick="go('${id}')">${NAV_ICONS[id]||''}<span class="full">${label}</span><span class="short">${short}</span>${id==='records'&&pending?`<span class="badge">${pending}</span>`:''}</button>`;
   return `
-  <div class="app">
-    <aside class="side">
+  <div class="app${S.sideOpen?'':' side-collapsed'}">
+    <aside class="side" style="position:relative">
+      <button class="side-toggle" onclick="toggleSide()" aria-label="Toggle sidebar" title="${S.sideOpen?'Collapse sidebar':'Expand sidebar'}">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="8,2 4,6 8,10"/>
+        </svg>
+      </button>
       <div class="brand"><div class="mark" aria-hidden="true">ACE</div><div><b>Field Evidence</b><small>Digital MRV · Demo</small></div></div>
       <nav class="nav" aria-label="Main">
         ${NAV.map(navBtn).join('')}
@@ -892,7 +920,10 @@ function shell(body, title, sub, actions = ''){
     </aside>
     <div class="main">
       <header class="topbar">
-        <div><div class="crumb">${esc(S.user.org)}</div></div>
+        <div style="display:flex;align-items:center;gap:10px">
+          ${!S.sideOpen?`<button class="sidebar-open-btn" onclick="toggleSide()" aria-label="Open sidebar" title="Open sidebar"><svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="2" y1="5" x2="16" y2="5"/><line x1="2" y1="9" x2="16" y2="9"/><line x1="2" y1="13" x2="16" y2="13"/></svg></button>`:''}
+          <div class="crumb">${esc(S.user.org)}</div>
+        </div>
         <div class="actions">
           <label class="search" aria-label="Search records"><span class="muted">Search</span><input id="q" value="${esc(S.q)}" placeholder="Record, plot or project" oninput="S.q=this.value;debounceSearch()"></label>
           ${themeTree(true)}
@@ -1508,6 +1539,7 @@ function restoreTamper(){
   toast('Original data restored'); render();
 }
 function go(v){ S.route = v; if (v!=='entry') S.prefProject = null; render(); window.scrollTo({top:0}); }
+function toggleSide(){ S.sideOpen = !S.sideOpen; render(); }
 function viewRecord(id){ S.sel = id; S.route = 'record'; render(); window.scrollTo({top:0}); }
 
 /* ---------- Theme: system, day, night, or scheduled ---------- */
