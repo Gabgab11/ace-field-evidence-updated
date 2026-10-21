@@ -641,7 +641,6 @@ const NAV = [
   ['records','Records',false,'Records'],
   ['reports','Reports',true,'Reports'],
   ['status','Build status',true,'Status'],
-  ['trivia','Did you know',true,'Facts'],
   ['trivia','Trivia',true,'Trivia'],
   ['audit','Audit log',true,'Audit']
 ];
@@ -1642,7 +1641,7 @@ function triviaView(){
 function render(){
   const root = $('root');
   if (!S.authed){ if(S.route==='welcome'){root.innerHTML=welcomeView();return;} if(S.route==='register'){root.innerHTML=registerView();return;} root.innerHTML=loginView(); return; }
-  const views = { dashboard, projects, entry, records, record:recordView, audit:auditView, profile, settings, sites:sitesView, baselines:baselinesView, integrity:integrityView, reports:reportsView, status:statusView, trivia:triviaView, trivia:triviaView };
+  const views = { dashboard, projects, entry, records, record:recordView, audit:auditView, profile, settings, sites:sitesView, baselines:baselinesView, integrity:integrityView, reports:reportsView, status:statusView, trivia:triviaView };
   const focusQ = document.activeElement && document.activeElement.id === 'q';
   root.innerHTML = (views[S.route] || dashboard)();
   if (focusQ){ const q = $('q'); if (q){ q.focus(); q.setSelectionRange(q.value.length, q.value.length); } }
