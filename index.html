@@ -1810,13 +1810,13 @@ function sensingView(){
     <div style="margin-top:16px">${colCard('sat-arch','Architecture note','Hybrid approach',`
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:4px">
         <div style="background:var(--soft);border-radius:14px;padding:16px">
-          <div style="font-weight:700;color:var(--green);margin-bottom:6px">🛰 High-Tech (Macro)</div>
+          <div style="font-weight:700;color:var(--green);margin-bottom:6px;display:flex;align-items:center;gap:7px"><svg width="15" height="15" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="10" cy="10" r="3"/><circle cx="10" cy="10" r="6.5" stroke-dasharray="2.5 2.5"/><path d="M10 2v2m0 12v2M2 10h2m12 0h2"/></svg> Satellite & AI</div>
           <ul style="font-size:13px;color:var(--muted);padding-left:16px;display:flex;flex-direction:column;gap:4px">
             <li>Scalable to millions of ha</li><li>Lower cost per hectare</li><li>Rapid deployment</li><li>Best for ARR, REDD+</li>
           </ul>
         </div>
         <div style="background:var(--soft);border-radius:14px;padding:16px">
-          <div style="font-weight:700;color:var(--sky);margin-bottom:6px">📡 High-Touch (Ground)</div>
+          <div style="font-weight:700;color:var(--sky);margin-bottom:6px;display:flex;align-items:center;gap:7px"><svg width="15" height="15" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="7" y="7" width="6" height="6" rx="1.5"/><path d="M4 4a8.5 8.5 0 0112 0M4 16a8.5 8.5 0 0012 0"/></svg> IoT & Ground</div>
           <ul style="font-size:13px;color:var(--muted);padding-left:16px;display:flex;flex-direction:column;gap:4px">
             <li>High local accuracy</li><li>Captures soil carbon</li><li>Ground-truths satellite data</li><li>Best for biochar, blue carbon</li>
           </ul>
@@ -1849,7 +1849,7 @@ function iotView(){
     ${colCard('iot-sensors','Sensor network','Live device status',`
       <div style="display:flex;flex-direction:column;gap:10px;margin-top:4px">
         ${sensors.map(s=>`<div style="display:flex;align-items:center;gap:14px;padding:13px 16px;border-radius:14px;background:var(--soft);border:1px solid var(--line)">
-          <div style="flex:0 0 auto;width:40px;height:40px;border-radius:12px;background:var(--green-soft);display:grid;place-items:center;font-size:18px">${s.type.includes('flux')||s.type.includes('Carbon')?'🌿':s.type.includes('Soil')?'🪱':s.type.includes('Biochar')?'🔥':s.type.includes('Weather')?'🌦':'⚙️'}</div>
+          <div style="flex:0 0 auto;width:40px;height:40px;border-radius:12px;background:var(--green-soft);display:grid;place-items:center;color:var(--green)">${s.type.includes('flux')||s.type.includes('Carbon')?'<svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><polyline points="3,14 7,9 11,12 17,5"/><line x1="3" y1="17" x2="17" y2="17"/></svg>':s.type.includes('Soil')?'<svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M3 17c2-4 4-8 7-8s5 4 7 8"/><circle cx="10" cy="6" r="3"/></svg>':s.type.includes('Biochar')?'<svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M10 3v6M7 6c0 3 6 3 6 6a5 5 0 01-10 0 4 4 0 014-4"/></svg>':s.type.includes('Weather')?'<svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M5 17a4 4 0 010-8 5 5 0 019.9-1A3.5 3.5 0 0117 17"/></svg>':'<svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="10" cy="10" r="2.5"/><path d="M10 2v2m0 12v2M2 10h2m12 0h2m-3.1-4.9-1.4 1.4M5.5 14.5l-1.4 1.4M14.9 14.9l-1.4-1.4M5.5 5.5L4.1 4.1"/></svg>'}</div>
           <div style="flex:1;min-width:0">
             <div style="font-weight:700;font-size:13.5px">${s.name} <span style="font-size:11px;color:var(--muted);font-weight:400">${s.id}</span></div>
             <div style="font-size:12px;color:var(--muted)">${s.type} · ${s.lat}, ${s.lng}</div>
@@ -1866,14 +1866,14 @@ function iotView(){
     <div style="margin-top:16px">${colCard('iot-types','Sensor types deployed','By measurement category',`
       <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;margin-top:8px">
         ${[
-          {icon:'🌿',label:'Carbon flux towers',desc:'CO₂ and CH₄ exchange via eddy covariance'},
-          {icon:'🪱',label:'Soil carbon probes',desc:'Organic carbon, moisture and temperature'},
-          {icon:'🔥',label:'Biochar yield meters',desc:'Batch weight and quality verification'},
-          {icon:'🌦',label:'Micro-weather stations',desc:'Temperature, humidity, rainfall, wind'},
-          {icon:'⚙️',label:'Edge compute nodes',desc:'On-site pre-processing, anomaly filtering'},
-          {icon:'📡',label:'Satellite ground receivers',desc:'Local ground-truth for SAR calibration'},
+          {icon:'<svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><polyline points="3,14 7,9 11,12 17,5"/><line x1="3" y1="17" x2="17" y2="17"/></svg>',label:'Carbon flux towers',desc:'CO₂ and CH₄ exchange via eddy covariance'},
+          {icon:'<svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M3 17c2-4 4-8 7-8s5 4 7 8"/><circle cx="10" cy="6" r="3"/></svg>',label:'Soil carbon probes',desc:'Organic carbon, moisture and temperature'},
+          {icon:'<svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="6" y="12" width="8" height="5" rx="1"/><path d="M10 3v9M7 6l3-3 3 3"/></svg>',label:'Biochar yield meters',desc:'Batch weight and quality verification'},
+          {icon:'<svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M5 17a4 4 0 010-8 5 5 0 019.9-1A3.5 3.5 0 0117 17"/></svg>',label:'Micro-weather stations',desc:'Temperature, humidity, rainfall, wind'},
+          {icon:'<svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="10" cy="10" r="2.5"/><path d="M10 2v2m0 12v2M2 10h2m12 0h2m-3.1-4.9-1.4 1.4M5.5 14.5l-1.4 1.4M14.9 14.9l-1.4-1.4M5.5 5.5L4.1 4.1"/></svg>',label:'Edge compute nodes',desc:'On-site pre-processing, anomaly filtering'},
+          {icon:'<svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="10" cy="10" r="3"/><circle cx="10" cy="10" r="6.5" stroke-dasharray="2.5 2.5"/><path d="M10 2v2m0 12v2M2 10h2m12 0h2"/></svg>',label:'Satellite ground receivers',desc:'Local ground-truth for SAR calibration'},
         ].map(t=>`<div style="padding:14px;border-radius:14px;background:var(--soft);border:1px solid var(--line)">
-          <div style="font-size:22px;margin-bottom:6px">${t.icon}</div>
+          <div style="color:var(--green);margin-bottom:8px">${t.icon}</div>
           <div style="font-weight:700;font-size:13px;margin-bottom:3px">${t.label}</div>
           <div style="font-size:12px;color:var(--muted)">${t.desc}</div>
         </div>`).join('')}
@@ -1895,35 +1895,35 @@ function iotView(){
 /* ---------- dMRV Stack View ---------- */
 function dmrvView(){
   const pipeline = [
-    {step:1,icon:'📡',label:'Collect',desc:'IoT sensors, satellite imagery and field entry stream data to the cloud continuously.',status:'live'},
-    {step:2,icon:'⚙️',label:'Pre-process',desc:'Edge nodes filter noise, detect outliers and compress data before transmission.',status:'live'},
-    {step:3,icon:'🤖',label:'AI analysis',desc:'ML models quantify biomass, detect deforestation, calculate baselines dynamically.',status:'beta'},
-    {step:4,icon:'🔄',label:'ETL pipeline',desc:'Automated extraction, transformation, and loading with quality checks against VCS/Gold Standard.',status:'live'},
-    {step:5,icon:'🔐',label:'Cryptographic seal',desc:'Each record receives a digital signature (DID) tied to sensor, operator and timestamp.',status:'live'},
-    {step:6,icon:'⛓',label:'Ledger entry',desc:'Immutable blockchain timestamping creates unalterable audit trail from raw data to credit.',status:'planned'},
-    {step:7,icon:'🌐',label:'API publish',desc:'Open APIs push verified data to national registries, Verra, Gold Standard and public dashboards.',status:'planned'},
+    {step:1,icon:'<svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="10" cy="10" r="3"/><circle cx="10" cy="10" r="6.5" stroke-dasharray="2.5 2.5"/><path d="M10 2v2m0 12v2M2 10h2m12 0h2"/></svg>',label:'Collect',desc:'IoT sensors, satellite imagery and field entry stream data to the cloud continuously.',status:'live'},
+    {step:2,icon:'<svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="10" cy="10" r="2.5"/><path d="M10 2v2m0 12v2M2 10h2m12 0h2m-3.1-4.9-1.4 1.4M5.5 14.5l-1.4 1.4M14.9 14.9l-1.4-1.4M5.5 5.5 4.1 4.1"/></svg>',label:'Pre-process',desc:'Edge nodes filter noise, detect outliers and compress data before transmission.',status:'live'},
+    {step:3,icon:'<svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="3" width="14" height="14" rx="3"/><path d="M7 10h6M10 7v6"/></svg>',label:'AI analysis',desc:'ML models quantify biomass, detect deforestation, calculate baselines dynamically.',status:'beta'},
+    {step:4,icon:'<svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 10h12M13 7l3 3-3 3"/><path d="M7 5l-3 3 3 3" opacity=".4"/></svg>',label:'ETL pipeline',desc:'Automated extraction, transformation, and loading with quality checks against VCS/Gold Standard.',status:'live'},
+    {step:5,icon:'<svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="5" y="9" width="10" height="8" rx="2"/><path d="M7 9V7a3 3 0 016 0v2"/><circle cx="10" cy="13" r="1" fill="currentColor"/></svg>',label:'Cryptographic seal',desc:'Each record receives a digital signature (DID) tied to sensor, operator and timestamp.',status:'live'},
+    {step:6,icon:'<svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="2" y="6" width="4" height="4" rx="1"/><rect x="8" y="6" width="4" height="4" rx="1"/><rect x="14" y="6" width="4" height="4" rx="1"/><path d="M4 10v2a2 2 0 002 2h8a2 2 0 002-2v-2"/><line x1="10" y1="14" x2="10" y2="17"/></svg>',label:'Ledger entry',desc:'Immutable blockchain timestamping creates unalterable audit trail from raw data to credit.',status:'planned'},
+    {step:7,icon:'<svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="10" cy="10" r="8"/><path d="M2 10h16M10 2c-2.5 3-4 5-4 8s1.5 5 4 8M10 2c2.5 3 4 5 4 8s-1.5 5-4 8"/></svg>',label:'API publish',desc:'Open APIs push verified data to national registries, Verra, Gold Standard and public dashboards.',status:'planned'},
   ];
   const statusStyle = {live:'background:var(--green-soft);color:var(--green)',beta:'background:rgba(47,111,146,.12);color:var(--sky)',planned:'background:var(--soft);color:var(--muted)'};
   const tools = [
-    {cat:'AI & ML Models',icon:'🤖',items:[
+    {cat:'AI & ML Models',icon:'<svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="3" width="14" height="14" rx="3"/><path d="M7 10h6M10 7v6"/></svg>',items:[
       {name:'Biomass Neural Net',desc:'ResNet-based model trained on GEDI + Sentinel-2 for AGB estimation. RMSE < 12 t/ha.'},
       {name:'Deforestation detector',desc:'Change-detection model flagging canopy loss >0.1 ha with daily Sentinel-2 composites.'},
       {name:'Dynamic baseline engine',desc:'Time-series regression model updating reference emission baselines quarterly.'},
       {name:'Anomaly classifier',desc:'XGBoost classifier on IoT streams — catches sensor drift, data gaps, and suspicious spikes.'},
     ]},
-    {cat:'ETL Pipeline',icon:'🔄',items:[
+    {cat:'ETL Pipeline',icon:'<svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 10h12M13 7l3 3-3 3"/></svg>',items:[
       {name:'Ingest workers',desc:'Apache Kafka streams for high-frequency sensor data; batch ingestion for satellite scenes.'},
       {name:'Quality gate',desc:'Automated checks: range bounds, cross-sensor consistency, timestamp integrity, missing-data flags.'},
       {name:'Methodology mapper',desc:'Rules engine that maps raw measurements to VCS VM0007, VM0042, and Gold Standard procedures.'},
       {name:'Reporting engine',desc:'Scheduled generation of MRV reports in UNFCCC and voluntary market formats.'},
     ]},
-    {cat:'Immutable Ledger',icon:'⛓',items:[
+    {cat:'Immutable Ledger',icon:'<svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="2" y="6" width="4" height="4" rx="1"/><rect x="8" y="6" width="4" height="4" rx="1"/><rect x="14" y="6" width="4" height="4" rx="1"/><path d="M4 10v2a2 2 0 002 2h8a2 2 0 002-2v-2"/></svg>',items:[
       {name:'Blockchain timestamping',desc:'Hyperledger Fabric network. Each data record hashed and anchored — tamper-evident by design.'},
       {name:'DID (Digital Identity)',desc:'W3C DID standard: unique cryptographic identity for every sensor, operator and auditor.'},
       {name:'Credential vault',desc:'Verifiable credentials for project developers — machine-readable and registry-compatible.'},
       {name:'Smart contract audits',desc:'Automated credit issuance triggers fire only when all verification conditions are met on-chain.'},
     ]},
-    {cat:'Open APIs',icon:'🌐',items:[
+    {cat:'Open APIs',icon:'<svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="10" cy="10" r="8"/><path d="M2 10h16M10 2c-2.5 3-4 5-4 8s1.5 5 4 8M10 2c2.5 3 4 5 4 8s-1.5 5-4 8"/></svg>',items:[
       {name:'REST / GraphQL API',desc:'Full read access for registries, exchanges and analytics platforms. OAuth 2.0 secured.'},
       {name:'Verra Registry connector',desc:'Direct push to VCS project pages and issuance requests via the Verra open API.'},
       {name:'Gold Standard link',desc:'Automated reporting to Gold Standard Impact Registry for certified projects.'},
@@ -1967,8 +1967,8 @@ function dmrvView(){
         <table style="width:100%;border-collapse:collapse;font-size:13px;min-width:480px">
           <thead><tr style="background:var(--soft)">
             <th style="padding:10px 12px;text-align:left;font-weight:700;border-bottom:2px solid var(--line)">Feature</th>
-            <th style="padding:10px 12px;text-align:left;font-weight:700;border-bottom:2px solid var(--line);color:var(--green)">🛰 High-Tech (Satellite & AI)</th>
-            <th style="padding:10px 12px;text-align:left;font-weight:700;border-bottom:2px solid var(--line);color:var(--sky)">📡 High-Touch (IoT & Ground)</th>
+            <th style="padding:10px 12px;text-align:left;font-weight:700;border-bottom:2px solid var(--line);color:var(--green)"><span style="display:inline-flex;align-items:center;gap:6px"><svg width="13" height="13" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="10" cy="5" r="3"/><circle cx="10" cy="5" r="6" stroke-dasharray="2.5 2.5"/><path d="M7 12l-3 6h12l-3-6"/></svg>High-Tech (Satellite & AI)</span></th>
+            <th style="padding:10px 12px;text-align:left;font-weight:700;border-bottom:2px solid var(--line);color:var(--sky)"><span style="display:inline-flex;align-items:center;gap:6px"><svg width="13" height="13" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="7" y="7" width="6" height="6" rx="1.5"/><path d="M4 4a8.5 8.5 0 0112 0M2 10h2m12 0h2"/></svg>High-Touch (IoT & Ground)</span></th>
           </tr></thead>
           <tbody>
             ${[
