@@ -4,6 +4,8 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>ACE Field Evidence · Digital MRV</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <style>
 :root{
   --bg:#F5F6F2; --surface:#FFFFFF; --soft:#F0F3EE; --line:#E5EAE3;
@@ -189,13 +191,22 @@ input[type=checkbox]{width:18px;height:18px;accent-color:var(--green)}
 .hero-band .intro{position:relative;overflow:hidden;padding:30px;border-radius:var(--r-card);background:linear-gradient(180deg,var(--hero-fade-0) 0%,var(--hero-fade-92) 62%,var(--hero-fade-ff) 100%),var(--art) center 40%/cover no-repeat;border:1px solid var(--line);display:flex;flex-direction:column;justify-content:flex-end;gap:22px;min-height:300px;box-shadow:var(--shadow)}
 .hero-band .intro h2{font-size:32px;margin-bottom:10px}
 .hero-band .intro p{color:var(--hero-p);max-width:44ch;font-size:15.5px}
-.mapcard{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-card);padding:16px;overflow:hidden;box-shadow:var(--shadow)}
-.mapcard svg{width:100%;height:auto;display:block;border-radius:14px;background:#F7F9F5}
-.mapcard text{font-family:var(--sans);fill:var(--muted);font-size:11px;font-weight:600}
-.mapcard .pl{fill:var(--ink);font-size:12px}
-.mapcard .pt{cursor:pointer}
-.mapcard .pt text{opacity:0;fill:var(--ink);transition:opacity .15s}
-.mapcard .pt:hover text,.mapcard .pt:focus text{opacity:1}
+.mapcard{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-card);overflow:hidden;box-shadow:var(--shadow);display:flex;flex-direction:column}
+.mapcard-header{padding:14px 16px 0;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.mapcard-header h3{font-size:13.5px;font-weight:700;color:var(--ink)}
+.map-toggle{display:flex;gap:4px;background:var(--soft);border-radius:8px;padding:3px}
+.map-toggle button{border:none;background:none;padding:4px 11px;border-radius:6px;font-size:12px;font-weight:600;color:var(--muted);cursor:pointer;transition:background .15s,color .15s}
+.map-toggle button.active{background:var(--surface);color:var(--ink);box-shadow:0 1px 4px rgba(0,0,0,.1)}
+#ace-leaflet-map{flex:1;min-height:320px;width:100%}
+.ace-pin{width:14px;height:14px;border-radius:50%;border:2.5px solid #fff;box-shadow:0 1px 5px rgba(0,0,0,.35);cursor:pointer}
+.leaflet-popup-content-wrapper{border-radius:14px;box-shadow:0 4px 20px rgba(0,0,0,.15);font-family:var(--sans)}
+.leaflet-popup-content{margin:14px 16px;font-size:13px;line-height:1.5}
+.pop-name{font-weight:700;font-size:14px;margin-bottom:4px}
+.pop-badge{display:inline-block;font-size:11px;font-weight:600;padding:2px 8px;border-radius:99px;margin-bottom:8px}
+.pop-note{font-size:11.5px;color:#888;font-style:italic;margin-top:6px}
+.map-legend{padding:10px 16px 12px;display:flex;flex-wrap:wrap;gap:10px;border-top:1px solid var(--line)}
+.map-legend span{display:flex;align-items:center;gap:5px;font-size:11.5px;color:var(--muted)}
+.map-legend i{width:10px;height:10px;border-radius:50%;flex-shrink:0}
 .legend{display:flex;gap:14px;flex-wrap:wrap;color:var(--muted);font-size:12.5px;padding:12px 4px 2px;font-weight:500}
 .legend i{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px}
 
@@ -339,7 +350,7 @@ input[type=checkbox]{width:18px;height:18px;accent-color:var(--green)}
 [data-theme="dark"] .pill.rejected{background:#3D221A;color:#E08A72}
 [data-theme="dark"] .btn.danger{background:#2A1A15}
 [data-theme="dark"] .notice{background:#2E2510;color:#F0C56A}
-[data-theme="dark"] .mapcard svg{background:var(--soft)}
+[data-theme="dark"] #ace-leaflet-map .leaflet-popup-content-wrapper{background:var(--surface);color:var(--ink)}
 [data-theme="dark"] input,[data-theme="dark"] select,[data-theme="dark"] textarea{border-color:#2E4A3C}
 [data-theme="dark"] .btn{border-color:#2E4A3C}
 [data-theme="dark"] .btn:hover{background:var(--soft)}
@@ -620,7 +631,15 @@ const STATUS = { draft:'Draft', submitted:'Awaiting review', changes:'Changes re
 const PROJECTS = [
   { id:'ACE-KE-001', name:'Kilifi Mangrove Restoration', country:'Kenya',   type:'Blue carbon', tpl:'Soil carbon', method:'To be confirmed', standard:'To be confirmed', status:'Monitoring', c:[-3.63, 39.85] },
   { id:'ACE-GH-002', name:'Ashanti Agroforestry',        country:'Ghana',   type:'Agroforestry', tpl:'Afforestation', method:'To be confirmed', standard:'To be confirmed', status:'Monitoring', c:[6.69, -1.62] },
-  { id:'ACE-NG-003', name:'Niger Delta Biochar Pilot', country:'Nigeria', type:'Biochar', tpl:'Biochar', method:'To be confirmed', standard:'To be confirmed', status:'Onboarding', c:[4.82, 6.97] }
+  { id:'ACE-NG-003', name:'Niger Delta Biochar Pilot', country:'Nigeria', type:'Biochar', tpl:'Biochar', method:'To be confirmed', standard:'To be confirmed', status:'Onboarding', c:[4.82, 6.97] },
+  { id:'ACE-NG-004', name:'OSUN | Modakeke / Ile-Ife Landscape', country:'Nigeria', type:'Agroforestry', tpl:'Afforestation', method:'To be confirmed', standard:'To be confirmed', status:'Onboarding', c:[7.4827, 4.5418] },
+  { id:'ACE-NG-005', name:'OGUN | Omo Forest Reserve', country:'Nigeria', type:'REDD+', tpl:'Afforestation', method:'To be confirmed', standard:'To be confirmed', status:'Onboarding', c:[6.9167, 4.1833] },
+  { id:'ACE-NG-006', name:'ONDO | Akure-Ofosu Forest Reserve', country:'Nigeria', type:'REDD+', tpl:'Afforestation', method:'To be confirmed', standard:'To be confirmed', status:'Onboarding', c:[7.1833, 5.2333] },
+  { id:'ACE-NG-007', name:'FUTA | Federal University of Technology Akure', country:'Nigeria', type:'Afforestation', tpl:'Afforestation', method:'To be confirmed', standard:'To be confirmed', status:'Onboarding', c:[7.2986, 5.1389], illustrative:true },
+  { id:'ACE-NG-008', name:'OAU | Obafemi Awolowo University Ile-Ife', country:'Nigeria', type:'Afforestation', tpl:'Afforestation', method:'To be confirmed', standard:'To be confirmed', status:'Onboarding', c:[7.5200, 4.5200], illustrative:true },
+  { id:'ACE-NG-009', name:'ABU | Ahmadu Bello University Zaria', country:'Nigeria', type:'Afforestation', tpl:'Afforestation', method:'To be confirmed', standard:'To be confirmed', status:'Onboarding', c:[11.1564, 7.6313], illustrative:true },
+  { id:'ACE-NG-010', name:'UNICAL | University of Calabar', country:'Nigeria', type:'Afforestation', tpl:'Afforestation', method:'To be confirmed', standard:'To be confirmed', status:'Onboarding', c:[4.9757, 8.3417], illustrative:true },
+  { id:'ACE-NG-011', name:'UNIUYO | University of Uyo', country:'Nigeria', type:'Afforestation', tpl:'Afforestation', method:'To be confirmed', standard:'To be confirmed', status:'Onboarding', c:[5.0480, 7.9132], illustrative:true }
 ];
 const TEMPLATES = {
   'Afforestation': { type:'Tree diameter survey', fields:[
@@ -975,20 +994,92 @@ function shell(body, title, sub, actions = ''){
 let _dt; function debounceSearch(){ clearTimeout(_dt); _dt = setTimeout(() => { if (S.route === 'records') render(); const el = $('q'); if (el) { el.focus(); el.setSelectionRange(el.value.length, el.value.length); } }, 180); }
 
 /* ---------- Views ---------- */
-function mapSvg(){
-  const W = 640, H = 400, x = lon => (lon + 12) / 62 * W, y = lat => (20 - lat) / 34 * H;
-  let dots = ''; for (let gx = 8; gx < W; gx += 14) for (let gy = 8; gy < H; gy += 14) dots += `<circle cx="${gx}" cy="${gy}" r="1.2"/>`;
-  const col = { verified:'#2F7D4F', submitted:'#2F6F92', changes:'#E0A93B', rejected:'#B5472C', draft:'#9AA69D' };
-  const pts = S.records.filter(r => r.lat && r.lon).map(r => {
-    const cx = x(r.lon), cy = y(r.lat), f = flagCount(r) > 0;
-    return `<g class="pt" onclick="viewRecord('${r.id}')" tabindex="0" role="button" aria-label="${r.id}, ${STATUS[r.status]}">
-      ${f ? `<circle cx="${cx}" cy="${cy}" r="15" fill="none" stroke="#d0654a" stroke-dasharray="3 3"/>` : ''}
-      <circle cx="${cx}" cy="${cy}" r="6" fill="${col[r.status]}"/><text x="${cx+11}" y="${cy+4}">${r.id}</text></g>`;
-  }).join('');
-  const prj = PROJECTS.map(p => `<circle cx="${x(p.c[1])}" cy="${y(p.c[0])}" r="30" fill="none" stroke="#0E1A14" stroke-opacity=".35"/>
-    <text class="pl" x="${x(p.c[1])}" y="${y(p.c[0])-38}" text-anchor="middle">${esc(p.name)}</text>`).join('');
-  return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Map of measurement points"><g fill="#0E1A14" opacity=".1">${dots}</g>${prj}${pts}</svg>
-    <div class="legend"><span><i style="background:#8fbfd9"></i>Awaiting review</span><span><i style="background:#7fb08f"></i>Verified</span><span><i style="background:#e0a93b"></i>Changes requested</span><span><i style="background:#9db0a2"></i>Draft</span><span><i style="border:1px dashed #d0654a;background:none"></i>Automated flag</span></div>`;
+let _aceMap = null;
+function initLeafletMap(){
+  const el = document.getElementById('ace-leaflet-map');
+  if (!el || !window.L) return;
+  if (_aceMap){ _aceMap.remove(); _aceMap = null; }
+
+  const tiles = {
+    satellite: L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+      attribution: 'Tiles &copy; Esri', maxZoom: 18
+    }),
+    street: L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; OpenStreetMap contributors', maxZoom: 19
+    })
+  };
+
+  _aceMap = L.map('ace-leaflet-map', {
+    center: [7.5, 5.5], zoom: 6,
+    layers: [tiles.satellite],
+    zoomControl: true, scrollWheelZoom: false
+  });
+
+  const pinCol = { Monitoring:'#2F7D4F', Onboarding:'#2F6F92', Draft:'#9AA69D', Verified:'#2F7D4F' };
+  const badgeStyle = { Monitoring:'background:#E3F1E7;color:#2F7D4F', Onboarding:'background:rgba(47,111,146,.12);color:#2F6F92', Draft:'background:#F0F3EE;color:#6B7A70' };
+
+  PROJECTS.forEach(p => {
+    const col = pinCol[p.status] || '#9AA69D';
+    const icon = L.divIcon({
+      className: '',
+      html: `<div class="ace-pin" style="background:${col}"></div>`,
+      iconSize: [14,14], iconAnchor: [7,7], popupAnchor: [0,-10]
+    });
+    const marker = L.marker([p.c[0], p.c[1]], { icon }).addTo(_aceMap);
+    const badge = badgeStyle[p.status] || '';
+    const illustrative = p.illustrative ? '<div class="pop-note">Illustrative — coordinates not yet verified</div>' : '';
+    marker.bindPopup(`
+      <div class="pop-name">${p.name}</div>
+      <span class="pop-badge" style="${badge}">${p.status}</span>
+      <div style="font-size:12.5px;color:#555">${p.type} &middot; ${p.country}</div>
+      ${illustrative}
+    `, { maxWidth: 240 });
+  });
+
+  S.records.filter(r => r.lat && r.lon).forEach(r => {
+    const statusCol = { verified:'#2F7D4F', submitted:'#2F6F92', changes:'#E0A93B', rejected:'#B5472C', draft:'#9AA69D' };
+    const col = statusCol[r.status] || '#9AA69D';
+    const icon = L.divIcon({
+      className: '',
+      html: `<div class="ace-pin" style="background:${col};width:10px;height:10px"></div>`,
+      iconSize: [10,10], iconAnchor: [5,5], popupAnchor: [0,-8]
+    });
+    L.marker([r.lat, r.lon], { icon }).addTo(_aceMap)
+      .bindPopup(`<div class="pop-name" style="font-size:13px">${r.id}</div><div style="font-size:12px;color:#555">${STATUS[r.status]}</div>`);
+  });
+
+  document.getElementById('map-btn-sat').addEventListener('click', () => {
+    _aceMap.removeLayer(tiles.street);
+    _aceMap.addLayer(tiles.satellite);
+    document.getElementById('map-btn-sat').classList.add('active');
+    document.getElementById('map-btn-str').classList.remove('active');
+  });
+  document.getElementById('map-btn-str').addEventListener('click', () => {
+    _aceMap.removeLayer(tiles.satellite);
+    _aceMap.addLayer(tiles.street);
+    document.getElementById('map-btn-str').classList.add('active');
+    document.getElementById('map-btn-sat').classList.remove('active');
+  });
+}
+
+function mapCard(){
+  setTimeout(initLeafletMap, 80);
+  return `<div class="mapcard">
+    <div class="mapcard-header">
+      <h3>Project locations</h3>
+      <div class="map-toggle">
+        <button id="map-btn-sat" class="active">Satellite</button>
+        <button id="map-btn-str">Map</button>
+      </div>
+    </div>
+    <div id="ace-leaflet-map"></div>
+    <div class="map-legend">
+      <span><i style="background:#2F7D4F"></i>Monitoring</span>
+      <span><i style="background:#2F6F92"></i>Onboarding</span>
+      <span><i style="background:#9AA69D"></i>Draft</span>
+      <span style="font-style:italic;color:#aaa">· University pins are illustrative</span>
+    </div>
+  </div>`;
 }
 
 function dashboard(){
@@ -1009,7 +1100,7 @@ function dashboard(){
       </div>
       <div class="actions"><button class="btn primary" onclick="go('entry')">New measurement</button><button class="btn" onclick="go('records')">Open records</button></div>
     </div>
-    <div class="mapcard">${mapSvg()}</div>
+    ${mapCard()}
   </section>
 
   <section class="grid k4" style="margin-bottom:20px">
