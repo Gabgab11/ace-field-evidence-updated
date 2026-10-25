@@ -810,7 +810,10 @@ const NAV = [
   ['reports','Reports',true,'Reports'],
   ['status','Build status',true,'Status'],
   ['trivia','Trivia',true,'Trivia'],
-  ['audit','Audit log',true,'Audit']
+  ['audit','Audit log',true,'Audit'],
+  ['sensing','Remote sensing',true,'Sensing'],
+  ['iot','IoT & sensors',true,'IoT'],
+  ['dmrv','dMRV stack',true,'dMRV']
 ];
 
 /* ---------- Login ---------- */
@@ -919,7 +922,10 @@ function shell(body, title, sub, actions = ''){
     trivia:`<svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor"><path d="M10 2a8 8 0 100 16A8 8 0 0010 2zm0 3a1.2 1.2 0 110 2.4A1.2 1.2 0 0110 5zm1 4.5v5.5H9V9.5h2z"/></svg>`,
     audit:`<svg class="nav-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3H5a2 2 0 00-2 2v11a2 2 0 002 2h10a2 2 0 002-2V8l-5-5z"/><polyline points="9,3 9,8 14,8"/><line x1="7" y1="13" x2="13" y2="13"/><line x1="7" y1="10" x2="11" y2="10"/></svg>`,
     profile:`<svg class="nav-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="10" cy="7" r="3.5"/><path d="M3 18c0-3.9 3.1-7 7-7s7 3.1 7 7"/></svg>`,
-    settings:`<svg class="nav-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="2.5"/><path d="M10 2v2m0 12v2M2 10h2m12 0h2m-3.1-4.9-1.4 1.4M5.5 14.5l-1.4 1.4M14.9 14.9l-1.4-1.4M5.5 5.5L4.1 4.1"/></svg>`
+    settings:`<svg class="nav-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="2.5"/><path d="M10 2v2m0 12v2M2 10h2m12 0h2m-3.1-4.9-1.4 1.4M5.5 14.5l-1.4 1.4M14.9 14.9l-1.4-1.4M5.5 5.5L4.1 4.1"/></svg>`,
+    sensing:`<svg class="nav-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="3"/><circle cx="10" cy="10" r="6.5" stroke-dasharray="2.5 2.5"/><path d="M10 2v2m0 12v2M2 10h2m12 0h2"/></svg>`,
+    iot:`<svg class="nav-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="7" width="6" height="6" rx="1.5"/><path d="M4 4a8.5 8.5 0 0112 0M4 16a8.5 8.5 0 0012 0M2 10h2m12 0h2"/></svg>`,
+    dmrv:`<svg class="nav-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="13" width="4" height="4" rx="1"/><rect x="8" y="9" width="4" height="8" rx="1"/><rect x="14" y="5" width="4" height="12" rx="1"/><path d="M4 13l4-4 4 2 4-6"/></svg>`
   };
   const navBtn = ([id,label,hideM,short]) => `<button class="${(S.route===id||(S.route==='record'&&id==='records'))?'on':''} ${hideM?'m-hide':''}" onclick="go('${id}')">${NAV_ICONS[id]||''}<span class="full">${label}</span><span class="short">${short}</span>${id==='records'&&pending?`<span class="badge">${pending}</span>`:''}</button>`;
   return `
@@ -1743,11 +1749,252 @@ function triviaView(){
   return shell(`${landBand(150)}${factCard(false)}<p class="muted" style="margin-top:14px;font-size:13px">Questions shuffle each time you reach the end of the deck.</p>`, 'Did you know', 'Thirty questions on trees, carbon, soil, biochar and this app.');
 }
 
+/* ---------- Remote Sensing View ---------- */
+function sensingView(){
+  const sats = [
+    {name:'Sentinel-2 (ESA)',type:'Optical',res:'10m',revisit:'5 days',use:'NDVI, land cover, deforestation alerts',status:'active'},
+    {name:'Sentinel-1 (ESA)',type:'SAR Radar',res:'10m',revisit:'6 days',use:'Works through clouds; monitors soil moisture',status:'active'},
+    {name:'GEDI (NASA)',type:'LiDAR',res:'25m',revisit:'Variable',use:'Canopy height and above-ground biomass',status:'active'},
+    {name:'Planet Labs',type:'Optical',res:'3m',revisit:'Daily',use:'High-frequency deforestation monitoring',status:'planned'},
+    {name:'ALOS-2 (JAXA)',type:'SAR',res:'3m',revisit:'14 days',use:'Tropical forest structure and AGB',status:'planned'},
+  ];
+  const alerts = [
+    {site:'Kilifi Mangrove',alert:'Canopy loss detected — 0.4 ha',date:'Oct 18',sev:'high'},
+    {site:'Ashanti Agroforestry',alert:'NDVI decline in northern block',date:'Oct 14',sev:'med'},
+    {site:'Niger Delta Biochar',alert:'Burn scar boundary updated',date:'Oct 9',sev:'low'},
+  ];
+  const sevCol = {high:'var(--clay)',med:'var(--ochre)',low:'var(--green)'};
+  const sevBg  = {high:'rgba(181,71,44,.1)',med:'rgba(224,169,59,.1)',low:'rgba(47,125,79,.1)'};
+  const statusBadge = s => s==='active'?`<span style="background:var(--green-soft);color:var(--green);border-radius:99px;padding:2px 10px;font-size:12px;font-weight:700">Active</span>`:`<span style="background:var(--soft);color:var(--muted);border-radius:99px;padding:2px 10px;font-size:12px;font-weight:600">Planned</span>`;
+  const body = `
+    <div class="kpi-row" style="margin-bottom:20px">
+      <div class="card kpi-card"><div class="kpi-val" style="color:var(--green)">3</div><div class="kpi-lbl">Active satellites</div></div>
+      <div class="card kpi-card"><div class="kpi-val">10m</div><div class="kpi-lbl">Best resolution</div></div>
+      <div class="card kpi-card"><div class="kpi-val" style="color:var(--ochre)">3</div><div class="kpi-lbl">Open alerts</div></div>
+      <div class="card kpi-card"><div class="kpi-val">Daily</div><div class="kpi-lbl">Max revisit</div></div>
+    </div>
+    ${colCard('sat-feed','Satellite data sources','Live & planned',`
+      <div style="overflow-x:auto;margin-top:4px">
+        <table style="width:100%;border-collapse:collapse;font-size:13.5px">
+          <thead><tr style="color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.05em">
+            <th style="text-align:left;padding:6px 8px;font-weight:600">Platform</th>
+            <th style="text-align:left;padding:6px 8px;font-weight:600">Type</th>
+            <th style="text-align:left;padding:6px 8px;font-weight:600">Res.</th>
+            <th style="text-align:left;padding:6px 8px;font-weight:600">Revisit</th>
+            <th style="text-align:left;padding:6px 8px;font-weight:600">Use case</th>
+            <th style="text-align:left;padding:6px 8px;font-weight:600">Status</th>
+          </tr></thead>
+          <tbody>${sats.map((s,i)=>`<tr style="border-top:1px solid var(--line);${i%2===0?'background:var(--soft)':''}">
+            <td style="padding:9px 8px;font-weight:600">${s.name}</td>
+            <td style="padding:9px 8px;color:var(--muted)">${s.type}</td>
+            <td style="padding:9px 8px">${s.res}</td>
+            <td style="padding:9px 8px">${s.revisit}</td>
+            <td style="padding:9px 8px;color:var(--muted);font-size:12.5px">${s.use}</td>
+            <td style="padding:9px 8px">${statusBadge(s.status)}</td>
+          </tr>`).join('')}</tbody>
+        </table>
+      </div>
+    `)}
+    <div style="margin-top:16px">${colCard('sat-alerts','Change detection alerts','Last 30 days',`
+      <div style="display:flex;flex-direction:column;gap:10px;margin-top:4px">
+        ${alerts.map(a=>`<div style="display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:12px;background:${sevBg[a.sev]};border:1px solid ${sevCol[a.sev]}22">
+          <div style="width:8px;height:8px;border-radius:50%;background:${sevCol[a.sev]};flex:0 0 auto"></div>
+          <div style="flex:1;min-width:0">
+            <div style="font-weight:600;font-size:13.5px">${a.site}</div>
+            <div style="color:var(--muted);font-size:12.5px">${a.alert}</div>
+          </div>
+          <div style="font-size:12px;color:var(--muted);white-space:nowrap">${a.date}</div>
+        </div>`).join('')}
+      </div>
+    `)}</div>
+    <div style="margin-top:16px">${colCard('sat-arch','Architecture note','Hybrid approach',`
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:4px">
+        <div style="background:var(--soft);border-radius:14px;padding:16px">
+          <div style="font-weight:700;color:var(--green);margin-bottom:6px">🛰 High-Tech (Macro)</div>
+          <ul style="font-size:13px;color:var(--muted);padding-left:16px;display:flex;flex-direction:column;gap:4px">
+            <li>Scalable to millions of ha</li><li>Lower cost per hectare</li><li>Rapid deployment</li><li>Best for ARR, REDD+</li>
+          </ul>
+        </div>
+        <div style="background:var(--soft);border-radius:14px;padding:16px">
+          <div style="font-weight:700;color:var(--sky);margin-bottom:6px">📡 High-Touch (Ground)</div>
+          <ul style="font-size:13px;color:var(--muted);padding-left:16px;display:flex;flex-direction:column;gap:4px">
+            <li>High local accuracy</li><li>Captures soil carbon</li><li>Ground-truths satellite data</li><li>Best for biochar, blue carbon</li>
+          </ul>
+        </div>
+      </div>
+      <p style="font-size:13px;color:var(--muted);margin-top:12px;padding:12px;background:var(--green-soft);border-radius:10px;border-left:3px solid var(--green)"><strong>Recommendation:</strong> Use satellite imagery for macro monitoring and AI for scalability. Ground-truth with targeted IoT sensor networks. Feed all data into an immutable ledger via open APIs.</p>
+    `)}</div>`;
+  return shell(body, 'Remote sensing', 'Satellite imagery, LiDAR and SAR for land-use change detection.');
+}
+
+/* ---------- IoT & Sensors View ---------- */
+function iotView(){
+  const sensors = [
+    {id:'S-001',name:'Flux Tower — Kilifi',type:'Carbon flux',lat:'-3.63',lng:'39.84',battery:87,signal:'Strong',last:'2 min ago',val:'186.4 μmol/m²/s'},
+    {id:'S-002',name:'Soil probe — Ashanti N',type:'Soil carbon',lat:'6.74',lng:'-1.61',battery:62,signal:'Good',last:'4 min ago',val:'31.2 g/kg'},
+    {id:'S-003',name:'Soil probe — Ashanti S',type:'Soil carbon',lat:'6.71',lng:'-1.63',battery:71,signal:'Good',last:'4 min ago',val:'27.8 g/kg'},
+    {id:'S-004',name:'Smart meter — Niger Delta',type:'Biochar yield',lat:'5.52',lng:'6.31',battery:94,signal:'Strong',last:'1 min ago',val:'82 t/batch'},
+    {id:'S-005',name:'Weather station — Kilifi',type:'Microclimate',lat:'-3.62',lng:'39.82',battery:45,signal:'Weak',last:'18 min ago',val:'28.3°C / 81% RH'},
+    {id:'S-006',name:'Edge node — Ashanti hub',type:'Edge compute',lat:'6.73',lng:'-1.60',battery:99,signal:'Strong',last:'30 s ago',val:'Processing OK'},
+  ];
+  const battColor = b => b>70?'var(--green)':b>30?'var(--ochre)':'var(--clay)';
+  const sigColor  = s => s==='Strong'?'var(--green)':s==='Good'?'var(--ochre)':'var(--clay)';
+  const body = `
+    <div class="kpi-row" style="margin-bottom:20px">
+      <div class="card kpi-card"><div class="kpi-val" style="color:var(--green)">6</div><div class="kpi-lbl">Active sensors</div></div>
+      <div class="card kpi-card"><div class="kpi-val" style="color:var(--ochre)">1</div><div class="kpi-lbl">Low signal</div></div>
+      <div class="card kpi-card"><div class="kpi-val">4</div><div class="kpi-lbl">Site networks</div></div>
+      <div class="card kpi-card"><div class="kpi-val">Real-time</div><div class="kpi-lbl">Data stream</div></div>
+    </div>
+    ${colCard('iot-sensors','Sensor network','Live device status',`
+      <div style="display:flex;flex-direction:column;gap:10px;margin-top:4px">
+        ${sensors.map(s=>`<div style="display:flex;align-items:center;gap:14px;padding:13px 16px;border-radius:14px;background:var(--soft);border:1px solid var(--line)">
+          <div style="flex:0 0 auto;width:40px;height:40px;border-radius:12px;background:var(--green-soft);display:grid;place-items:center;font-size:18px">${s.type.includes('flux')||s.type.includes('Carbon')?'🌿':s.type.includes('Soil')?'🪱':s.type.includes('Biochar')?'🔥':s.type.includes('Weather')?'🌦':'⚙️'}</div>
+          <div style="flex:1;min-width:0">
+            <div style="font-weight:700;font-size:13.5px">${s.name} <span style="font-size:11px;color:var(--muted);font-weight:400">${s.id}</span></div>
+            <div style="font-size:12px;color:var(--muted)">${s.type} · ${s.lat}, ${s.lng}</div>
+            <div style="font-size:13px;font-weight:600;color:var(--ink);margin-top:2px">${s.val}</div>
+          </div>
+          <div style="text-align:right;flex:0 0 auto;font-size:12px">
+            <div style="color:${battColor(s.battery)};font-weight:700">🔋 ${s.battery}%</div>
+            <div style="color:${sigColor(s.signal)};font-weight:600">${s.signal}</div>
+            <div style="color:var(--muted)">${s.last}</div>
+          </div>
+        </div>`).join('')}
+      </div>
+    `)}
+    <div style="margin-top:16px">${colCard('iot-types','Sensor types deployed','By measurement category',`
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;margin-top:8px">
+        ${[
+          {icon:'🌿',label:'Carbon flux towers',desc:'CO₂ and CH₄ exchange via eddy covariance'},
+          {icon:'🪱',label:'Soil carbon probes',desc:'Organic carbon, moisture and temperature'},
+          {icon:'🔥',label:'Biochar yield meters',desc:'Batch weight and quality verification'},
+          {icon:'🌦',label:'Micro-weather stations',desc:'Temperature, humidity, rainfall, wind'},
+          {icon:'⚙️',label:'Edge compute nodes',desc:'On-site pre-processing, anomaly filtering'},
+          {icon:'📡',label:'Satellite ground receivers',desc:'Local ground-truth for SAR calibration'},
+        ].map(t=>`<div style="padding:14px;border-radius:14px;background:var(--soft);border:1px solid var(--line)">
+          <div style="font-size:22px;margin-bottom:6px">${t.icon}</div>
+          <div style="font-weight:700;font-size:13px;margin-bottom:3px">${t.label}</div>
+          <div style="font-size:12px;color:var(--muted)">${t.desc}</div>
+        </div>`).join('')}
+      </div>
+    `)}</div>
+    <div style="margin-top:16px">${colCard('edge-compute','Edge computing','On-site data processing',`
+      <div style="padding:16px;border-radius:14px;background:var(--soft);border:1px solid var(--line);margin-top:4px">
+        <p style="font-size:13.5px;color:var(--muted);margin-bottom:12px">Edge nodes at each site pre-process raw sensor readings before transmission — reducing bandwidth, filtering noise, and ensuring data quality before it hits the cloud pipeline.</p>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;font-size:13px">
+          <div style="text-align:center;padding:10px;background:var(--surface);border-radius:10px"><div style="font-size:18px;font-weight:700;color:var(--green)">↓ 73%</div><div style="color:var(--muted)">Bandwidth saved</div></div>
+          <div style="text-align:center;padding:10px;background:var(--surface);border-radius:10px"><div style="font-size:18px;font-weight:700;color:var(--sky)">99.2%</div><div style="color:var(--muted)">Uptime</div></div>
+          <div style="text-align:center;padding:10px;background:var(--surface);border-radius:10px"><div style="font-size:18px;font-weight:700;color:var(--ochre)">&lt; 2s</div><div style="color:var(--muted)">Avg latency</div></div>
+        </div>
+      </div>
+    `)}</div>`;
+  return shell(body, 'IoT & sensors', 'Ground sensor network, edge computing devices and real-time field data streams.');
+}
+
+/* ---------- dMRV Stack View ---------- */
+function dmrvView(){
+  const pipeline = [
+    {step:1,icon:'📡',label:'Collect',desc:'IoT sensors, satellite imagery and field entry stream data to the cloud continuously.',status:'live'},
+    {step:2,icon:'⚙️',label:'Pre-process',desc:'Edge nodes filter noise, detect outliers and compress data before transmission.',status:'live'},
+    {step:3,icon:'🤖',label:'AI analysis',desc:'ML models quantify biomass, detect deforestation, calculate baselines dynamically.',status:'beta'},
+    {step:4,icon:'🔄',label:'ETL pipeline',desc:'Automated extraction, transformation, and loading with quality checks against VCS/Gold Standard.',status:'live'},
+    {step:5,icon:'🔐',label:'Cryptographic seal',desc:'Each record receives a digital signature (DID) tied to sensor, operator and timestamp.',status:'live'},
+    {step:6,icon:'⛓',label:'Ledger entry',desc:'Immutable blockchain timestamping creates unalterable audit trail from raw data to credit.',status:'planned'},
+    {step:7,icon:'🌐',label:'API publish',desc:'Open APIs push verified data to national registries, Verra, Gold Standard and public dashboards.',status:'planned'},
+  ];
+  const statusStyle = {live:'background:var(--green-soft);color:var(--green)',beta:'background:rgba(47,111,146,.12);color:var(--sky)',planned:'background:var(--soft);color:var(--muted)'};
+  const tools = [
+    {cat:'AI & ML Models',icon:'🤖',items:[
+      {name:'Biomass Neural Net',desc:'ResNet-based model trained on GEDI + Sentinel-2 for AGB estimation. RMSE < 12 t/ha.'},
+      {name:'Deforestation detector',desc:'Change-detection model flagging canopy loss >0.1 ha with daily Sentinel-2 composites.'},
+      {name:'Dynamic baseline engine',desc:'Time-series regression model updating reference emission baselines quarterly.'},
+      {name:'Anomaly classifier',desc:'XGBoost classifier on IoT streams — catches sensor drift, data gaps, and suspicious spikes.'},
+    ]},
+    {cat:'ETL Pipeline',icon:'🔄',items:[
+      {name:'Ingest workers',desc:'Apache Kafka streams for high-frequency sensor data; batch ingestion for satellite scenes.'},
+      {name:'Quality gate',desc:'Automated checks: range bounds, cross-sensor consistency, timestamp integrity, missing-data flags.'},
+      {name:'Methodology mapper',desc:'Rules engine that maps raw measurements to VCS VM0007, VM0042, and Gold Standard procedures.'},
+      {name:'Reporting engine',desc:'Scheduled generation of MRV reports in UNFCCC and voluntary market formats.'},
+    ]},
+    {cat:'Immutable Ledger',icon:'⛓',items:[
+      {name:'Blockchain timestamping',desc:'Hyperledger Fabric network. Each data record hashed and anchored — tamper-evident by design.'},
+      {name:'DID (Digital Identity)',desc:'W3C DID standard: unique cryptographic identity for every sensor, operator and auditor.'},
+      {name:'Credential vault',desc:'Verifiable credentials for project developers — machine-readable and registry-compatible.'},
+      {name:'Smart contract audits',desc:'Automated credit issuance triggers fire only when all verification conditions are met on-chain.'},
+    ]},
+    {cat:'Open APIs',icon:'🌐',items:[
+      {name:'REST / GraphQL API',desc:'Full read access for registries, exchanges and analytics platforms. OAuth 2.0 secured.'},
+      {name:'Verra Registry connector',desc:'Direct push to VCS project pages and issuance requests via Verra's open API.'},
+      {name:'Gold Standard link',desc:'Automated reporting to Gold Standard Impact Registry for certified projects.'},
+      {name:'Public data dashboard',desc:'Real-time open dashboard for institutional buyers and civil society to track project impact.'},
+    ]},
+  ];
+  const body = `
+    <div class="kpi-row" style="margin-bottom:20px">
+      <div class="card kpi-card"><div class="kpi-val" style="color:var(--green)">4</div><div class="kpi-lbl">Pipeline stages live</div></div>
+      <div class="card kpi-card"><div class="kpi-val" style="color:var(--sky)">1</div><div class="kpi-lbl">In beta</div></div>
+      <div class="card kpi-card"><div class="kpi-val" style="color:var(--muted)">2</div><div class="kpi-lbl">Planned</div></div>
+      <div class="card kpi-card"><div class="kpi-val">16</div><div class="kpi-lbl">Core tools</div></div>
+    </div>
+    ${colCard('dmrv-pipeline','Data pipeline','End-to-end MRV flow',`
+      <div style="position:relative;margin-top:8px">
+        ${pipeline.map((p,i)=>`<div style="display:flex;gap:14px;align-items:flex-start;padding-bottom:${i<pipeline.length-1?'4px':'0'}">
+          <div style="display:flex;flex-direction:column;align-items:center;flex:0 0 auto">
+            <div style="width:42px;height:42px;border-radius:50%;background:var(--green-soft);display:grid;place-items:center;font-size:19px;z-index:1">${p.icon}</div>
+            ${i<pipeline.length-1?`<div style="width:2px;background:var(--line);flex:1;min-height:20px;margin:2px 0"></div>`:''}
+          </div>
+          <div style="padding-bottom:18px;flex:1;min-width:0">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:3px">
+              <span style="font-weight:700;font-size:13.5px">Step ${p.step}: ${p.label}</span>
+              <span style="font-size:11px;padding:2px 8px;border-radius:99px;font-weight:600;${statusStyle[p.status]}">${p.status.charAt(0).toUpperCase()+p.status.slice(1)}</span>
+            </div>
+            <p style="font-size:13px;color:var(--muted)">${p.desc}</p>
+          </div>
+        </div>`).join('')}
+      </div>
+    `)}
+    ${tools.map((cat,ci)=>`<div style="margin-top:16px">${colCard('dmrv-cat-'+ci, cat.cat, cat.icon+' '+cat.items.length+' tools',`
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px;margin-top:8px">
+        ${cat.items.map(t=>`<div style="padding:14px 16px;border-radius:14px;background:var(--soft);border:1px solid var(--line)">
+          <div style="font-weight:700;font-size:13px;margin-bottom:4px">${t.name}</div>
+          <div style="font-size:12.5px;color:var(--muted);line-height:1.45">${t.desc}</div>
+        </div>`).join('')}
+      </div>
+    `)}</div>`).join('')}
+    <div style="margin-top:16px">${colCard('dmrv-tradeoffs','Architecture trade-offs','High-tech vs. high-touch',`
+      <div style="overflow-x:auto;margin-top:8px">
+        <table style="width:100%;border-collapse:collapse;font-size:13px;min-width:480px">
+          <thead><tr style="background:var(--soft)">
+            <th style="padding:10px 12px;text-align:left;font-weight:700;border-bottom:2px solid var(--line)">Feature</th>
+            <th style="padding:10px 12px;text-align:left;font-weight:700;border-bottom:2px solid var(--line);color:var(--green)">🛰 High-Tech (Satellite & AI)</th>
+            <th style="padding:10px 12px;text-align:left;font-weight:700;border-bottom:2px solid var(--line);color:var(--sky)">📡 High-Touch (IoT & Ground)</th>
+          </tr></thead>
+          <tbody>
+            ${[
+              ['Pros','Scalable · lower cost/ha · rapid deployment over large areas','Extremely accurate local data · captures underground metrics (soil carbon)'],
+              ['Cons','Cloud cover issues · lower precision for complex ecosystems','High hardware & maintenance cost · difficult to scale remotely'],
+              ['Best for','Large-scale forestry (ARR, REDD+) and macro land management','Regenerative agriculture, blue carbon, high-density biochar'],
+            ].map(([f,ht,hh],i)=>`<tr style="${i%2?'background:var(--soft)':''}">
+              <td style="padding:10px 12px;font-weight:600;border-bottom:1px solid var(--line)">${f}</td>
+              <td style="padding:10px 12px;color:var(--muted);border-bottom:1px solid var(--line)">${ht}</td>
+              <td style="padding:10px 12px;color:var(--muted);border-bottom:1px solid var(--line)">${hh}</td>
+            </tr>`).join('')}
+          </tbody>
+        </table>
+      </div>
+      <div style="margin-top:14px;padding:14px;background:rgba(47,125,79,.08);border-radius:12px;border-left:4px solid var(--green);font-size:13.5px">
+        <strong>ACE Recommendation:</strong> Prioritise a <em>hybrid approach</em> — satellite imagery and AI for macro-level monitoring and scalability; a targeted IoT sensor network for ground-truth. All data flows into an immutable ledger via open APIs to prevent double-counting and satisfy institutional buyers demanding high-integrity credits.
+      </div>
+    `)}</div>`;
+  return shell(body, 'dMRV stack', 'Full digital MRV architecture: AI models, ETL pipelines, blockchain ledger, digital identity and open APIs.');
+}
+
 /* ---------- Render ---------- */
 function render(){
   const root = $('root');
   if (!S.authed){ if(S.route==='welcome'){root.innerHTML=welcomeView();return;} if(S.route==='register'){root.innerHTML=registerView();return;} root.innerHTML=loginView(); return; }
-  const views = { dashboard, projects, entry, records, record:recordView, audit:auditView, profile, settings, sites:sitesView, baselines:baselinesView, integrity:integrityView, reports:reportsView, status:statusView, trivia:triviaView };
+  const views = { dashboard, projects, entry, records, record:recordView, audit:auditView, profile, settings, sites:sitesView, baselines:baselinesView, integrity:integrityView, reports:reportsView, status:statusView, trivia:triviaView, sensing:sensingView, iot:iotView, dmrv:dmrvView };
   const focusQ = document.activeElement && document.activeElement.id === 'q';
   root.innerHTML = (views[S.route] || dashboard)();
   if (focusQ){ const q = $('q'); if (q){ q.focus(); q.setSelectionRange(q.value.length, q.value.length); } }
