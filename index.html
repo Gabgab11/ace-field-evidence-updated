@@ -1138,17 +1138,7 @@ function dashboard(){
     </div>
   </section>
 
-  <div style="margin-top:20px">${colCard('fact','Did you know','Carbon trivia',factCard(true))}</div>
-
-  <div style="margin-top:20px">${colCard('modules','Modules','Quick navigation',`<div class="actions" style="flex-wrap:wrap;margin-top:4px">${NAV.filter(n=>n[0]!=='dashboard').map(n => `<button class="btn sm" onclick="go('${n[0]}')">${n[1]}</button>`).join('')}</div>`)}</div>
-
-  <section class="grid dash2" style="margin-top:20px">
-    ${colCard('queue', can('review') ? 'Review queue' : 'Your recent activity', can('review') ? `${queue.length} waiting` : '', can('review')
-      ? (queue.length ? queue.map(x => `<div class="act" style="cursor:pointer" onclick="viewRecord('${x.id}')" tabindex="0"><span class="ic">${x.id.slice(-2)}</span><div><b>${x.id} · ${esc(x.type)}</b><small>${esc(projOf(x.projectId).name)} · ${esc(x.source)}${flagCount(x)?` · ${flagCount(x)} flag${flagCount(x)>1?'s':''}`:''}</small></div></div>`).join('') : '<div class="empty">Nothing waiting. The queue is clear.</div>')
-      : (allAudit().filter(a => a.by === S.user.role).slice(0,5).map(a => `<div class="act"><span class="ic">✓</span><div><b>${a.rec} · ${esc(a.action)}</b><small>${a.at}</small></div></div>`).join('') || '<div class="empty">No activity yet. Create a measurement to get started.</div>')
-    )}
-    ${colCard('activity','Recent activity','All roles',allAudit().slice(0,6).map(a => `<div class="act"><span class="ic">${a.rec.slice(-2)}</span><div><b>${a.rec} · ${esc(a.action)}</b><small>${esc(a.by)} · ${a.at}</small></div></div>`).join(''))}
-  </section>`;
+  `;
   return shell(body, 'Overview', 'Where your field evidence stands today.');
 }
 
